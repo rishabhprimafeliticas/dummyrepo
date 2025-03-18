@@ -1,0 +1,77 @@
+const draftInfoListAsync = async (req, res) => {
+  try {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).jsonp(errors.array());
+    }
+
+    if (!req.headers.userid || !req.headers.username || !req.headers.authorization || !req.headers.awareid) {
+      return res.status(400).jsonp({ status: false, message: "Bad request!" });
+    }
+
+    const payload = { username: req.headers.username };
+    const resp = await refresh(req.headers.authorization, req.headers.userid, payload);
+
+    if (resp.status) {
+      const getDraftInfoAsync = await draft_info.find({ _awareid: req.headers.awareid, status: { $ne: "Approved" } });
+
+      if (getDraftInfoAsync.length === 0) {
+        return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
+      } else {
+        const product_lines_avaliable = await product_lines.find({deleted:false});
+        const update_physical_asset_avaliable = await update_physical_asset.find({ _awareid: req.headers.awareid });
+
+        const draft_info_list = [];
+
+        for (const item of getDraftInfoAsync) {
+          const product_line = [];
+
+          const temp_product_lines_avaliable = product_lines_avaliable.find(x => x.po_id == item.purchase_order);
+
+          if (temp_product_lines_avaliable) {
+            const all_po_lines = item.order_lines_in_current_request
+              ? item.order_lines_in_current_request.map(elment => temp_product_lines_avaliable.product_line.find(x => x.id == elment))
+              : temp_product_lines_avaliable.product_line;
+
+            for (const line of all_po_lines) {
+              if (line.update_aware_token_id) {
+                const asset_found = update_physical_asset_avaliable.find(x => x.update_aware_token_id == line.update_aware_token_id);
+
+                if (asset_found) {
+                  product_line.push({
+                    update_asset_id: asset_found.updated_aware_asset_id,
+                    main_color: asset_found.select_main_color,
+                    color: asset_found.main_color,
+                    weight: asset_found.weight,
+                    update_aware_token_id: asset_found.update_aware_token_id,
+                  });
+                }
+              }
+            }
+          }
+
+          draft_info_list.push({
+            _id: item._id,
+            _awareid: item._awareid || null,
+            status: item.status || null,
+            aware_output_token_type: item.aware_output_token_type || null,
+            date: item.date || null,
+            way_to_update_token: item.way_to_update_token || null,
+            final_brand: item.final_brand || null,
+            purchase_order: item.purchase_order || null,
+            create_token_stepper: item.create_token_stepper || null,
+            product_lines_avaliable: product_line.length > 0 ? product_line : [],
+          });
+        }
+
+        return res.status(200).jsonp({ status: true, data: draft_info_list, authorization: resp.token });
+      }
+    } else {
+      return res.status(resp.code).jsonp({ status: false, data: null, authorization: null });
+    }
+  } catch (ex) {
+    loggerhandler.logger.error(`${ex}, email:${req.headers.email}`);
+    return res.status(400).jsonp({ status: false, message: "Bad request!" });
+  }
+};

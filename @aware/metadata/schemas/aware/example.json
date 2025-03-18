@@ -1,0 +1,215 @@
+{
+    "description": "This schema describes metadata of the Aware Token Metadata Standard",
+    "title": "Aware20221012",
+    "$id": "http://wearaware.co/schemas/AwareMetadata.json",
+    "type": "object",
+    "properties": {
+        "description": {
+            "description": "The description of the AwareToken",
+            "examples": [
+                "This schema defines the aware token metadata saved for this product."
+            ],
+            "type": "string"
+        },
+        "name": {
+            "description": "This property is the name of the Aware Token",
+            "examples": [
+                "ABC yarn token"
+            ],
+            "type": "string"
+        },
+        "version": {
+            "description": "This property defines the calendar version of the schema so that consumers can correctly parse the json",
+            "examples": [
+                "aware-20221012"
+            ],
+            "type": "string"
+        },
+        "date":{
+            "description": "This property defines the date of creation in json",
+            "examples": [
+                "16/05/2022"
+            ],
+            "type": "string"
+        },
+        "awareTokenType":{
+            "description": "This property defines the Aware Token Type in json",
+            "examples": [
+                "yarn"
+            ],
+            "type": "string"
+        },
+        "awareAssetId":{
+            "description": "This property defines the aware AssetId in json",
+            "examples": [
+                ""
+            ],
+            "type": "string"
+        },
+        "productionFacility":{
+            "description": "This property defines the productionFacility in json",
+            "examples": [
+                "sanfrancisco"
+            ],
+            "type": "string"
+        },
+        "producer":{
+            "description": "This property defines the producer name in json",
+            "examples": [
+                "ABC Trading"
+            ],
+            "type": "string"
+        },
+        "batchNo":{
+            "description": "This property defines the batch no in json",
+            "examples": [
+                "77839H8873"
+            ],
+            "type": "string"
+        },
+        "valueChainProcess":{
+            "description": "This property defines the valueChainProcess in json",
+            "examples": [
+                "raw material processing", "another process"
+            ],
+            "type": "array"
+        },        
+        "materialSpecs":{
+            "description": "This property defines the materialSpecs in json",
+            "examples": [
+                "16/1 S"
+            ],
+            "type": "string"
+        },
+        "color":{
+            "description": "This property defines the color in json",
+            "examples": [
+                "blue"
+            ],
+            "type": "string"
+        },                
+        "composition":{
+            "description": "This property defines the composition in json",
+            "examples": [
+                "50% recycled cotton / 40% conventional cotton / 10% recycled polyester"
+            ],
+            "type": "string"
+        },
+        "weightInKgs":{
+            "description": "This property defines the WeightInKgs in json",
+            "examples": [
+                "8500"
+            ],
+            "type": "string"    
+        },
+        "sustainableProcessClaim":{
+            "description": "This property defines the Sustainable Process Claim in json",
+            "examples": [
+                "No", "another value"
+            ],
+            "type": "array"    
+        },
+        "wetProcessing":{
+            "description": "This property defines the Wet Processing Claim in json",
+            "examples": [
+                "scouring", ""
+            ],
+            "type": "array"    
+        },
+        "tracer": {
+            "type": "object",
+            "properties":{
+                "tracerAdded": {
+                    "description": "This property is about tracer material Addition ",
+                    "examples": [
+                        "Yes"
+                    ],
+                    "type": "string"
+                },
+                "typeofTracer": {
+                    "description": "This property is about type of tracer whether aware or custom ",
+                    "examples": [
+                        "aware"
+                    ],
+                    "type": "string"    
+                }
+            }
+        },  
+        "selfValidationCertificate":{
+            "description": "This property defines the Self-Validation certificate sustainable material in json",
+            "examples": [
+                "No", "another value"
+            ],
+            "type": "array"    
+        },      
+        "environmentalScopeCertificate":{
+            "description": "This property defines the Environmental scope certificate in json",
+            "examples": [
+                "No", "another value"
+            ],
+            "type": "array"    
+        },
+        "socialComplianceCertificate":{
+            "description": "This property defines the Social compliance certificate in json",
+            "examples": [
+                "No", "another value"
+            ],
+            "type": "array"    
+        },        
+        "chemicalComplianceCertificate":{
+            "description": "This property defines the Chemical compliance certificate in json",
+            "examples": [
+                "No", "another value"
+            ],
+            "type": "array"    
+        },
+        "previousTokenDetail" : {
+            "description": "This property defines the previous Token on which it is updated in json",
+            "examples": [
+                "9", "29"
+            ],
+            "type": "array"   
+        }
+    },
+    "additionalProperties": false,
+    "examples": [
+        {
+            "version": "aware-20210501",
+            "name": "ABC Yarn Token",
+            "description": "This travel cards describes travel information using pebble device on the internet.",
+            "date": "16/05/2022",
+            "awareTokenType": "yarn",
+            "awareAssetId":"abc234994",
+            "producer":"ABC Trading",
+            "productionFacility":  "sanfrancisco",
+            "valueChainProcess": [ "raw material processing" ],            
+            "materialSpecs": "16/1 S",
+            "color": "blue",            
+            "batchNo": "77839H8873",
+            "composition": "50% recycled cotton / 40% conventional cotton / 10% recycled polyester",
+            "weightInKgs": "8500",
+            "sustainableProcessClaim": [ "No" ],
+            "wetProcessing": [ "scouring" ],
+            "tracer": {
+                "tracerAdded": "No",
+                "typeofTracer": "aware"
+            },
+            "selfValidationCertificate": [""],
+            "environmentalScopeCertificate": [""],            
+            "socialComplianceCertificate":[],
+            "chemicalComplianceCertificate":[],
+            "previousTokenDetail":["4", "9", "11"]
+        }
+    ],
+    "required": [
+        "version",
+        "name",
+        "description",
+        "awareAssetId",
+        "awareTokenType",
+        "producer",
+        "productionFacility",        
+        "weightInKgs",
+        "batchNo"
+    ]
+}

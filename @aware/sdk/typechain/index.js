@@ -1,0 +1,24 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.IAwareToken__factory = exports.AwareToken__factory = exports.IERC165__factory = exports.ERC165__factory = exports.IERC1155Receiver__factory = exports.IERC1155__factory = exports.IERC1155MetadataURI__factory = exports.ERC1155Burnable__factory = exports.ERC1155__factory = exports.factories = void 0;
+const tslib_1 = require("tslib");
+exports.factories = tslib_1.__importStar(require("./factories"));
+var ERC1155__factory_1 = require("./factories/@openzeppelin/contracts/token/ERC1155/ERC1155__factory");
+Object.defineProperty(exports, "ERC1155__factory", { enumerable: true, get: function () { return ERC1155__factory_1.ERC1155__factory; } });
+var ERC1155Burnable__factory_1 = require("./factories/@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable__factory");
+Object.defineProperty(exports, "ERC1155Burnable__factory", { enumerable: true, get: function () { return ERC1155Burnable__factory_1.ERC1155Burnable__factory; } });
+var IERC1155MetadataURI__factory_1 = require("./factories/@openzeppelin/contracts/token/ERC1155/extensions/IERC1155MetadataURI__factory");
+Object.defineProperty(exports, "IERC1155MetadataURI__factory", { enumerable: true, get: function () { return IERC1155MetadataURI__factory_1.IERC1155MetadataURI__factory; } });
+var IERC1155__factory_1 = require("./factories/@openzeppelin/contracts/token/ERC1155/IERC1155__factory");
+Object.defineProperty(exports, "IERC1155__factory", { enumerable: true, get: function () { return IERC1155__factory_1.IERC1155__factory; } });
+var IERC1155Receiver__factory_1 = require("./factories/@openzeppelin/contracts/token/ERC1155/IERC1155Receiver__factory");
+Object.defineProperty(exports, "IERC1155Receiver__factory", { enumerable: true, get: function () { return IERC1155Receiver__factory_1.IERC1155Receiver__factory; } });
+var ERC165__factory_1 = require("./factories/@openzeppelin/contracts/utils/introspection/ERC165__factory");
+Object.defineProperty(exports, "ERC165__factory", { enumerable: true, get: function () { return ERC165__factory_1.ERC165__factory; } });
+var IERC165__factory_1 = require("./factories/@openzeppelin/contracts/utils/introspection/IERC165__factory");
+Object.defineProperty(exports, "IERC165__factory", { enumerable: true, get: function () { return IERC165__factory_1.IERC165__factory; } });
+var AwareToken__factory_1 = require("./factories/contracts/AwareToken__factory");
+Object.defineProperty(exports, "AwareToken__factory", { enumerable: true, get: function () { return AwareToken__factory_1.AwareToken__factory; } });
+var IAwareToken__factory_1 = require("./factories/contracts/interfaces/IAwareToken__factory");
+Object.defineProperty(exports, "IAwareToken__factory", { enumerable: true, get: function () { return IAwareToken__factory_1.IAwareToken__factory; } });
+//# sourceMappingURL=index.js.map
