@@ -17,8 +17,6 @@ exports.handlers = {
   getUsersKycDetailsAsync: async (req, res) => {
     const errors = validationResult(req);
 
-    // console.log("HHGHGHY")
-
     if (!errors.isEmpty()) {
       return res.status(422).jsonp(errors.array());
     } else {
@@ -40,9 +38,6 @@ exports.handlers = {
       if (!account) {
         res.status(400).jsonp({ status: false, message: "Bad request!" });
       }
-
-
-      // console.log("account.kyc_id", account.kyc_id)
 
       var details = await kyc_details.findOne({ _id: mongoose.Types.ObjectId(account.kyc_id) }).catch((err) => {
         loggerhandler.logger.error(`${err} ,email:${req.headers.email}`)
@@ -99,8 +94,6 @@ exports.handlers = {
   getManagerKycDetailsAsync: async (req, res) => {
     const errors = validationResult(req);
 
-    // console.log("HHGHGHY")
-
     if (!errors.isEmpty()) {
       return res.status(422).jsonp(errors.array());
     } else {
@@ -122,9 +115,6 @@ exports.handlers = {
       if (!account) {
         res.status(400).jsonp({ status: false, message: "Bad request!" });
       }
-
-
-      // console.log("account.kyc_id", account.kyc_id)
 
       var details = await kyc_details.findOne({ manager_id: mongoose.Types.ObjectId(req.headers.userid) }).catch((err) => {
         loggerhandler.logger.error(`${err} ,email:${req.headers.email}`)
@@ -152,9 +142,6 @@ exports.handlers = {
         details: details,
       };
 
-      // console.log("jsonObject", jsonObject)
-
-
       var payload = { username: req.headers.username };
       refresh(req.headers.authorization, req.headers.userid, payload,
         function (resp) {
@@ -179,7 +166,6 @@ exports.handlers = {
 
   updateKycAsync: async (req, res) => {
     const errors = validationResult(req);
-    // console.log('req.headers.adminflag1', req.headers.adminflag)
     if (!errors.isEmpty()) {
       return res.status(422).jsonp(errors.array());
     }
@@ -242,11 +228,7 @@ exports.handlers = {
             }
           );
         } else {
-          // console.log('req.headers.adminflag2', req.headers.adminflag)
-          // console.log('req.body._id', req.body._id)
-          // console.log('temp_kyc_status', temp_kyc_status)
-
-
+          
           kyc_details.findByIdAndUpdate(
             { _id: mongoose.Types.ObjectId(req.body._id) },
             {
@@ -335,22 +317,13 @@ exports.handlers = {
 
       const reg = /[&<>"'/]/gi;
       var _id = req.body._id.replace(reg, (match) => map[match]);
-      // var documentName = req.body.documentName.replace(
-      //   reg,
-      //   (match) => map[match]
-      // );
+     
       var documentName = req.body.documentName;
       var description = req.body.discription
-      // .replace(
-      //   reg,
-      //   (match) => map[match]
-      // );
+     
       var validThru = req.body.validThru
-      // replace(reg, (match) => map[match]);
       var type = req.body.type
-      // .replace(reg, (match) => map[match]);
       var doc_id = req.body.doc_id
-      // .replace(reg, (match) => map[match]);
 
       var tempobject = null;
       if (!req.headers.adminflag) {
@@ -877,10 +850,6 @@ exports.handlers = {
         if (!req.headers.adminflag) {
           if (req.body.type == "escForm") {
             temp_certificates = details.environmental_scope_certificates;
-
-            // temp_certificates = temp_certificates.filter(function (obj) {
-            //   return obj.doc_id !== req.body.doc_id;
-            // });
             temp_certificates= temp_certificates.map((e)=>{
               if(e.doc_id==req.body.doc_id)
                 { 
@@ -929,9 +898,7 @@ exports.handlers = {
             );
           } else if (req.body.type == "sccForm") {
             temp_certificates = details.social_compliance_certificates;
-            // temp_certificates = temp_certificates.filter(function (obj) {
-            //   return obj.doc_id !== req.body.doc_id;
-            // });
+           
             temp_certificates= temp_certificates.map((e)=>{
               if(e.doc_id==req.body.doc_id)
                 { 
@@ -980,9 +947,7 @@ exports.handlers = {
           } else if (req.body.type == "cccForm") {
             temp_certificates = details.chemical_compliance_certificates;
 
-            // temp_certificates = temp_certificates.filter(function (obj) {
-            //   return obj.doc_id !== req.body.doc_id;
-            // });
+          
             temp_certificates= temp_certificates.map((e)=>{
               if(e.doc_id==req.body.doc_id)
                 { 
@@ -1032,9 +997,6 @@ exports.handlers = {
           } else if (req.body.type == "spcForm") {
             temp_certificates = details.sustainable_process_certificates;
 
-            // temp_certificates = temp_certificates.filter(function (obj) {
-            //   return obj.doc_id !== req.body.doc_id;
-            // });
             temp_certificates= temp_certificates.map((e)=>{
               if(e.doc_id==req.body.doc_id)
                 { 
@@ -1086,9 +1048,6 @@ exports.handlers = {
           if (req.body.type == "escForm") {
             temp_certificates = details.environmental_scope_certificates;
 
-            // temp_certificates = temp_certificates.filter(function (obj) {
-            //   return obj.doc_id !== req.body.doc_id;
-            // });
             temp_certificates= temp_certificates.map((e)=>{
               if(e.doc_id==req.body.doc_id)
                 { 
@@ -1310,19 +1269,12 @@ exports.handlers = {
 
       const reg = /[&<>"'/]/gi;
       var _id = req.body._id
-      // .replace(reg, (match) => map[match]);
       var tracer_id = req.body.tracer_id
-      // .replace(reg, (match) => map[match]);
 
       var licenseNumber = req.body.licenseNumber
-      // .replace(
-      //   reg,
-      //   (match) => map[match]
-      // );
+      
       var validThru = req.body.validThru
-      // .replace(reg, (match) => map[match]);
       var type = req.body.type
-      // .replace(reg, (match) => map[match]);
 
       var temp_kyc_status = await kyc_details.findOne({ _id: mongoose.Types.ObjectId(req.body._id) }).select(['kyc_status']).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex }); })
       if (!req.headers.adminflag) {
@@ -1848,11 +1800,7 @@ exports.handlers = {
               payload,
               async function (resp) {
                 if (resp.status == true) {
-                  // return res.status(200).jsonp({
-                  //   status: true,
-                  //   message: "KYC has been submitted successfully.",
-                  //   authorization: resp.token,
-                  // });
+                  
 
                   var accountdetails = await account_details.findOne({ kyc_id: req.body._id }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
                   if (!accountdetails) {
@@ -1876,7 +1824,6 @@ exports.handlers = {
                       }
 
                     })
-                    // return res.status(200).jsonp({ status: true, data: update_aw_tokens_avaliable, authorization: resp.token });
 
                   }
                 } else {
@@ -1904,16 +1851,10 @@ exports.handlers = {
         return res.status(422).jsonp("I know you have it in you, Try again!");
       }
 
-      // console.log("Nikhil",req.files);
-      // console.log("companyphotos",req.body);
-      // var file = req.file;
+     
 
       var companylogo = req.files.companylogo[0];
-      // var companypdf = req.files.companypdf[0];
-      // var companyphotos = req.files.companyphotos;
-      // var companyphotosname = companyphotos.map(a => a.filename.replace(/\s/g, ''));
-
-      // var certificates = [];
+  
 
       const map = {
         "&": "&amp;",
@@ -1933,11 +1874,6 @@ exports.handlers = {
           {
             company_logo: companylogo.filename.replace(/\s/g, ""),
             kyc_status: req.body.is_updatetable == true && temp_kyc_status == "3" ? "2" : "1",
-
-            // company_profile_pdf: companypdf.filename.replace(/\s/g, ''),
-            // company_presentation: companypresentation,
-            // company_photos : companyphotosname
-            // modified_by: req.headers.userid,
             modified_date: new Date(),
           },
 
@@ -1973,10 +1909,7 @@ exports.handlers = {
           { _id: mongoose.Types.ObjectId(_id) },
           {
             company_logo: companylogo.filename.replace(/\s/g, ""),
-            // company_profile_pdf: companypdf.filename.replace(/\s/g, ''),
-            // company_presentation: companypresentation,
-            // company_photos : companyphotosname
-            // modified_by: req.headers.userid,
+          
             modified_date: new Date(),
           },
           function (err, datasubmitted) {
@@ -2026,67 +1959,22 @@ exports.handlers = {
         return res.status(422).jsonp("I know you have it in you, Try again!");
       }
 
-
-      // console.log('hi',req.body.companypresentation)
-
-
-
-      // console.log("Nikhil",req.files);
-      // console.log("companyphotos",req.body);
-      // var file = req.file;
-
-      // var companylogo = req.files.companylogo[0];
-      // var companypdf = req.files.companypdf[0];
-      // var companyphotos = req.files.companyphotos;
-      // var companyphotosname = companyphotos.map(a => a.filename.replace(/\s/g, ''));
-
-      // var certificates = [];
       var companypresentation = req.body.companypresentation
-      // const map = {
-      //   "&": "&amp;",
-      //   "<": "&lt;",
-      //   ">": "&gt;",
-      //   '"': "&quot;",
-      //   "'": "&#x27;",
-      //   "/": "&#x2F;",
-      // };
+     
 
       const reg = /[&<>"'/]/gi;
       var _id = req.body._id.replace(reg, (match) => map[match]);
-      // var companypresentation = req.body.companypresentation.replace(
-      //   reg,
-      //   (match) => map[match]
-      // );
-
-      // var tempobject = {
-      //   'licensenumber': licenseNumber,
-      //   'validthru': validThru,
-      //   'path': file.filename.replace(/\s/g, ''),
-      //   'status': 'Under Verification'
-      // }
-
-      // var details = await kyc_details.findOne({ _id: mongoose.Types.ObjectId(_id) }).catch((ex) => { res.status(500).jsonp({ status: false, message: ex }); });
-      // var env_certificates = details.aware_tracer;
-
-      // env_certificates.forEach(element => {
-      //   certificates.push(element);
-      // })
-
-      // certificates.push(tempobject);ss
-
 
       var temp_kyc_status = await kyc_details.findOne({ _id: mongoose.Types.ObjectId(req.body._id) }).select(['kyc_status']).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex }); })
       if (!req.headers.adminflag) {
         kyc_details.findByIdAndUpdate(
           { _id: mongoose.Types.ObjectId(_id) },
           {
-            // company_logo: companylogo.filename.replace(/\s/g, ''),
-            // company_profile_pdf: companypdf.filename.replace(/\s/g, ''),
+            
             company_presentation: companypresentation,
             kyc_status: req.body.is_updatetable == true && temp_kyc_status == "3" ? "2" : "1",
 
-            // company_photos : companyphotosname
-            // modified_by: req.headers.userid,
+          
             modified_date: new Date(),
           },
           function (err, datasubmitted) {
@@ -2122,12 +2010,9 @@ exports.handlers = {
           kyc_details.findByIdAndUpdate(
             { _id: mongoose.Types.ObjectId(_id) },
             {
-              // company_logo: companylogo.filename.replace(/\s/g, ''),
-              // company_profile_pdf: companypdf.filename.replace(/\s/g, ''),
+            
               company_presentation: companypresentation,
 
-              // company_photos : companyphotosname
-              // modified_by: req.headers.userid,
               modified_date: new Date(),
             },
             function (err, datasubmitted) {
@@ -2174,16 +2059,8 @@ exports.handlers = {
         return res.status(422).jsonp("I know you have it in you, Try again!");
       }
 
-      // console.log("Nikhil",req.files);
-      // console.log("companyphotos",req.body);
-      // var file = req.file;
-
-      // var companylogo = req.files.companylogo[0];
       var companypdf = req.files.companypdf[0];
-      // var companyphotos = req.files.companyphotos;
-      // var companyphotosname = companyphotos.map(a => a.filename.replace(/\s/g, ''));
-
-      // var certificates = [];
+     
 
       const map = {
         "&": "&amp;",
@@ -2196,41 +2073,15 @@ exports.handlers = {
 
       const reg = /[&<>"'/]/gi;
       var _id = req.body._id.replace(reg, (match) => map[match]);
-      // var companypresentation = req.body.companypresentation.replace(reg, (match) => (map[match]));
-
-      // var temp = []
-      //  var tempobject = {
-      //     'name': req.body.project_case,
-      //   }
-      //   temp.push(tempobject);
-
-      // var tempobject = {
-      //   'licensenumber': licenseNumber,
-      //   'validthru': validThru,
-      //   'path': file.filename.replace(/\s/g, ''),
-      //   'status': 'Under Verification'
-      // }
-
-      // var details = await kyc_details.findOne({ _id: mongoose.Types.ObjectId(_id) }).catch((ex) => { res.status(500).jsonp({ status: false, message: ex }); });
-      // var env_certificates = details.aware_tracer;
-
-      // env_certificates.forEach(element => {
-      //   certificates.push(element);
-      // })
-
-      // certificates.push(tempobject);
+     
       var temp_kyc_status = await kyc_details.findOne({ _id: mongoose.Types.ObjectId(req.body._id) }).select(['kyc_status']).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex }); })
       if (!req.headers.adminflag) {
         kyc_details.findByIdAndUpdate(
           { _id: mongoose.Types.ObjectId(_id) },
           {
-            // company_logo: companylogo.filename.replace(/\s/g, ''),
             company_profile_pdf: companypdf.filename,
             kyc_status: req.body.is_updatetable == true && temp_kyc_status == "3" ? "2" : "1",
 
-            // company_presentation: companypresentation,
-            // company_photos : companyphotosname
-            // modified_by: req.headers.userid,
             modified_date: new Date(),
           },
           function (err, datasubmitted) {
@@ -2264,13 +2115,8 @@ exports.handlers = {
         kyc_details.findByIdAndUpdate(
           { _id: mongoose.Types.ObjectId(_id) },
           {
-            // company_logo: companylogo.filename.replace(/\s/g, ''),
             company_profile_pdf: companypdf.filename,
 
-
-            // company_presentation: companypresentation,
-            // company_photos : companyphotosname
-            // modified_by: req.headers.userid,
             modified_date: new Date(),
           },
           function (err, datasubmitted) {
@@ -2415,15 +2261,8 @@ exports.handlers = {
       if (!req.body._id) {
         return res.status(422).jsonp("I know you have it in you, Try again!");
       }
-      // console.log("Nikhil", req.files);
-      // console.log("companyphotos", req.body);
-      // var file = req.file;
-      // var companylogo = req.files.companylogo[0];
-      // var companypdf = req.files.companypdf[0];
+   
       var companyphotos = req.files.companyphotofile[0];
-
-
-      // console.log("companyphotos", companyphotos);
 
       const map = {
         "&": "&amp;",
@@ -2437,8 +2276,7 @@ exports.handlers = {
       var _id = req.body._id.replace(reg, (match) => map[match]);
       var type = req.body.type.replace(reg, (match) => map[match]);
 
-      // console.log("type", type);
-      // certificates.push(tempobject);
+      
       var temp_kyc_status = await kyc_details.findOne({ _id: mongoose.Types.ObjectId(req.body._id) }).select(['kyc_status']).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex }); })
       if (!req.headers.adminflag) {
         if (type == 1) {
@@ -2480,9 +2318,7 @@ exports.handlers = {
           kyc_details.findByIdAndUpdate(
             { _id: mongoose.Types.ObjectId(_id) },
             {
-              // company_logo: companylogo.filename.replace(/\s/g, ''),
-              // company_profile_pdf: companypdf.filename.replace(/\s/g, ''),
-              // company_presentation: companypresentation,
+             
               company_photo_two: companyphotos.filename,
               kyc_status: req.body.is_updatetable == true && temp_kyc_status == "3" ? "2" : "1",
               modified_by: req.headers.userid,
@@ -2518,9 +2354,7 @@ exports.handlers = {
           kyc_details.findByIdAndUpdate(
             { _id: mongoose.Types.ObjectId(_id) },
             {
-              // company_logo: companylogo.filename.replace(/\s/g, ''),
-              // company_profile_pdf: companypdf.filename.replace(/\s/g, ''),
-              // company_presentation: companypresentation,
+              
               company_photo_three: companyphotos.filename,
               kyc_status: req.body.is_updatetable == true && temp_kyc_status == "3" ? "2" : "1",
               modified_by: req.headers.userid,
@@ -2556,9 +2390,7 @@ exports.handlers = {
           kyc_details.findByIdAndUpdate(
             { _id: mongoose.Types.ObjectId(_id) },
             {
-              // company_logo: companylogo.filename.replace(/\s/g, ''),
-              // company_profile_pdf: companypdf.filename.replace(/\s/g, ''),
-              // company_presentation: companypresentation,
+             
               company_photo_four: companyphotos.filename,
               kyc_status: req.body.is_updatetable == true && temp_kyc_status == "3" ? "2" : "1",
               modified_by: req.headers.userid,
@@ -2594,9 +2426,7 @@ exports.handlers = {
           kyc_details.findByIdAndUpdate(
             { _id: mongoose.Types.ObjectId(_id) },
             {
-              // company_logo: companylogo.filename.replace(/\s/g, ''),
-              // company_profile_pdf: companypdf.filename.replace(/\s/g, ''),
-              // company_presentation: companypresentation,
+              
               company_photo_five: companyphotos.filename,
               kyc_status: req.body.is_updatetable == true && temp_kyc_status == "3" ? "2" : "1",
               modified_by: req.headers.userid,
@@ -2670,9 +2500,7 @@ exports.handlers = {
           kyc_details.findByIdAndUpdate(
             { _id: mongoose.Types.ObjectId(_id) },
             {
-              // company_logo: companylogo.filename.replace(/\s/g, ''),
-              // company_profile_pdf: companypdf.filename.replace(/\s/g, ''),
-              // company_presentation: companypresentation,
+             
               company_photo_two: companyphotos.filename,
               modified_by: req.headers.userid,
               modified_date: new Date(),
@@ -2707,9 +2535,7 @@ exports.handlers = {
           kyc_details.findByIdAndUpdate(
             { _id: mongoose.Types.ObjectId(_id) },
             {
-              // company_logo: companylogo.filename.replace(/\s/g, ''),
-              // company_profile_pdf: companypdf.filename.replace(/\s/g, ''),
-              // company_presentation: companypresentation,
+              
               company_photo_three: companyphotos.filename,
 
               modified_by: req.headers.userid,
@@ -2745,9 +2571,7 @@ exports.handlers = {
           kyc_details.findByIdAndUpdate(
             { _id: mongoose.Types.ObjectId(_id) },
             {
-              // company_logo: companylogo.filename.replace(/\s/g, ''),
-              // company_profile_pdf: companypdf.filename.replace(/\s/g, ''),
-              // company_presentation: companypresentation,
+         
               company_photo_four: companyphotos.filename,
 
               modified_by: req.headers.userid,
@@ -2783,9 +2607,7 @@ exports.handlers = {
           kyc_details.findByIdAndUpdate(
             { _id: mongoose.Types.ObjectId(_id) },
             {
-              // company_logo: companylogo.filename.replace(/\s/g, ''),
-              // company_profile_pdf: companypdf.filename.replace(/\s/g, ''),
-              // company_presentation: companypresentation,
+              
               company_photo_five: companyphotos.filename,
 
               modified_by: req.headers.userid,
@@ -2839,7 +2661,6 @@ exports.handlers = {
           .status(400)
           .jsonp({ status: false, message: "Bad request!" });
       } else {
-        // var userDetails = await account_details.findOne({ _id: mongoose.Types.ObjectId(req.headers.userid) }).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
         account_details.findByIdAndUpdate(
           { _id: mongoose.Types.ObjectId(req.headers.userid) },
           {
@@ -2886,11 +2707,7 @@ exports.handlers = {
       if (!req.body._id) {
         return res.status(422).jsonp("I know you have it in you, Try again!");
       }
-      // console.log("Nikhil", req.files);
-      // console.log("companyphotos", req.body);
-      // var file = req.file;
-      // var companylogo = req.files.companylogo[0];
-      // var companypdf = req.files.companypdf[0];
+     
 
 
       const map = {
@@ -2905,8 +2722,7 @@ exports.handlers = {
       var _id = req.body._id;
       var type = req.body.type;
 
-      // console.log("type", type);
-      // certificates.push(tempobject);
+      
       var temp_kyc_status = await kyc_details.findOne({ _id: mongoose.Types.ObjectId(req.body._id) }).select(['kyc_status']).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex }); })
       if (!req.headers.adminflag) {
         if (type == 1) {
@@ -2948,9 +2764,7 @@ exports.handlers = {
           kyc_details.findByIdAndUpdate(
             { _id: mongoose.Types.ObjectId(_id) },
             {
-              // company_logo: companylogo.filename.replace(/\s/g, ''),
-              // company_profile_pdf: companypdf.filename.replace(/\s/g, ''),
-              // company_presentation: companypresentation,
+         
               company_photo_two: null,
               kyc_status: req.body.is_updatetable == true && temp_kyc_status == "3" ? "2" : "1",
               modified_by: req.headers.userid,
@@ -2986,9 +2800,7 @@ exports.handlers = {
           kyc_details.findByIdAndUpdate(
             { _id: mongoose.Types.ObjectId(_id) },
             {
-              // company_logo: companylogo.filename.replace(/\s/g, ''),
-              // company_profile_pdf: companypdf.filename.replace(/\s/g, ''),
-              // company_presentation: companypresentation,
+           
               company_photo_three: null,
               kyc_status: req.body.is_updatetable == true && temp_kyc_status == "3" ? "2" : "1",
               modified_by: req.headers.userid,
@@ -3024,9 +2836,7 @@ exports.handlers = {
           kyc_details.findByIdAndUpdate(
             { _id: mongoose.Types.ObjectId(_id) },
             {
-              // company_logo: companylogo.filename.replace(/\s/g, ''),
-              // company_profile_pdf: companypdf.filename.replace(/\s/g, ''),
-              // company_presentation: companypresentation,
+              
               company_photo_four: null,
               kyc_status: req.body.is_updatetable == true && temp_kyc_status == "3" ? "2" : "1",
               modified_by: req.headers.userid,
@@ -3062,9 +2872,7 @@ exports.handlers = {
           kyc_details.findByIdAndUpdate(
             { _id: mongoose.Types.ObjectId(_id) },
             {
-              // company_logo: companylogo.filename.replace(/\s/g, ''),
-              // company_profile_pdf: companypdf.filename.replace(/\s/g, ''),
-              // company_presentation: companypresentation,
+            
               company_photo_five: null,
               kyc_status: req.body.is_updatetable == true && temp_kyc_status == "3" ? "2" : "1",
               modified_by: req.headers.userid,
@@ -3137,9 +2945,7 @@ exports.handlers = {
           kyc_details.findByIdAndUpdate(
             { _id: mongoose.Types.ObjectId(_id) },
             {
-              // company_logo: companylogo.filename.replace(/\s/g, ''),
-              // company_profile_pdf: companypdf.filename.replace(/\s/g, ''),
-              // company_presentation: companypresentation,
+             
               company_photo_two: null,
 
               modified_by: req.headers.userid,
@@ -3175,9 +2981,7 @@ exports.handlers = {
           kyc_details.findByIdAndUpdate(
             { _id: mongoose.Types.ObjectId(_id) },
             {
-              // company_logo: companylogo.filename.replace(/\s/g, ''),
-              // company_profile_pdf: companypdf.filename.replace(/\s/g, ''),
-              // company_presentation: companypresentation,
+            
               company_photo_three: null,
 
               modified_by: req.headers.userid,
@@ -3213,9 +3017,7 @@ exports.handlers = {
           kyc_details.findByIdAndUpdate(
             { _id: mongoose.Types.ObjectId(_id) },
             {
-              // company_logo: companylogo.filename.replace(/\s/g, ''),
-              // company_profile_pdf: companypdf.filename.replace(/\s/g, ''),
-              // company_presentation: companypresentation,
+             
               company_photo_four: null,
 
               modified_by: req.headers.userid,
@@ -3251,9 +3053,7 @@ exports.handlers = {
           kyc_details.findByIdAndUpdate(
             { _id: mongoose.Types.ObjectId(_id) },
             {
-              // company_logo: companylogo.filename.replace(/\s/g, ''),
-              // company_profile_pdf: companypdf.filename.replace(/\s/g, ''),
-              // company_presentation: companypresentation,
+             
               company_photo_five: null,
 
               modified_by: req.headers.userid,
@@ -3340,8 +3140,7 @@ exports.handlers = {
 
       var accounts_found = await account_details.find({ kyc_id: { $in: output2 }, is_deleted: false }).select(["role_id", "kyc_id"]).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex }) });
       var user_roles = await user_role.find().select(["role_id", "role_name"]).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex }) });
-      // console.log('account', accounts_found)
-      // console.log('user_roles', user_roles)
+    
 
 
       var JsonSerialize = [];
@@ -3436,9 +3235,7 @@ exports.handlers = {
           requests.create(
             {
               sender_aware_id: req.body.sender_aware_id,
-              // producer_id: req.body.producer_id,
-              // producer_name: req.body.producer_name,
-              // company_name: req.body.company_name,
+              
               receiver_aware_id: req.body.receiver_aware_id,
               isdeleted: false
 
@@ -3456,22 +3253,6 @@ exports.handlers = {
 
             })
 
-
-
-
-
-
-          // await requests.findOneAndUpdate({ _awareid: req.body._awareid, _id: mongoose.Types.ObjectId(req.body.aware_token_id) },
-          //   {
-          //     status: 'SEND',
-          //   },
-          //   { new: true },
-          //   async function (err, user) {
-          //     if (err) return res.status(500).jsonp({ status: false, message: err.toString() })
-
-          //     return res.status(200).jsonp({ status: true, message: "Token request has been generated.", authorization: resp.token });
-
-          //   })
 
         }
         else {
@@ -4246,14 +4027,6 @@ exports.handlers = {
           })
         }
       })
-
-      // console.log({ purchase_order_ETD })
-
-      // return res.status(200).jsonp({
-      //   status: true,
-      //   data: true,
-      //   // authorization: resp.token,
-      // });
       refresh(authorization, userid, { username }, resp => {
         if (resp.status) {
           return res.status(200).jsonp({ status: true, data: true, authorization: resp.token });
@@ -4276,101 +4049,5 @@ exports.handlers = {
 
 };
 
-// getOldMyConnectionsAsync: async (req, res) => {
-//   // let receiver_aware_id = req.headers.receiver_aware_id
-//   const errors = validationResult(req);
-//   if (!errors.isEmpty()) {
-//     return res.status(422).jsonp(errors.array())
-//   }
-//   else {
 
-//     if (!req.headers.userid || !req.headers.username || !req.headers.authorization || !req.headers.aware_id) {
-//       return res.status(400).jsonp({ status: false, message: "Bad request!" });
-//     }
-
-//     const request_data_receiver = await requests.find({ receiver_aware_id: req.headers.aware_id, status: "Accepted" }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-//     const request_data_sender = await requests.find({ sender_aware_id: req.headers.aware_id, status: "Accepted" }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-//     const output = [];
-//     const map = new Map();
-//     for (const item of request_data_receiver) {
-//       if (!map.has(item.sender_aware_id.toString())) {
-//         map.set(item.sender_aware_id.toString(), true); // set any value to Map
-//         output.push(item.sender_aware_id.toString());
-//       }
-//     }
-
-
-//     for (const item of request_data_sender) {
-//       if (!map.has(item.receiver_aware_id.toString())) {
-//         map.set(item.receiver_aware_id.toString(), true); // set any value to Map
-//         output.push(item.receiver_aware_id.toString());
-//       }
-//     }
-
-//     var kyc_details_data = await kyc_details.find({ aware_id: { $in: output } }).select(["company_name", "aware_id", "_id", "country"]).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex }) });
-
-//     const output2 = [];
-//     const map2 = new Map();
-//     for (const item of kyc_details_data) {
-//       if (!map2.has(item._id)) {
-//         map2.set(item._id, true); // set any value to Map
-//         output2.push(item._id);
-//       }
-//     }
-
-//     var accounts_found = await account_details.find({ kyc_id: { $in: output2 } }).select(["role_id", "kyc_id"]).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex }) });
-//     var user_roles = await user_role.find().select(["role_id", "role_name"]).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex }) });
-
-//     var jsonArray = [];
-//     for (const item of request_data_receiver) {
-
-//       var details_to_send = kyc_details_data.find(x => x.aware_id == item.sender_aware_id);
-//       var role_id = accounts_found.find(x => x.kyc_id == details_to_send._id.toString()).role_id;
-//       var role_name = user_roles.find(x => x.role_id == role_id).role_name;
-
-//       var rawobject = {
-//         _id: details_to_send._id,
-//         company_name: details_to_send.company_name,
-//         aware_id: details_to_send.aware_id,
-//         country: details_to_send.country,
-//         role_name: role_name,
-//         role_id: role_id,
-//         status: item.status
-//       }
-
-//       jsonArray.push(rawobject);
-//     }
-
-//     for (const item of request_data_sender) {
-
-//       var details_to_send = kyc_details_data.find(x => x.aware_id == item.receiver_aware_id);
-//       var role_id = accounts_found.find(x => x.kyc_id == details_to_send._id.toString()).role_id;
-//       var role_name = user_roles.find(x => x.role_id == role_id).role_name;
-
-//       var rawobject = {
-//         _id: details_to_send._id,
-//         company_name: details_to_send.company_name,
-//         aware_id: details_to_send.aware_id,
-//         country: details_to_send.country,
-//         role_name: role_name,
-//         role_id: role_id,
-//         status: item.status
-//       }
-
-//       jsonArray.push(rawobject);
-//     }
-//     // let filterData = jsonArray.filter((item) => item.role_id == 7)
-//     var payload = { username: req.headers.username };
-//     refresh(req.headers.authorization, req.headers.userid, payload, function (resp) {
-//       if (resp.status == true) {
-//         return res.status(200).jsonp({ status: true, data: jsonArray, authorization: resp.token });
-//       }
-//       else {
-//         return res.status(resp.code).jsonp({ status: false, data: null, authorization: null });
-//       }purchase_order_ETD_list
-//     });
-//   }
-// },
 
