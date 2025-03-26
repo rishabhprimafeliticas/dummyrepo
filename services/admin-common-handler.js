@@ -23,10 +23,7 @@ const ethers = require("ethers");
 var wallets = require("../models/wallets");
 const draft_info = require("../models/draft_info");
 
-// const MongoClient = require('mongodb').MongoClient;
-// const URL = process.env.DATABASE_SENSITIVE_URL;
-// const DB = process.env.DATABASE_SENSITIVE;
-// const HDWalletProvider = require('truffle-hdwallet-provider');
+
 var bip39 = require("bip39"); // npm i -S bip39
 var crypto = require("crypto");
 const aw_tokens = require("../models/aw_tokens");
@@ -60,56 +57,7 @@ const handlers = {
           .jsonp({ status: false, message: "Bad request!" });
       }
 
-      // await account_details.find({ is_deleted: { $ne: true }, role_id: { $ne: 1 } }, async function (err, account) {
-      //   if (err) { loggerhandler.logger.error(`${err} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: err }); }
-
-      //   var userroles = await user_role.find({ role_id: { $ne: 1 } }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: "Internal error!" }); });
-      //   let filtered_data = account.map((ele) => ({ ...ele.toObject(), role_name: (userroles.find((x) => x.role_id == account.role_id)?.role_name) }))
-
-      //   // var jsonArray = [];
-      //   // for (var i = 0; i < account.length; i++) {
-      //   //   var account_details = account[i];
-
-      //   //   var jsonObject = {
-      //   //     id: account_details._id,
-      //   //     first_name: account_details.first_name,
-      //   //     last_name: account_details.last_name,
-      //   //     email: account_details.email,
-      //   //     role_id: account_details.role_id,
-      //   //     role_name: userroles.find(
-      //   //       (x) => x.role_id.toString() == account_details.role_id.toString()
-      //   //     ).role_name,
-      //   //     two_fa_enabled: account_details.two_fa_enabled,
-      //   //     termsnconditions: account_details.termsnconditions,
-      //   //     kyc_id: account_details.kyc_id,
-      //   //     is_number_verified: account_details.is_number_verified,
-      //   //     acknowledgement: account_details.acknowledgement,
-      //   //     created_date: account_details.created_date,
-      //   //   };
-
-      //   //   jsonArray.push(jsonObject);
-      //   // }
-      //   // filltered_users = jsonArray.filter(
-      //   //   (item) => item.role_name !== "Administrator"
-      //   // );
-
-      //   // console.log(jsonObject);
-      //   // return res.status(200).jsonp({ status: true, data: jsonArray, authorization: null });
-      //   // var userroles = await user_role.find({}).catch((ex) => {
-      //   //   loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`);
-      //   //   return res
-      //   //     .status(500)
-      //   //     .jsonp({ status: false, message: "Internal error!" });
-      //   // });
-      //   // let filtered_role = userroles.filter(
-      //   //   (item) => item.role_name !== "Administrator"
-      //   // );
-
-      // });
-
-      // let account = await account_details.find({ is_deleted: { $ne: true }, role_id: { $nin: [1, 10] } }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: "Internal error!" }); });
-
-      // let filtered_data = account.map((ele) => ({ ...ele.toObject(), role_name: (userroles.find((x) => x.role_id == ele.role_id)?.role_name) }))
+     
       try {
         var userroles = await user_role.find({ role_id: { $nin: [1] } });
         // console.log('userroles', userroles, 'useroless')
@@ -216,95 +164,7 @@ const handlers = {
     }
   },
 
-  // getdashboard: async (req, res) => {
-  //   const errors = validationResult(req);
-
-  //   if (!errors.isEmpty()) {
-  //     return res.status(422).jsonp(errors.array());
-  //   } else {
-  //     if (!req.headers.userid ||
-  //       !req.headers.username ||
-  //       !req.headers.authorization) {
-  //       return res
-  //         .status(400)
-  //         .jsonp({ status: false, message: "Bad request!" });
-  //     }
-
-  //     if (account_details.length == 0) {
-  //       return res
-  //         .status(400)
-  //         .jsonp({ status: false, message: "Bad request!" });
-  //     }
-
-  //     // console.log("account_details", account_details.length, account_details)
-  //     account_details.find({ role_id: { $in: [2, 3, 4, 5, 6, 7] }, is_deleted: { $ne: true } }, async function (err, account) {
-  //       if (err) { loggerhandler.logger.error(`${err} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: err }); }
-
-  //       // const pallet_compounder = account.filter(x => x.role_id == '2').length;
-  //       // const fiber_producer = account.filter(x => x.role_id == '3').length;
-  //       // const yarn_producer = account.filter(x => x.role_id == '4').length;
-  //       // const fabric_producer = account.filter(x => x.role_id == '5').length;
-  //       // const product_producer = account.filter(x => x.role_id == '6').length;
-  //       // const final_brand = account.filter(x => x.role_id == '7').length;
-
-  //       // const jsonData = {
-  //       //   "pallet_compounder": pallet_compounder,
-  //       //   "fiber_producer": fiber_producer,
-  //       //   "yarn_producer": yarn_producer,
-  //       //   "fabric_producer": fabric_producer,
-  //       //   "product_producer": product_producer,
-  //       //   "final_brand": final_brand,
-  //       // }
-
-  //       // const jsondata = account.map((ele) => {
-  //       //   let pallet_compounder = 0
-  //       //   let fiber_producer = 0
-  //       //   let yarn_producer = 0
-  //       //   let fabric_producer = 0
-  //       //   let product_producer = 0
-  //       //   let final_brand = 0
-  //       //   switch (ele.role_id) {
-  //       //     case 2: pallet_compounder += 1; break;
-  //       //     case 3: fiber_producer += 1; break;
-  //       //     case 4: yarn_producer += 1; break;
-  //       //     case 5: fabric_producer += 1; break;
-  //       //     case 6: product_producer += 1; break;
-  //       //     case 7: final_brand += 1; break;
-  //       //     default: break;
-  //       //   }
-  //       //   return ({ pallet_compounder, fiber_producer, yarn_producer, fabric_producer, product_producer, final_brand })
-  //       // })
-
-  //       const jsonData = account.reduce((acc, ele) => {
-  //         const roleCounts = { 2: "pallet_compounder", 3: "fiber_producer", 4: "yarn_producer", 5: "fabric_producer", 6: "product_producer", 7: "final_brand" };
-  //         const roleName = roleCounts[ele.role_id];
-  //         if (roleName) { acc[roleName] = (acc[roleName] || 0) + 1; }
-  //         return acc;
-  //       }, {});
-
-  //       // console.log("jsonData", jsonData)
-  //       var payload = { username: req.headers.username };
-  //       refresh(
-  //         req.headers.authorization,
-  //         req.headers.userid,
-  //         payload,
-  //         function (resp) {
-  //           if (resp.status == true) {
-  //             return res.status(200).jsonp({
-  //               status: true,
-  //               data: jsonData,
-  //               authorization: resp.token,
-  //             });
-  //           } else {
-  //             return res
-  //               .status(resp.code)
-  //               .jsonp({ status: false, data: null, authorization: null });
-  //           }
-  //         }
-  //       );
-  //     })
-  //   }
-  // },
+ 
 
   getdashboard: async (req, res) => {
     const errors = validationResult(req);
@@ -328,7 +188,6 @@ const handlers = {
           .jsonp({ status: false, message: "Bad request!" });
       }
 
-      // console.log("account_details", account_details.length, account_details)
       account_details.find(
         { role_id: { $in: [2, 3, 4, 5, 6, 7] }, is_deleted: { $ne: true } },
         async function (err, account) {
@@ -411,37 +270,7 @@ const handlers = {
                 .status(500)
                 .jsonp({ status: false, message: ex.toString() });
             });
-          // var user_status = await kyc_status.find({});
-          // console.log({kycDetails})
-          // var jsonArray = [];
-          // for (var i = 0; i < account.length; i++) {
-          //   var account_details = account[i];
-          //   // console.log(account_details.kyc_id);
-
-          //   let filteredKycDetails = kycDetails.filter(
-          //     (item) => item._id == account_details.kyc_id
-          //   );
-          //   let statusdetails = user_status.filter(
-          //     (item) => item.status_id == filteredKycDetails[0]?.kyc_status
-          //   );
-          //   var jsonObject = {
-          //     id: account_details._id,
-          //     role_id: account_details.role_id,
-          //     kyc_status: filteredKycDetails[0]?.kyc_status,
-          //     role: userroles.find(
-          //       (x) => x.role_id.toString() == account_details.role_id.toString()
-          //     ).role_name,
-          //     kyc_id: account_details.kyc_id,
-          //     kyc_details: filteredKycDetails[0],
-          //     userStatus: statusdetails[0]?.status,
-          //   };
-          //   jsonArray.push(jsonObject);
-          // }
-          // const Pending = filltered_users.filter(x => x.kyc_status == '1').length;
-          // const Under_Verification = filltered_users.filter(x => x.kyc_status == '2').length;
-          // const Approved = filltered_users.filter(x => x.kyc_status == '3').length;
-          // const Rejected = filltered_users.filter(x => x.kyc_status == '4').length;
-          // const OnHold = filltered_users.filter(x => x.kyc_status == '5').length;
+          
 
           var jsonkyc = {
             Pending: kycDetails?.filter((x) => x.kyc_status == "1").length || 0,
@@ -550,58 +379,7 @@ const handlers = {
     }
   },
 
-  //edit user from manage user
-  // updateUserDetail: async (req, res) => {
-  //   const errors = validationResult(req);
-  //   // console.log("id is there", req.headers.clientid);
-
-  //   if (!errors.isEmpty()) {
-  //     return res.status(422).jsonp(errors.array());
-  //   } else {
-  //     // console.log(req.body);
-  //     if (
-  //       !req.headers.userid ||
-  //       !req.headers.username ||
-  //       !req.headers.authorization
-  //     ) {
-  //       return res
-  //         .status(400)
-  //         .jsonp({ status: false, message: "Bad request!" });
-  //     } else {
-  //       account_details.findByIdAndUpdate(
-  //         { _id: mongoose.Types.ObjectId(req.headers.clientid) },
-  //         {
-  //           first_name: req.body.firstname,
-  //           last_name: req.body.lastname,
-  //           role_id: req.body.roleId,
-  //         },
-  //         function (err, datasubmitted) {
-  //           if (err) { loggerhandler.logger.error(`${err} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: err }); }
-
-  //           var payload = { username: req.headers.username };
-  //           refresh(
-  //             req.headers.authorization,
-  //             req.headers.userid,
-  //             payload,
-  //             function (resp) {
-  //               if (resp.status == true) {
-  //                 return res.status(200).jsonp({
-  //                   status: true,
-  //                   message: "User details has been updated to the directory.",
-  //                   authorization: resp.token,
-  //                 });
-  //               } else {
-  //                 return res
-  //                   .status(resp.code)
-  //                   .jsonp({ status: false, data: null, authorization: null });
-  //               }
-  //             }
-  //           );
-  //         }
-  //       );
-  //     }
-  //   }
-  // },
+ 
 
   updateUserDetail: async (req, res) => {
     const errors = validationResult(req);
@@ -1082,362 +860,7 @@ const handlers = {
     }
   },
 
-  // /////status updater method
-  // updateKycStatus: async (req, res) => {
-  //   const errors = validationResult(req);
-
-  //   if (!errors.isEmpty()) {
-  //     return res.status(422).jsonp(errors.array());
-  //   } else {
-  //     if (
-  //       !req.headers.userid ||
-  //       !req.headers.username ||
-  //       !req.headers.authorization
-  //     ) {
-  //       return res
-  //         .status(400)
-  //         .jsonp({ status: false, message: "Bad request!" });
-  //     } else {
-
-  //       var details_of_kyc = await kyc_details.findOne({ _id: mongoose.Types.ObjectId(req.headers.statusid) }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //       if (!details_of_kyc) {
-  //         return res
-  //           .status(403)
-  //           .jsonp({ status: false, message: "You are not allowed to do so!" });
-  //       }
-
-  //       var environmental_scope_certificates = [];
-  //       var social_compliance_certificates = [];
-  //       var chemical_compliance_certificates = [];
-  //       var sustainable_process_certificates = [];
-  //       var aware_tracer = [];
-  //       var custom_tracer = [];
-
-  //       if (req.body.kyc_status == 3) {
-  //         for (const item of details_of_kyc.environmental_scope_certificates) {
-  //           var temp = {
-  //             doc_id: item.doc_id,
-  //             documentname: item.documentname,
-  //             description: item.description,
-  //             validthru: item.validthru,
-  //             isselected: item.isselected,
-  //             path: item.path,
-  //             status: "verified"
-  //           }
-  //           environmental_scope_certificates.push(temp);
-  //         }
-  //         for (const item of details_of_kyc.social_compliance_certificates) {
-  //           var temp = {
-  //             doc_id: item.doc_id,
-  //             documentname: item.documentname,
-  //             description: item.description,
-  //             validthru: item.validthru,
-  //             isselected: item.isselected,
-  //             path: item.path,
-  //             status: "verified"
-  //           }
-  //           social_compliance_certificates.push(temp);
-  //         }
-  //         for (const item of details_of_kyc.chemical_compliance_certificates) {
-  //           var temp = {
-  //             doc_id: item.doc_id,
-  //             documentname: item.documentname,
-  //             description: item.description,
-  //             validthru: item.validthru,
-  //             isselected: item.isselected,
-  //             path: item.path,
-  //             status: "verified"
-  //           }
-  //           chemical_compliance_certificates.push(temp);
-  //         }
-  //         for (const item of details_of_kyc.sustainable_process_certificates) {
-  //           var temp = {
-  //             doc_id: item.doc_id,
-  //             documentname: item.documentname,
-  //             description: item.description,
-  //             validthru: item.validthru,
-  //             isselected: item.isselected,
-  //             path: item.path,
-  //             status: "verified"
-  //           }
-  //           sustainable_process_certificates.push(temp);
-  //         }
-  //         for (const item of details_of_kyc.aware_tracer) {
-  //           var temp = {
-  //             _id: item._id,
-  //             tracer_id: item.tracer_id,
-  //             licensenumber: item.licensenumber,
-  //             validthru: item.validthru,
-  //             path: item.path,
-  //             status: "verified"
-
-  //           }
-  //           aware_tracer.push(temp);
-  //         }
-  //         for (const item of details_of_kyc.custom_tracer) {
-  //           var temp = {
-  //             tracer_id: item.tracer_id,
-  //             tracerName: item.tracerName,
-  //             validthru: item.validthru,
-  //             path: item.path,
-  //             status: "verified"
-
-  //           }
-  //           custom_tracer.push(temp);
-  //         }
-
-  //       }
-  //       else if (req.body.kyc_status == 4) {
-  //         for (const item of details_of_kyc.environmental_scope_certificates) {
-  //           var temp = {
-  //             doc_id: item.doc_id,
-  //             documentname: item.documentname,
-  //             description: item.description,
-  //             validthru: item.validthru,
-  //             isselected: item.isselected,
-  //             path: item.path,
-  //             status: "rejected"
-  //           }
-  //           environmental_scope_certificates.push(temp);
-  //         }
-  //         for (const item of details_of_kyc.social_compliance_certificates) {
-  //           var temp = {
-  //             doc_id: item.doc_id,
-  //             documentname: item.documentname,
-  //             description: item.description,
-  //             validthru: item.validthru,
-  //             isselected: item.isselected,
-  //             path: item.path,
-  //             status: "rejected"
-  //           }
-  //           social_compliance_certificates.push(temp);
-  //         } for (const item of details_of_kyc.chemical_compliance_certificates) {
-  //           var temp = {
-  //             doc_id: item.doc_id,
-  //             documentname: item.documentname,
-  //             description: item.description,
-  //             validthru: item.validthru,
-  //             isselected: item.isselected,
-  //             path: item.path,
-  //             status: "rejected"
-  //           }
-  //           chemical_compliance_certificates.push(temp);
-  //         } for (const item of details_of_kyc.sustainable_process_certificates) {
-  //           var temp = {
-  //             doc_id: item.doc_id,
-  //             documentname: item.documentname,
-  //             description: item.description,
-  //             validthru: item.validthru,
-  //             isselected: item.isselected,
-  //             path: item.path,
-  //             status: "rejected"
-  //           }
-  //           sustainable_process_certificates.push(temp);
-  //         }
-  //         for (const item of details_of_kyc.aware_tracer) {
-  //           var temp = {
-  //             _id: item._id,
-  //             tracer_id: item.tracer_id,
-  //             licensenumber: item.licensenumber,
-  //             validthru: item.validthru,
-  //             path: item.path,
-  //             status: "rejected"
-
-  //           }
-  //           aware_tracer.push(temp);
-  //         }
-  //         for (const item of details_of_kyc.custom_tracer) {
-  //           var temp = {
-  //             tracer_id: item.tracer_id,
-  //             tracerName: item.tracerName,
-  //             validthru: item.validthru,
-  //             path: item.path,
-  //             status: "rejected"
-
-  //           }
-  //           custom_tracer.push(temp);
-  //         }
-
-  //       }
-  //       else if (req.body.kyc_status == 5) {
-  //         for (const item of details_of_kyc.environmental_scope_certificates) {
-  //           var temp = {
-  //             doc_id: item.doc_id,
-  //             documentname: item.documentname,
-  //             description: item.description,
-  //             validthru: item.validthru,
-  //             isselected: item.isselected,
-  //             path: item.path,
-  //             status: "on-hold"
-  //           }
-  //           environmental_scope_certificates.push(temp);
-  //         }
-  //         for (const item of details_of_kyc.social_compliance_certificates) {
-  //           var temp = {
-  //             doc_id: item.doc_id,
-  //             documentname: item.documentname,
-  //             description: item.description,
-  //             validthru: item.validthru,
-  //             isselected: item.isselected,
-  //             path: item.path,
-  //             status: "on-hold"
-  //           }
-  //           social_compliance_certificates.push(temp);
-  //         } for (const item of details_of_kyc.chemical_compliance_certificates) {
-  //           var temp = {
-  //             doc_id: item.doc_id,
-  //             documentname: item.documentname,
-  //             description: item.description,
-  //             validthru: item.validthru,
-  //             isselected: item.isselected,
-  //             path: item.path,
-  //             status: "on-hold"
-  //           }
-  //           chemical_compliance_certificates.push(temp);
-  //         } for (const item of details_of_kyc.sustainable_process_certificates) {
-  //           var temp = {
-  //             doc_id: item.doc_id,
-  //             documentname: item.documentname,
-  //             description: item.description,
-  //             validthru: item.validthru,
-  //             isselected: item.isselected,
-  //             path: item.path,
-  //             status: "on-hold"
-  //           }
-  //           sustainable_process_certificates.push(temp);
-  //         }
-  //         for (const item of details_of_kyc.aware_tracer) {
-  //           var temp = {
-  //             _id: item._id,
-  //             tracer_id: item.tracer_id,
-  //             licensenumber: item.licensenumber,
-  //             validthru: item.validthru,
-  //             path: item.path,
-  //             status: "on-hold"
-
-  //           }
-  //           aware_tracer.push(temp);
-  //         }
-  //         for (const item of details_of_kyc.custom_tracer) {
-  //           var temp = {
-  //             tracer_id: item.tracer_id,
-  //             tracerName: item.tracerName,
-  //             validthru: item.validthru,
-  //             path: item.path,
-  //             status: "on-hold"
-
-  //           }
-  //           custom_tracer.push(temp);
-  //         }
-
-  //       }
-
-  //       kyc_details.findByIdAndUpdate(
-  //         { _id: mongoose.Types.ObjectId(req.headers.statusid) },
-  //         {
-  //           kyc_status: req.body.kyc_status,
-  //           environmental_scope_certificates: environmental_scope_certificates,
-  //           social_compliance_certificates: social_compliance_certificates,
-  //           chemical_compliance_certificates: chemical_compliance_certificates,
-  //           sustainable_process_certificates: sustainable_process_certificates,
-  //           aware_tracer: aware_tracer,
-  //           custom_tracer: custom_tracer,
-
-  //         },
-  //         async function (err, datasubmitted) {
-  //           if (err)
-  //             return res.status(500).jsonp({ status: false, message: err });
-
-  //           if (req.body.kyc_status == 3) {
-
-  //             web3_handler.createWalletAsync(details_of_kyc.aware_id, function (resget) {
-
-  //               console.log("res", resget)
-  //               if (resget != true) {
-  //                 return res.status(500).jsonp({ status: false, message: "Internal error!" });
-  //               }
-  //               else {
-
-  //                 var payload = { username: req.headers.username };
-  //                 refresh(
-  //                   req.headers.authorization,
-  //                   req.headers.userid,
-  //                   payload,
-  //                   async function (resp) {
-
-  //                     if (resp.status == true) {
-
-  //                       var accountdetails = await account_details.findOne({ kyc_id: req.headers.statusid }).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-
-  //                       if (!accountdetails) {
-  //                         return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
-  //                       }
-  //                       else {
-  //                         SendGrid.sendKycStatusMail(accountdetails.email, req.body.kyc_status, '', function (result) {
-  //                           if (result != null) {
-  //                             return res.status(200).jsonp({
-  //                               status: true,
-  //                               message: "KYC status has been updated.",
-  //                               authorization: resp.token,
-  //                             });
-  //                           } else {
-  //                             return res.status(500).jsonp({ status: false, message: "Internal error!" })
-  //                           }
-  //                         })
-  //                       }
-  //                     } else {
-  //                       return res
-  //                         .status(resp.code)
-  //                         .jsonp({ status: false, data: null, authorization: null });
-  //                     }
-  //                   }
-  //                 );
-  //               }
-
-  //             });
-  //           }
-  //           else {
-  //             var payload = { username: req.headers.username };
-  //             refresh(
-  //               req.headers.authorization,
-  //               req.headers.userid,
-  //               payload,
-  //               async function (resp) {
-  //                 if (resp.status == true) {
-
-  //                   var accountdetails = await account_details.findOne({ kyc_id: req.headers.statusid }).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-
-  //                   if (!accountdetails) {
-  //                     return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
-  //                   }
-  //                   else {
-  //                     SendGrid.sendKycStatusMail(accountdetails.email, req.body.kyc_status, '', function (result) {
-  //                       if (result != null) {
-  //                         return res.status(200).jsonp({
-  //                           status: true,
-  //                           message: "KYC status has been updated.",
-  //                           authorization: resp.token,
-  //                         });
-  //                       } else {
-  //                         return res.status(500).jsonp({ status: false, message: "Internal error!" })
-  //                       }
-  //                     })
-  //                   }
-  //                 } else {
-  //                   return res
-  //                     .status(resp.code)
-  //                     .jsonp({ status: false, data: null, authorization: null });
-  //                 }
-  //               }
-  //             );
-  //           }
-
-  //         }
-  //       );
-  //     }
-  //   }
-  // },
+ 
 
   updateKycStatus: async (req, res) => {
     const errors = validationResult(req);
@@ -1510,17 +933,7 @@ const handlers = {
             }
           }
           for (const item of details_of_kyc.social_compliance_certificates) {
-            //   var temp = {
-            //     doc_id: item.doc_id,
-            //     documentname: item.documentname,
-            //     description: item.description,
-            //     validthru: item.validthru,
-            //     isselected: item.isselected,
-            //     path: item.path,
-            //     status: "verified"
-            //   }
-            //   social_compliance_certificates.push(temp);
-            // }
+           
 
             if (item.status != "verified") {
               var temp = {
@@ -1826,16 +1239,7 @@ const handlers = {
 
         kyc_details.findByIdAndUpdate(
           { _id: mongoose.Types.ObjectId(req.headers.statusid) },
-          // {
-          //   kyc_status: req.body.kyc_status,
-          //   environmental_scope_certificates: environmental_scope_certificates,
-          //   social_compliance_certificates: social_compliance_certificates,
-          //   chemical_compliance_certificates: chemical_compliance_certificates,
-          //   sustainable_process_certificates: sustainable_process_certificates,
-          //   aware_tracer: aware_tracer,
-          //   custom_tracer: custom_tracer,
-          //   sub_brand: temp_account_details.role_id == 7 ? [SubBrand] : []
-          // },
+        
           {
             kyc_status: req.body.kyc_status,
             environmental_scope_certificates: environmental_scope_certificates,
@@ -2252,45 +1656,7 @@ const handlers = {
           allIDDATA.push(masters_data01);
         }
 
-        // masters_data.find(
-        //   { $and: [{ masterId: masterId }] },
-        //   function (err, user) {
-        //     // console.log("err", err);
-        //     if (err) {
-        //       loggerhandler.logger.error(`${err} ,email:${req.headers.email}`);
-        //       return res
-        //         .status(500)
-        //         .jsonp({ status: false, message: err.toString() });
-        //     }
-
-        //     if (user) {
-        //       // console.log("user", user);
-
-        //       var payload = { username: req.headers.username };
-        //       refresh(
-        //         req.headers.authorization,
-        //         req.headers.userid,
-        //         payload,
-        //         function (resp) {
-        //           if (resp.status == true) {
-        //             // console.log("data received", jsonObject);
-        //             return res.status(200).jsonp({
-        //               message: "all the data received of particular master",
-        //               status: true,
-        //               data: user,
-        //               authorization: resp.token,
-        //             });
-        //           } else {
-        //             return res.status(resp.code).jsonp({
-        //               status: false,
-        //               authorization: null,
-        //             });
-        //           }
-        //         }
-        //       );
-        //     }
-        //   }
-        // ).sort({ name: 1 });
+        
       }
     }
   },
@@ -2402,10 +1768,7 @@ const handlers = {
 
   updateTokenStatusAndTransferAwareToken: async (req, res) => {
     try {
-      // const errors = validationResult(req);
-      // if (!errors.isEmpty()) {
-      //   return res.status(422).jsonp(errors.array());
-      // }
+   
 
       const { userid, username, authorization } = req.headers;
       console.log("req.headers", req.headers);
@@ -2421,7 +1784,6 @@ const handlers = {
 
       // Refresh token and store new authorization
       let newToken;
-      //www.google.com/search?sca_esv=88e79802ecab127d&sxsrf=AHTn8zrZi0pwUIDvz5jvoRM31Jk1vUnkow:1739594813963&q=food+serving+container+in+5+stars&udm=2&fbs=ABzOT_CWdhQLP1FcmU5B0fn3xuWpA-dk4wpBWOGsoR7DG5zJBpwxALD7bRaeOIZxqOFEngxArVnzSUyc1QpiuTUVHc4E7mfS7phR3Xv7xK7LS9NQY_j97lM4M75d2ahQ4ow7H_MMDBeIa-r7PHqrio0d-7tMQ_E0RZpVjxCnuD1kZRCOLkWlDe5a0Fr-fKQkiMl_h4azCv540b92_VHR5v1Qli92u5Tw4Q&sa=X&ved=2ahUKEwiHzsHX78SLAxX-wzgGHaEBHfMQtKgLegQIFBAB&biw=1745&bih=874&dpr=1.1
       https: await new Promise((resolve) => {
         refresh(authorization, userid, { username }, (resp) => {
           if (resp.status) {
@@ -2437,19 +1799,17 @@ const handlers = {
         });
       });
 
-      const userIds = data.map((item) => mongoose.Types.ObjectId(item._id));
+      const createTokensIds = data.map((item) => mongoose.Types.ObjectId(item._id));
+
+      console.log("🪙TCA🪙 CreateTokensIds", createTokensIds);
 
       // Update token status
       await aw_tokens.updateMany(
-        { _id: { $in: userIds } },
+        { _id: { $in: createTokensIds } },
         { status: "Processing" }
       );
 
-      // await aw_tokens.findOneAndUpdate(
-      //   { _id: mongoose.Types.ObjectId(_id) },
-      //   { status: "Processing" },
-      //   { new: true }
-      // );
+      
 
       if (!schedulerRunning) {
         console.log("Scheduler started.");
@@ -2466,106 +1826,14 @@ const handlers = {
         authorization: newToken,
       });
 
-      // const sleep = async (ms) => {
-      //   return new Promise(resolve => setTimeout(resolve, ms));
-      // }
-
-      // await sleep(200000);
-
-      // Continue processing in the background
-      // setImmediate(async () => {
-
-      // });
+     
     } catch (ex) {
       loggerhandler.logger.error(`Unhandled error: ${ex}`);
       return res.status(500).jsonp({ status: false, message: ex.message });
     }
   },
 
-  // updateTokenStatusAndTransferAwareToken: async (req, res) => {
-  //   const errors = validationResult(req);
-
-  //   if (!errors.isEmpty()) {
-
-  //     return res.status(422).jsonp(errors.array());
-
-  //   } else {
-
-  //     if (!req.headers.userid || !req.headers.username || !req.headers.authorization || !req.headers.aware_id) {
-  //       return res.status(400).jsonp({ status: false, message: "Bad request!" });
-  //     }
-  //     else {
-
-  //       //confirm with nikhil
-  //       // const aw_token_avaliable = await aw_tokens.findOne({ _awareid: req.headers.aware_id, _id: mongoose.Types.ObjectId(req.body._id) }).catch((ex) => { return res.status(500).jsonp({ status: false, message: "Internal error!" }) });
-
-  //       const aw_token_avaliable = await aw_tokens.findOne({ _id: mongoose.Types.ObjectId(req.body._id) }).select(["_id", "_awareid"]).catch((ex) => { return res.status(500).jsonp({ status: false, message: "Internal error!" }) });
-
-  //       const assets_avaliable = await physical_assets.findOne({ _awareid: aw_token_avaliable._awareid, aware_token_id: aw_token_avaliable._id.toString() }).catch((ex) => { return res.status(500).jsonp({ status: false, message: "Internal error!" }) })
-
-  //       if (req.body.token_status == "approved") {
-
-  //         // var physical_assets_found = await physical_assets.findOne({ aware_token_id: req.body._id }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //         web3_handler.createAwareTokenAsync(req.body._id, async function (response) {
-  //           if (response == false) {
-  //             return res.status(500).jsonp({ status: false, message: "Internal error!" });
-  //           }
-  //           else {
-
-  //             // await aw_tokens.findOneAndUpdate({ _awareid: req.headers.aware_id, _id: mongoose.Types.ObjectId(req.body._id) },
-  //             //   {
-  //             //     status: 'Approved', type_of_token: physical_assets_found.aware_token_type,
-  //             //     total_tokens: Number(physical_assets_found.weight),
-  //             //     avaliable_tokens: Number(physical_assets_found.weight),
-  //             //     // used_tokens: Number(physical_assets_found.weight)
-  //             //   },
-  //             //   { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //             var payload = { username: req.headers.username };
-  //             refresh(req.headers.authorization, req.headers.userid, payload, async function (resp) {
-  //               if (resp.status == true) {
-  //                 await notifications.create({
-  //                   notification_sent_to: req.headers.aware_id,
-  //                   message: `Your ${assets_avaliable.weight} tokens are approved by your manager. You can send  them now.`
-  //                 })
-  //                 return res.status(200).jsonp({ status: true, message: "Tokens have been transferred to the user wallet successfully", authorization: resp.token });
-  //               }
-  //               else {
-  //                 return res.status(resp.code).jsonp({ status: false, message: null, authorization: null });
-  //               }
-  //             });
-
-  //           }
-
-  //         });
-
-  //       }
-  //       else {
-
-  //         await aw_tokens.findOneAndUpdate({ _awareid: req.headers.aware_id, _id: mongoose.Types.ObjectId(req.body._id) }, { status: 'Rejected', message: req.body.message }, { new: true }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //         var payload = { username: req.headers.username };
-  //         refresh(req.headers.authorization, req.headers.userid, payload, async function (resp) {
-  //           if (resp.status == true) {
-
-  //             await notifications.create({
-  //               notification_sent_to: req.headers.aware_id,
-  //               message: `Your ${assets_avaliable.weight} tokens are rejected. Please make corrections and resend the request.`
-  //             })
-
-  //             return res.status(200).jsonp({ status: true, message: "Token request has been rejected.", authorization: resp.token });
-  //           }
-  //           else {
-  //             return res.status(resp.code).jsonp({ status: false, message: null, authorization: null });
-  //           }
-  //         });
-
-  //       }
-
-  //     }
-  //   }
-  // },
+ 
 
   updateTokenStatusAndSendToken: async (req, res) => {
     const errors = validationResult(req);
@@ -2584,49 +1852,7 @@ const handlers = {
           .jsonp({ status: false, message: "Bad request!" });
       } else {
         if (req.body.token_status == "approved") {
-          // var wallet_found = wallets.findOne({ _awareid: req.headers.aware_id }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-          // if (!wallet_found) {
-          //   const web3 = new Web3(process.env.BABEL_ENDPOINT);
-          //   const account = web3.eth.accounts.create();
-
-          //   const privateKey = account.privateKey;
-          //   var chars = account.privateKey.split('');
-
-          //   var io_privateKey = "";
-          //   for (var i = 2; i < chars.length; i++) {
-          //     io_privateKey = io_privateKey + chars[i];
-          //   }
-
-          //   var ramdomstring = helperfunctions.makeid(64);
-
-          //   var fake_io_privatekey = `${ramdomstring}`;
-
-          //   var encrypted_privateKey = helperfunctions.encryptAddress(privateKey, 'encrypt');
-          //   var encrypted_io_privateKey = helperfunctions.encryptAddress(io_privateKey, 'encrypt');
-          //   var encrypted_fake_io_privatekey = helperfunctions.encryptAddress(fake_io_privatekey, 'encrypt');
-
-          //   const froom = encrypted_privateKey.slice(0, (encrypted_privateKey.length / 2));
-          //   const too = encrypted_privateKey.slice((encrypted_privateKey.length / 2), encrypted_privateKey.length);
-
-          //   const froom_i = encrypted_io_privateKey.slice(0, (encrypted_io_privateKey.length / 2));
-          //   const too_i = encrypted_io_privateKey.slice((encrypted_io_privateKey.length / 2), encrypted_io_privateKey.length);
-
-          //   await wallets.create({
-          //     _awareid: req.headers.aware_id,
-          //     wallet_address_0x: account.address,
-          //     wallet_address_io: from(account.address).string(),
-          //     private_key: encrypted_fake_io_privatekey,
-          //     from: froom,
-          //     to: too,
-          //     from_i: froom_i,
-          //     to_i: too_i,
-          //   }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) });
-
-          // }
-
-          // var physical_assets_found = await physical_assets.findOne({ aware_token_id: req.body._id }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
+         
           await send_aw_tokens
             .findOneAndUpdate(
               {
@@ -2704,173 +1930,7 @@ const handlers = {
     }
   },
 
-  //last working update approval
-  // updateTokenStatusAndTransferUpdateAwareToken: async (req, res) => {
-  //   const errors = validationResult(req);
 
-  //   if (!errors.isEmpty()) {
-
-  //     return res.status(422).jsonp(errors.array());
-
-  //   } else {
-
-  //     if (!req.headers.userid || !req.headers.username || !req.headers.authorization || !req.headers.aware_id) {
-  //       return res.status(400).jsonp({ status: false, message: "Bad request!" });
-  //     }
-  //     else {
-  //       try {
-  //         // const update_aw_token_avaliable = await update_aw_tokens.findOne({ _id: req.body._id }).catch((ex) => { callback(false); });
-
-  //         const update_aw_token_avaliable = await update_aw_tokens.findOne({ _id: mongoose.Types.ObjectId(req.body._id) }).select(["_id", "_awareid"]).catch((ex) => { callback(false); });
-
-  //         const assets_avaliable = await update_physical_asset.findOne({ _awareid: update_aw_token_avaliable._awareid, update_aware_token_id: update_aw_token_avaliable._id.toString() }).catch((ex) => { callback(false); })
-
-  //         if (req.body.token_status == "approved") {
-
-  //           var selected_update_aware_token_found = await selected_update_aware_token.findOne({ update_aware_token_id: req.body._id }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //           var update_physical_assets_found = await update_physical_asset.findOne({ update_aware_token_id: req.body._id }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //           var temp_product_lines_avaliable = await product_lines.findOne({ "product_line.update_aware_token_id": req.body._id, deleted: false }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-
-  //           console.log("Get inside web3!")
-  //           web3_handler.updateAwareTokenAsync(req.body._id, async function (response) {
-  //             if (response == false) {
-  //               return res.status(500).jsonp({ status: false, message: "Internal error!" });
-  //             }
-  //             else {
-
-  //               // console.log("HEY")
-  //               let product_line = temp_product_lines_avaliable?.product_line
-
-  //               if (temp_product_lines_avaliable) {
-  //                 let elementIndex = product_line.findIndex((obj) => obj.update_aware_token_id == req.body._id);
-  //                 product_line[elementIndex].update_status = 'APPROVED'
-  //                 await product_lines.findOneAndUpdate({ po_id: temp_product_lines_avaliable?.po_id, deleted: false }, { product_line: product_line }, { new: true }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-  //               }
-
-  //               // await Promise.allSettled(
-  //               //   update_physical_assets_found.assetdataArrayMain.map(async (dataset) => {
-  //               //     await callstack.unlockedTheLockedTokens(dataset);
-  //               //   })
-  //               // ).catch((error) => {
-  //               // })
-
-  //               // await update_aw_tokens.findOneAndUpdate({ _awareid: req.headers.aware_id, _id: mongoose.Types.ObjectId(req.body._id) },
-  //               //   {
-  //               //     status: 'Approved', type_of_token: selected_update_aware_token_found.aware_output_token_type,
-  //               //     total_tokens: Number(update_physical_assets_found.weight),
-  //               //     avaliable_tokens: Number(update_physical_assets_found.weight),
-  //               //     // used_tokens: Number(update_physical_assets_found.weight)
-  //               //   },
-  //               //   { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //               let send_status_checker = product_line?.find((ele) => { ele.update_status == 'SEND' })
-  //               if (!send_status_checker) {
-  //                 await purchase_orders.findOneAndUpdate({ _id: mongoose.Types.ObjectId(temp_product_lines_avaliable?.po_id), deleted: false }, { locked: false }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-  //               }
-
-  //               var payload = { username: req.headers.username };
-  //               refresh(req.headers.authorization, req.headers.userid, payload, async function (resp) {
-  //                 if (resp.status == true) {
-  //                   await notifications.create({
-  //                     notification_sent_to: req.headers.aware_id,
-  //                     message: `Your ${assets_avaliable.weight} tokens are approved by your manager. You can send  them now.`
-  //                   })
-  //                   return res.status(200).jsonp({ status: true, message: "Tokens have been transferred to the user wallet successfully", authorization: resp.token });
-  //                 }
-  //                 else {
-  //                   return res.status(resp.code).jsonp({ status: false, message: null, authorization: null });
-  //                 }
-  //               });
-
-  //             }
-
-  //           });
-
-  //         }
-  //         else {
-  //           // var selected_update_aware_token_found = await selected_update_aware_token.findOne({ update_aware_token_id: req.body._id }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //           // console.log("req.headers.aware_id, _id", req.headers.aware_id, "req.body._id", req.body._id);
-  //           var update_physical_assets_found = await update_physical_asset.findOne({ update_aware_token_id: req.body._id }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //           var temp_product_lines_avaliable = await product_lines.findOne({ "product_line.update_aware_token_id": req.body._id, deleted: false }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-  //           let product_line = temp_product_lines_avaliable?.product_line
-
-  //           // console.log("product_line", product_line)
-
-  //           if (temp_product_lines_avaliable) {
-  //             let elementIndex = product_line.findIndex((obj) => obj.update_aware_token_id == req.body._id);
-
-  //             // console.log("elementIndex", product_line[elementIndex])
-
-  //             product_line[elementIndex].update_status = 'Rejected'
-  //             product_line[elementIndex].message = req.body.message
-  //             // product_line[elementIndex].update_aware_token_id = '';
-  //             // product_line[elementIndex].production_quantity = '';
-  //             // var draft_info_avalible = await draft_info.findOne({ _id: mongoose.Types.ObjectId(product_line[elementIndex].draft_id) }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //             // let filtered_order_lines_in_current_request = []
-  //             // let b = draft_info_avalible.order_lines_in_current_request.filter(x => x != product_line[elementIndex].id);
-  //             // console.log('hii', b)
-  //             // draft_info_avalible.order_lines_in_current_request.forEach(element => {
-  //             //   if (element.toString() != product_line[elementIndex].id.toString()) {
-  //             //     filtered_order_lines_in_current_request.push(element)
-  //             //   }
-  //             // });
-  //             // if (filtered_order_lines_in_current_request.length <= 0) {
-  //             //   await draft_info.deleteOne({ _id: mongoose.Types.ObjectId(product_line[elementIndex].draft_id) }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-  //             // } else {
-  //             //   await draft_info.findOneAndUpdate({ _id: mongoose.Types.ObjectId(product_line[elementIndex].draft_id) }, { order_lines_in_current_request: filtered_order_lines_in_current_request }, { new: true }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-  //             // }
-  //             await draft_info.findOneAndUpdate({ _id: mongoose.Types.ObjectId(product_line[elementIndex].draft_id) }, { status: "CONCEPT" }, { new: true }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //             await product_lines.findOneAndUpdate({ po_id: temp_product_lines_avaliable?.po_id, deleted: false }, { product_line: product_line }, { new: true }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-  //           }
-
-  //           // await Promise.allSettled(
-  //           //   update_physical_assets_found.assetdataArrayMain.map(async (dataset) => {
-  //           //     await callstack.unlockedWTheLockedTokensWithoutChangingBalance(dataset);
-  //           //   })).catch((error) => { })
-
-  //           //new
-  //           await Promise.allSettled(
-  //             update_physical_assets_found.assetdataArrayMain.map(async (dataset) => {
-  //               await callstack.unlockedWTheLockedTokensAndAddingBalance(dataset, req);
-  //             })).catch((error) => { loggerhandler.logger.error(`${error} ,email:${req.headers.email}`); })
-
-  //           await update_aw_tokens.findOneAndUpdate({ _awareid: req.headers.aware_id, _id: mongoose.Types.ObjectId(req.body._id) }, { status: 'Rejected', message: req.body.message }, { new: true }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //           // let send_status_checker = product_line?.find((ele) => { ele.update_status == 'SEND' })
-  //           // if (!send_status_checker) {
-  //           //   await purchase_orders.findOneAndUpdate({ _id: mongoose.Types.ObjectId(temp_product_lines_avaliable?.po_id), deleted:false }, { locked: false }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-  //           // }
-  //           var payload = { username: req.headers.username };
-  //           refresh(req.headers.authorization, req.headers.userid, payload, async function (resp) {
-  //             if (resp.status == true) {
-  //               await notifications.create({
-  //                 notification_sent_to: req.headers.aware_id,
-  //                 message: `Your ${assets_avaliable.weight} tokens are rejected. Please make corrections  and resend the request.`
-  //               })
-
-  //               return res.status(200).jsonp({ status: true, message: "Token request has been rejected.", authorization: resp.token });
-  //             }
-  //             else {
-  //               return res.status(resp.code).jsonp({ status: false, message: null, authorization: null });
-  //             }
-  //           });
-
-  //         }
-
-  //       }
-  //       catch (ex) {
-  //         loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`);
-  //         console.log("ex", ex)
-  //       }
-  //     }
-  //   }
-  // },
 
   updateTokenStatusAndTransferUpdateAwareToken: async (req, res) => {
     try {
@@ -2906,21 +1966,18 @@ const handlers = {
         });
       });
 
-      const userIds = data.map((item) => item._id);
+       const updateTokensIds = data.map((item) => item._id);
 
-      console.log("Userids", userIds);
+      console.log("🪙TUA🪙 UpdateTokensIds", updateTokensIds);
 
       // Update token status
       await update_aw_tokens.updateMany(
-        { _id: { $in: userIds } },
+        { _id: { $in: updateTokensIds } },
         { status: "Processing" }
       );
 
-      // await aw_tokens.findOneAndUpdate(
-      //   { _id: mongoose.Types.ObjectId(_id) },
-      //   { status: "Processing" },
-      //   { new: true }
-      // );
+
+      
 
       if (!schedulerRunning) {
         console.log("Scheduler started.");
@@ -2937,16 +1994,7 @@ const handlers = {
         authorization: newToken,
       });
 
-      // const sleep = async (ms) => {
-      //   return new Promise(resolve => setTimeout(resolve, ms));
-      // }
-
-      // await sleep(200000);
-
-      // Continue processing in the background
-      // setImmediate(async () => {
-
-      // });
+      
     } catch (ex) {
       loggerhandler.logger.error(`Unhandled error: ${ex}`);
       return res.status(500).jsonp({ status: false, message: ex.message });
@@ -3744,129 +2792,7 @@ const handlers = {
     }
   },
 
-  /// 14 feb update and approve dont remove me
-  // updateTokenStatusAndTransferUpdateAwareToken: async (req, res) => {
-  //   const errors = validationResult(req);
 
-  //   if (!errors.isEmpty()) {
-
-  //     return res.status(422).jsonp(errors.array());
-
-  //   } else {
-
-  //     if (!req.headers.userid || !req.headers.username || !req.headers.authorization || !req.headers.aware_id) {
-  //       return res.status(400).jsonp({ status: false, message: "Bad request!" });
-  //     }
-  //     else {
-
-  //       try {
-  //         if (req.body.token_status == "approved") {
-
-  //           var selected_update_aware_token_found = await selected_update_aware_token.findOne({ update_aware_token_id: req.body._id }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //           var update_physical_assets_found = await update_physical_asset.findOne({ update_aware_token_id: req.body._id }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //           var temp_product_lines_avaliable = await product_lines.findOne({ "product_line.update_aware_token_id": req.body._id,deleted:false }).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-
-  //           web3_handler.updateAwareTokenAsync(req.body._id, async function (response) {
-  //             if (response == false) {
-  //               return res.status(500).jsonp({ status: false, message: "Internal error!" });
-  //             }
-  //             else {
-
-  //               // console.log("HEY")
-  //               let product_line = temp_product_lines_avaliable.product_line
-
-  //               if (temp_product_lines_avaliable) {
-  //                 let elementIndex = product_line.findIndex((obj) => obj.update_aware_token_id == req.body._id);
-  //                 product_line[elementIndex].update_status = 'APPROVED'
-  //                 await product_lines.findOneAndUpdate({ po_id: temp_product_lines_avaliable?.po_id ,deleted:false}, { product_line: product_line }, { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-  //               }
-
-  //               await Promise.allSettled(
-  //                 update_physical_assets_found.assetdataArrayMain.map(async (dataset) => {
-  //                   await callstack.unlockedTheLockedTokens(dataset);
-  //                 })
-  //               ).catch((error) => {
-  //               })
-
-  //               await update_aw_tokens.findOneAndUpdate({ _awareid: req.headers.aware_id, _id: mongoose.Types.ObjectId(req.body._id) },
-  //                 {
-  //                   status: 'Approved', type_of_token: selected_update_aware_token_found.aware_output_token_type,
-  //                   total_tokens: Number(update_physical_assets_found.weight),
-  //                   avaliable_tokens: Number(update_physical_assets_found.weight),
-  //                   // used_tokens: Number(update_physical_assets_found.weight)
-  //                 },
-  //                 { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //               let send_status_checker = product_line.find((ele) => { ele.update_status == 'SEND' })
-  //               if (!send_status_checker) {
-  //                 await purchase_orders.findOneAndUpdate({ _id: mongoose.Types.ObjectId(temp_product_lines_avaliable?.po_id), deleted:false }, { locked: false }).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-  //               }
-
-  //               var payload = { username: req.headers.username };
-  //               refresh(req.headers.authorization, req.headers.userid, payload, async function (resp) {
-  //                 if (resp.status == true) {
-  //                   return res.status(200).jsonp({ status: true, message: "Tokens have been transferred to the user wallet successfully", authorization: resp.token });
-  //                 }
-  //                 else {
-  //                   return res.status(resp.code).jsonp({ status: false, message: null, authorization: null });
-  //                 }
-  //               });
-
-  //             }
-
-  //           });
-
-  //         }
-  //         else {
-  //           var selected_update_aware_token_found = await selected_update_aware_token.findOne({ update_aware_token_id: req.body._id }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //           // console.log("req.headers.aware_id, _id", req.headers.aware_id, "req.body._id", req.body._id);
-  //           var update_physical_assets_found = await update_physical_asset.findOne({ update_aware_token_id: req.body._id }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //           var temp_product_lines_avaliable = await product_lines.findOne({ "product_line.update_aware_token_id": req.body._id ,deleted:false}).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-  //           let product_line = temp_product_lines_avaliable.product_line
-
-  //           if (temp_product_lines_avaliable) {
-  //             let elementIndex = product_line.findIndex((obj) => obj.update_aware_token_id == req.body._id);
-  //             product_line[elementIndex].update_status = 'SELECT'
-  //             product_line[elementIndex].update_aware_token_id = '';
-  //             product_line[elementIndex].production_quantity = '';
-  //             await product_lines.findOneAndUpdate({ po_id: temp_product_lines_avaliable?.po_id ,deleted:false}, { product_line: product_line }, { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-  //           }
-
-  //           await Promise.allSettled(
-  //             update_physical_assets_found.assetdataArrayMain.map(async (dataset) => {
-  //               await callstack.unlockedWTheLockedTokensWithoutChangingBalance(dataset);
-  //             })).catch((error) => { })
-
-  //           await update_aw_tokens.findOneAndUpdate({ _awareid: req.headers.aware_id, _id: mongoose.Types.ObjectId(req.body._id) }, { status: 'Rejected' }, { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //           let send_status_checker = product_line.find((ele) => { ele.update_status == 'SEND' })
-  //           if (!send_status_checker) {
-  //             await purchase_orders.findOneAndUpdate({ _id: mongoose.Types.ObjectId(temp_product_lines_avaliable?.po_id) , deleted:false}, { locked: false }).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-  //           }
-  //           var payload = { username: req.headers.username };
-  //           refresh(req.headers.authorization, req.headers.userid, payload, async function (resp) {
-  //             if (resp.status == true) {
-  //               return res.status(200).jsonp({ status: true, message: "Token request has been rejected.", authorization: resp.token });
-  //             }
-  //             else {
-  //               return res.status(resp.code).jsonp({ status: false, message: null, authorization: null });
-  //             }
-  //           });
-
-  //         }
-
-  //       }
-  //       catch (ex) {
-
-  //         console.log("ex", ex)
-  //       }
-  //     }
-  //   }
-  // },
 
   postManagerRegisterAsync: async (req, res) => {
     try {
@@ -4345,17 +3271,7 @@ const handlers = {
 
         let find = product_line_list.filter((e) => e._awareid == ele.aware_id);
 
-        // let created = product_line_list.reduce((acc, current) => {
-        //   let date = current?.created_date ? new Date(current.created_date) : new Date();
-        //   if (startDate && endDate) {
-        //     if (current._awareid == ele.aware_id && startDate <= date && endDate >= date) {
-        //       let length = current?.product_line?.length || 0;
-        //       acc += length
-        //     }
-        //   }
-
-        //   return acc;
-        // }, 0);
+        
 
         let created = product_line_list.reduce((acc, current) => {
           let date = current?.created_date
@@ -4384,17 +3300,14 @@ const handlers = {
                 endDate
               ).format("DD/MM/YYYY")}`
             : "N/A";
-        // console.log("custom_date",custom_date,moment(startDate).format('DD/MM/YYYY'))
         return {
-          // awareId: ele?.aware_id,
           companyname: ele?.company_name,
           allowed_dpp,
           custom_date,
           total_created,
           remaining,
           created,
-          // find,
-          // subscription: (ele?.subscription || {})
+         
         };
       });
 
@@ -4495,7 +3408,6 @@ const handlers = {
             .jsonp({ status: false, message: "Internal error!" });
         });
 
-      // console.log('hhhhhhhh', final_brand_kyc_Details?.subscription?.start_date, final_brand_kyc_Details?.subscription?.end_date)
       const startDate = final_brand_kyc_Details?.subscription?.start_date
         ? new Date(final_brand_kyc_Details.subscription.start_date)
         : null;
@@ -4516,7 +3428,6 @@ const handlers = {
             )}`
           : "N/A";
 
-      // console.log("final_brand_kyc_Details", final_brand_kyc_Details);
 
       const pi_chart_data = {
         FILLED: 0,
@@ -4541,7 +3452,6 @@ const handlers = {
         .subtract(1, "days")
         .endOf("day")
         .toDate();
-      // console.log({ NextsevenDaysStart, NextsevenDaysEnd, LastDaysStart, LastDaysEnd })
       let purchase_order_ETD_list = await purchase_orders.aggregate([
         {
           $match: {
@@ -4651,11 +3561,9 @@ const handlers = {
             }
           }
         });
-        // console.log({object})
         return object;
       });
 
-      // console.log("product_line_list", purchase_order_list);
 
       let created = product_line_list.reduce((acc, current) => {
         let date = current?.created_date
@@ -4670,23 +3578,7 @@ const handlers = {
         return acc;
       }, 0);
 
-      // function to calculate the total quantity created within the startDate and endDate
-      // const created_quantity = product_line_list.reduce((acc, current) => {
-      //   // console.log("current.product_line", current?.product_line?.quantity);
-      //   let date = current?.created_date
-      //     ? new Date(current.created_date)
-      //     : new Date();
-
-      //   if (startDate && endDate && startDate <= date && endDate >= date) {
-      //     let length;
-      //     for (product of current.product_line) {
-      //       length = product?.quantity || 0;
-      //       acc += length;
-      //     }
-      //   }
-
-      //   return acc;
-      // }, 0);
+      
 
       const created_quantity = product_line_list.reduce((acc, current) => {
         let date = current?.created_date
@@ -4713,18 +3605,7 @@ const handlers = {
         return acc;
       }, 0);
 
-      // Function to calculate the total quantity created without specified date range
-      // const total_quantity_created = product_line_list.reduce(
-      //   (acc, current) => {
-      //     let length;
-      //     for (product of current.product_line) {
-      //       length = product?.quantity || 0;
-      //       acc += length;
-      //     }
-      //     return acc;
-      //   },
-      //   0
-      // );
+     
 
       const total_quantity_created = product_line_list.reduce(
         (acc, current) => {
