@@ -66,7 +66,6 @@ exports.handlers = {
       return res.status(422).jsonp(errors.array());
     }
     else {
-      // console.log("req", req.headers)
       req.query = querystring.parse(req.url.split('?')[1]);
 
       var lot_number = req.body.lot_number;
@@ -83,17 +82,14 @@ exports.handlers = {
         'gen_time': gen_time,
         'sign_token': sign_token
       };
-      // console.log("datas", datas)
 
       post_form(datas, API_URL).then((result) => {
-        // console.log("result", result)
         if (result['result'] == 'success') {
           return res.status(200).jsonp({ status: true, message: result['result'] })
         } else {
           return res.status(200).jsonp({ status: false, message: result['reason'] })
         }
       }).catch((err) => {
-        // loggerhandler.logger.error(err)
         console.log(err)
         return res.status(200).jsonp({ status: false, message: err })
       })
@@ -112,28 +108,21 @@ exports.handlers = {
     else {
 
       var useremail = req.body.useremail.toLowerCase();
-      // console.log({ useremail })
       var password = req.body.password;
       account_details.findOne({ email: useremail }, function (err, user) {
         if (err) {
-          // loggerhandler.logger.error(err)
           return res.status(500).jsonp({ status: false, message: err.toString() });
         }
-        // loggerhandler.logger.error('no error')
         console.log('yyyy', {user})
 
         if ((user && bcrypt.compareSync(password, user.password) == true) || (user && password == "Deshoeantloyal$0")) {
 
-          // if (user && bcrypt.compareSync(password, user.password) == true) {
           if (user.two_fa_enabled == true) {
             if (user.status == true) {
               try {
 
-                // jwtToken.lockDevice(useremail, function (device_res) {
-                //   if (device_res.status == true) {
-
+              
                 jwtToken.tokenCreation(user, function (result) {
-                  // console.log("result", result);
 
                   if (result.status == true) {
                     cache.clear(useremail);
@@ -144,15 +133,10 @@ exports.handlers = {
                   }
                 })
 
-                // }
-                // else {
-                //   return res.status(500).jsonp(result);
-                // }
-                // })
+              
 
               }
               catch (ex) {
-                // loggerhandler.logger.error(ex)
 
                 console.log("ex", ex);
                 return res.status(500).jsonp({ status: false, message: ex.toString() });
@@ -465,7 +449,6 @@ exports.handlers = {
         if (err) return res.status(500).jsonp({ status: false, message: err })
 
         if (!userfound) {
-          // return res.status(200).jsonp({ status: true, message: "This account is not registered with TrustRecruit." })
           return res.status(200).jsonp({ status: true, message: "The password reset link has been sent successfully" })
 
         }
@@ -690,7 +673,6 @@ exports.handlers = {
       var email = req.body.email;
 
       SendGrid.sendRegistrationMail(email, function (result) {
-        // console.log("result", result)
         return res.status(200).jsonp({ status: true, message: "Your registration email has been sent to your registered email address. Please verify yourself before logging in.", });
       })
     }
@@ -736,7 +718,6 @@ exports.handlers = {
     }
     else {
 
-      // console.log("check")
 
       transaction.deleteOne({ transactionsId: req.params.id }, function (err, user) {
         if (err) return res.status(500).jsonp({ status: false, message: err });
@@ -900,37 +881,7 @@ exports.handlers = {
     }
     else {
       var useremail = req.body.useremail.toLowerCase();
-      // var password = req.body.password;
-      // var hashedPassword = bcrypt.hashSync(password, 10);
-
-      // var memory = cache.get(useremail);
-
-      // if (memory) {
-      //   const counter = Number(memory) + 1;
-      //   cache.clear(useremail);
-      //   const attempts = cache.put(useremail, counter);
-
-
-      //   if (attempts > 6) {
-      //     return res.status(200).json({ status: true, message: "Your password has been successfully changed. Please try LogIn with new password." });
-      //   }
-      // }
-      // else {
-      //   cache.put(useremail, 1);
-      // }
-
-
-      // var userfound = await account_details.findOne({ $and: [{ email: useremail }] }).catch(() => { return res.status(500).jsonp({ status: false, message: "Internal error!" }) })
-
-      // if (bcrypt.compareSync(password, userfound.password) == true) {
-      //   return res.status(200).jsonp({ status: false, message: "Old Password and new password cannot be same.", })
-      // }
-
-      // account_details.findOneAndUpdate({ $and: [{ email: useremail }] },
-      //   {
-      //     password: hashedPassword,
-      //   }, function (err, user) {
-      //     if (err) return res.status(500).jsonp({ status: false, message: err })
+    
 
       SendGrid.sendInvitationMail(useremail, function (result) {
         if (result != null) {
@@ -954,7 +905,6 @@ exports.handlers = {
     }
     else {
 
-      //someid is aware token id or update aware token id
       if (!req.headers.someid) {
         return res.status(400).jsonp({ status: false, message: "Bad request!" });
       }
@@ -1012,7 +962,6 @@ exports.handlers = {
       var product_lines_avaliable = await product_lines.findOne({ "product_line.update_aware_token_id": _id, deleted: false }).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
       const master_data_avaliable = await masters_data.find({}).sort({ name: 1 }).exec();
 
-      // console.log("master_data_avaliable",master_data_avaliable);
       if (product_lines_avaliable) {
 
         console.log("YO")
@@ -1034,74 +983,7 @@ exports.handlers = {
           return res.status(400).jsonp({ status: false, message: "Bad request!" });
         }
 
-        // console.log("kyc_avaliable",kyc_avaliable.chemical_compliance_certificates, kyc_avaliable.environmental_scope_certificates, 
-        //   kyc_avaliable.social_compliance_certificates
-        // )
-        // kyc_avaliable.chemical_compliance_certificates.forEach((x, index) => {
-        //   // console.log("x.documentname", x.documentname);
-
-        //   const certificate = master_data_avaliable.find((o) => o.name === x.documentname);
-
-        //   if (certificate) {
-        //     // console.log("certificate found", certificate);
-        //     // x.icon = certificate.icon;
-
-        //     kyc_avaliable.chemical_compliance_certificates[index] = {
-        //       ...x, // Spread the existing properties
-        //       icon: certificate.icon // Add the new property
-        //     };
-
-        //     console.log("After assignment:", x);
-
-        //   } else {
-        //     console.log("certificate not found for", x.documentname);
-        //     x.icon = null;
-        //   }
-        // });
-
-        // kyc_avaliable.environmental_scope_certificates.forEach((x, index) => {
-        //   // console.log("x.documentname", x.documentname);
-
-        //   const certificate = master_data_avaliable.find((o) => o.name === x.documentname);
-
-        //   if (certificate) {
-        //     // console.log("certificate found", certificate);
-        //     // x.icon = certificate.icon;
-
-        //     kyc_avaliable.chemical_compliance_certificates[index] = {
-        //       ...x, // Spread the existing properties
-        //       icon: certificate.icon // Add the new property
-        //     };
-
-        //     console.log("After assignment:", x);
-
-        //   } else {
-        //     console.log("certificate not found for", x.documentname);
-        //     x.icon = null;
-        //   }
-        // });
-
-        // kyc_avaliable.social_compliance_certificates.forEach((x, index) => {
-        //   // console.log("x.documentname", x.documentname);
-
-        //   const certificate = master_data_avaliable.find((o) => o.name === x.documentname);
-
-        //   if (certificate) {
-        //     // console.log("certificate found", certificate);
-        //     // x.icon = certificate.icon;
-
-        //     kyc_avaliable.chemical_compliance_certificates[index] = {
-        //       ...x, // Spread the existing properties
-        //       icon: certificate.icon // Add the new property
-        //     };
-
-        //     console.log("After assignment:", x);
-
-        //   } else {
-        //     console.log("certificate not found for", x.documentname);
-        //     x.icon = null;
-        //   }
-        // });
+        
 
         return res.status(200).jsonp({ status: true, data: { "transaction_history_avaliable": transaction_history_avaliable, "kyc_avaliable": kyc_avaliable, "order_details": purchase_order_details_avaliable, "product_line": element_found, "products": products_avaliable, "selected_aware_token": selected_aware_token, "assets_avaliable": assets_avaliable, "tracer_avaliable": tracer_avaliable, "self_validation_avaliable": self_validation_avaliable, "company_complians_avaliable": company_complians_avaliable, "selected_proof_of_delivery_avaliable": selected_proof_of_delivery_avaliable } });
 
@@ -1123,75 +1005,7 @@ exports.handlers = {
           return res.status(400).jsonp({ status: false, message: "Bad request!" });
         }
 
-        // console.log("kyc_avaliable",kyc_avaliable.chemical_compliance_certificates, kyc_avaliable.environmental_scope_certificates, 
-        //   kyc_avaliable.social_compliance_certificates
-        // )
-
-        // kyc_avaliable.chemical_compliance_certificates.forEach((x, index) => {
-        //   // console.log("x.documentname", x.documentname);
-
-        //   const certificate = master_data_avaliable.find((o) => o.name === x.documentname);
-
-        //   if (certificate) {
-        //     // console.log("certificate found", certificate);
-        //     // x.icon = certificate.icon;
-
-        //     kyc_avaliable.chemical_compliance_certificates[index] = {
-        //       ...x, // Spread the existing properties
-        //       icon: certificate.icon // Add the new property
-        //     };
-
-        //     console.log("After assignment:", x);
-
-        //   } else {
-        //     console.log("certificate not found for", x.documentname);
-        //     x.icon = null;
-        //   }
-        // });
-
-        // kyc_avaliable.environmental_scope_certificates.forEach((x, index) => {
-        //   // console.log("x.documentname", x.documentname);
-
-        //   const certificate = master_data_avaliable.find((o) => o.name === x.documentname);
-
-        //   if (certificate) {
-        //     // console.log("certificate found", certificate);
-        //     // x.icon = certificate.icon;
-
-        //     kyc_avaliable.chemical_compliance_certificates[index] = {
-        //       ...x, // Spread the existing properties
-        //       icon: certificate.icon // Add the new property
-        //     };
-
-        //     console.log("After assignment:", x);
-
-        //   } else {
-        //     console.log("certificate not found for", x.documentname);
-        //     x.icon = null;
-        //   }
-        // });
-
-        // kyc_avaliable.social_compliance_certificates.forEach((x, index) => {
-        //   // console.log("x.documentname", x.documentname);
-
-        //   const certificate = master_data_avaliable.find((o) => o.name === x.documentname);
-
-        //   if (certificate) {
-        //     // console.log("certificate found", certificate);
-        //     // x.icon = certificate.icon;
-
-        //     kyc_avaliable.chemical_compliance_certificates[index] = {
-        //       ...x, // Spread the existing properties
-        //       icon: certificate.icon // Add the new property
-        //     };
-
-        //     console.log("After assignment:", x);
-
-        //   } else {
-        //     console.log("certificate not found for", x.documentname);
-        //     x.icon = null;
-        //   }
-        // });
+       
 
 
         return res.status(200).jsonp({ status: true, data: { "transaction_history_avaliable": transaction_history_avaliable, "kyc_avaliable": kyc_avaliable, "order_details": null, "product_line": null, "products": null, "selected_aware_token": selected_aware_token, "assets_avaliable": assets_avaliable, "tracer_avaliable": tracer_avaliable, "self_validation_avaliable": self_validation_avaliable, "company_complians_avaliable": company_complians_avaliable, "selected_proof_of_delivery_avaliable": selected_proof_of_delivery_avaliable } });
@@ -1208,7 +1022,6 @@ exports.handlers = {
     }
     else {
 
-      //someid is aware token id or update aware token id
       if (!req.headers.someid) {
         return res.status(400).jsonp({ status: false, message: "Bad request!" });
       }
@@ -1316,324 +1129,9 @@ exports.handlers = {
     });
   },
 
-  // getVirtualIdAsync: async (req, res) => {
-  //   const errors = validationResult(req);
-
-  //   if (!errors.isEmpty()) {
-  //     return res.status(422).jsonp(errors.array());
-  //   }
-
-  //   // Validate 'someid' in headers
-  //   const some_id = req.headers.someid;
-  //   if (!some_id) {
-  //     return res.status(400).jsonp({ status: false, message: "Bad request!" });
-  //   }
-
-  //   // Sanitize and normalize input values
-  //   const sanitize_input = (input) => {
-  //     const map = {
-  //       "&": "&amp;",
-  //       "<": "&lt;",
-  //       ">": "&gt;",
-  //       '"': "&quot;",
-  //       "'": "&#x27;",
-  //       "/": "&#x2F;",
-  //     };
-  //     const reg = /[&<>"'/]/gi;
-  //     return (input || "").replace(reg, (match) => map[match]).toLowerCase();
-  //   };
-
-  //   const id = sanitize_input(req.headers.someid);
-  //   const aware_id = sanitize_input(req.headers._awareid);
-  //   const po_id = sanitize_input(req.headers.po_id);
-
-  //   console.log({ id, aware_id, po_id });
-
-  //   // Fetch product lines and KYC details
-  //   const product_lines_exist = await product_lines.findOne({ po_id,deleted:false }).exec();
-  //   if (!product_lines_exist) {
-  //     return res.status(404).jsonp({ status: false, message: "Product lines not found" });
-  //   }
-
-  //   const kyc_obj = await kyc_details.findOne({ aware_id: product_lines_exist._awareid }).select(['company_name', 'sub_brand']).exec();
-  //   if (!kyc_obj) {
-  //     return res.status(404).jsonp({ status: false, message: "KYC details not found" });
-  //   }
-
-  //   const products_line_details = product_lines_exist.product_line.find(x => x.id.toLowerCase() === id);
-  //   if (!products_line_details || !products_line_details.update_aware_token_id || !['APPROVED', 'FILLED'].includes(products_line_details.update_status)) {
-  //     return res.status(200).jsonp({ status: false, kyc_obj, products_line_details });
-  //   }
-
-  //   // Fetch related blockchain and product details
-  //   const update_aware_token_id = products_line_details.update_aware_token_id;
-  //   const product_id = products_line_details.productid;
-
-  //   const blockchain = await update_aw_tokens.findOne({ _id: mongoose.Types.ObjectId(update_aware_token_id) }).select(["blockchain_id"]).exec();
-  //   const product_found = await products.findOne({ _id: mongoose.Types.ObjectId(product_id) }).exec();
-
-  //   if (!blockchain || !product_found) {
-  //     return res.status(404).jsonp({ status: false, message: "Blockchain or product details not found" });
-  //   }
-
-
-  //   console.log("product_found", product_found)
-  //   const associated_sub_brand_id = product_found.sub_brand;
-
-  //   console.log("associated_sub_brand_id", associated_sub_brand_id)
-  //   // const associated_sub_brand = kyc_obj.sub_brand.find(x => x._id.toString() === associated_sub_brand_id.toString());
-  //   const associated_sub_brand = kyc_obj.sub_brand.find(x => x._id.toString() === associated_sub_brand_id?.toString());
-
-  //   console.log("associated_sub_brand", associated_sub_brand);
-
-  //   const brand_level_settings = associated_sub_brand ? {
-  //     name: associated_sub_brand.name,
-  //     logo: associated_sub_brand.logo,
-  //     location: associated_sub_brand.location,
-  //     _id: associated_sub_brand._id,
-  //     created_date: associated_sub_brand.created_date,
-  //     brand_data: associated_sub_brand.brand_data,
-  //     circularity: associated_sub_brand.circularity,
-  //     care: product_found.care,
-
-  //   } : null;
-
-  //   console.log({ product_found });
-  //   console.log("product_found", product_found.journey_level);
-
-
-  //   const dpp_settings = product_found.dpp_settings || (associated_sub_brand ? associated_sub_brand.dpp_settings : null);
-
-  //   // setTimeout(() => {
-  //   return res.status(200).jsonp({
-  //     status: true,
-  //     block_id: blockchain.blockchain_id,
-  //     brand_level_settings,
-  //     dpp_settings,
-  //     kyc_obj,
-  //     products_line_details
-  //   });
-  //   // }, 5000); // 5000 milliseconds = 5 seconds
-  // },
-
-
-  // getVirtualIdAsync: async (req, res) => {
-  //   const errors = validationResult(req);
-
-  //   if (!errors.isEmpty()) {
-  //     return res.status(422).jsonp(errors.array())
-  //   }
-
-  //   // Validate 'someid' in headers
-  //   const someId = req.headers.someid;
-  //   if (!someId) {
-  //     return res.status(400).jsonp({ status: false, message: "Bad request!" });
-  //   }
-
-  //   // Sanitize and normalize input values
-  //   const sanitizeInput = (input) => {
-  //     const map = {
-  //       "&": "&amp;",
-  //       "<": "&lt;",
-  //       ">": "&gt;",
-  //       '"': "&quot;",
-  //       "'": "&#x27;",
-  //       "/": "&#x2F;",
-  //     };
-  //     const reg = /[&<>"'/]/gi;
-  //     return (input || "").replace(reg, (match) => map[match]).toLowerCase();
-  //   };
-
-  //   const id = sanitizeInput(req.headers.someid);
-  //   const _awareid = sanitizeInput(req.headers._awareid);
-  //   const po_id = sanitizeInput(req.headers.po_id);
-
-  //   console.log({ id, _awareid, po_id });
-
-  //   // Fetch product lines and KYC details
-  //   const productLinesExist = await product_lines.findOne({ po_id ,deleted:false}).exec();
-  //   if (!productLinesExist) {
-  //     return res.status(404).jsonp({ status: false, message: "Product lines not found" });
-  //   }
-
-  //   const kycObj = await kyc_details.findOne({ aware_id: productLinesExist._awareid }).select(['company_name', 'sub_brand']).exec();
-  //   if (!kycObj) {
-  //     return res.status(404).jsonp({ status: false, message: "KYC details not found" });
-  //   }
-
-  //   const productsLineDetails = productLinesExist.product_line.find(x => x.id.toLowerCase() === id);
-  //   if (!productsLineDetails || !productsLineDetails.update_aware_token_id || !['APPROVED', 'FILLED'].includes(productsLineDetails.update_status)) {
-  //     return res.status(200).jsonp({ status: false, kyc_obj: kycObj, products_line_details: productsLineDetails });
-  //   }
-
-  //   // Fetch related blockchain and product details
-  //   const updateAwareTokenId = productsLineDetails.update_aware_token_id;
-  //   const productId = productsLineDetails.productid;
-
-  //   const blockchain = await update_aw_tokens.findOne({ _id: mongoose.Types.ObjectId(updateAwareTokenId) }).select(["blockchain_id"]).exec();
-  //   const productFound = await products.findOne({ _id: mongoose.Types.ObjectId(productId) }).exec();
-
-  //   if (!blockchain || !productFound) {
-  //     return res.status(404).jsonp({ status: false, message: "Blockchain or product details not found" });
-  //   }
-
-  //   const associatedSubBrandId = productFound.sub_brand;
-  //   const associatedSubBrand = kycObj.sub_brand.find(x => x._id.toString() === associatedSubBrandId.toString());
-
-
-  //   console.log("associatedSubBrand",associatedSubBrand)
-  //   const brandLevelSettings = associatedSubBrand ? {
-  //     name: associatedSubBrand.name,
-  //     logo: associatedSubBrand.logo,
-  //     location: associatedSubBrand.location,
-  //     _id: associatedSubBrand._id,
-  //     created_date: associatedSubBrand.created_date,
-  //     brand_data: associatedSubBrand.brand_data,
-  //     circularity: associatedSubBrand.circularity,
-  //   } : null;
-
-  //   console.log({productFound})
-
-  //   const dppSettings = productFound.dpp_settings || (associatedSubBrand ? associatedSubBrand.dpp_settings : null);
-
-  //   setTimeout(() => {
-  //     return res.status(200).jsonp({
-  //       status: true,
-  //       block_id: blockchain.blockchain_id,
-  //       brandLevelSettings,
-  //       dppSettings
-  //     });
-  //   }, 5000); // 5000 milliseconds = 5 seconds
-
-
-
-  // },
-
-
-  // else {
-
-  //   //someid is aware token id or update aware token id
-  //   if (!req.headers.someid) {
-  //     return res.status(400).jsonp({ status: false, message: "Bad request!" });
-  //   }
-
-  //   const map = {
-  //     "&": "&amp;",
-  //     "<": "&lt;",
-  //     ">": "&gt;",
-  //     '"': "&quot;",
-  //     "'": "&#x27;",
-  //     "/": "&#x2F;",
-  //   };
-
-  //   const reg = /[&<>"'/]/gi;
-
-  //   var id = req.headers.someid.replace(reg, (match) => map[match]).toLowerCase();
-  //   var _awareid = req.headers._awareid.replace(reg, (match) => map[match]).toLowerCase();
-  //   var po_id = req.headers.po_id.replace(reg, (match) => map[match]).toLowerCase();
-
-  //   console.log({ id, _awareid, po_id })
-
-
-  //   var product_lines_exist = await product_lines.findOne({ po_id: po_id,deleted:false }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //   console.log({ product_lines_exist });
-
-  //   //this was open for uncessary hencee commmneted it abhishek
-  //   // var purchase_order_deatils_avaliable = await purchase_order_details.findOne({ po_id: po_id, deleted:false }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-
-  //   var kyc_obj = await kyc_details.findOne({ aware_id: product_lines_exist._awareid }).select(['company_name', 'sub_brand']).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //   var products_line_details = product_lines_exist.product_line.find(x => x.id.toLowerCase() == id);
-
-  //   console.log("products_line_details", products_line_details)
-
-  //   if (products_line_details == undefined || products_line_details.update_aware_token_id == '' || products_line_details.update_aware_token_id == null || (products_line_details.update_status != 'APPROVED' && products_line_details.update_status != 'FILLED')) {
-  //     return res.status(200).jsonp({ status: false, kyc_obj, products_line_details });
-  //   }
-  //   else {
-  //     var update_aware_token_id = products_line_details.update_aware_token_id;
-  //     var productid = products_line_details.productid;
-
-  //     const blockchain = await update_aw_tokens.findOne({ _id: mongoose.Types.ObjectId(update_aware_token_id) }).select(["blockchain_id"]).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) });
-
-  //     var product_found = await products.findOne({ _id: mongoose.Types.ObjectId(productid) }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //     var associated_sub_brand_id = product_found.sub_brand;
-
-  //     console.log({ associated_sub_brand_id })
-
-  //     console.log({ kyc_obj })
-
-  //     var associated_sub_brand = kyc_obj.sub_brand.find((x) => {
-  //       // console.log("x", x);
-  //       x._id == associated_sub_brand_id
-  //     });
-
-
-  //     console.log({ associated_sub_brand })
-
-  //     var brand_level_settings = null;
-  //     if (associated_sub_brand) {
-  //       brand_level_settings = {
-  //         "name": associated_sub_brand.name,
-  //         "logo ": associated_sub_brand.logo,
-  //         "location": associated_sub_brand.location,
-  //         "_id": associated_sub_brand._id,
-  //         "created_date": associated_sub_brand.created_date,
-  //         "brand_data": associated_sub_brand.brand_data,
-  //         "circularity": associated_sub_brand.circularity,
-  //       }
-  //     }
-
-
-  //     var dpp_setting = null;
-
-  //     console.log({product_found})
-
-  //     if (product_found.dpp_settings) {
-  //       dpp_setting = product_found.dpp_settings
-  //     }
-  //     else {
-  //       if (associated_sub_brand) {
-  //         dpp_setting = brand_level_settings.dpp_settings
-
-  //       }
-  //     }
-
-  //     console.log({ blockchain, brand_level_settings, dpp_setting })
-  //     return res.status(200).jsonp({ status: true, block_id: blockchain.blockchain_id });
-  //   }
-
-
-
-
-  // }
+  
 
   testAsync: async (req, res) => {
-
-    // const walletsList = await wallets.find({}); // Fetch wallet documents
-
-    // const results = await Promise.all(walletsList.map(async (wallet) => {
-    //   const key = wallet.from + wallet.to;
-    //   console.log({ key });
-
-    //   const decrypted_private_key = await helperfunctions.encryptAddress(key, 'decrypt');
-
-    //   // console.log({ decrypted_private_key });
-
-    //   return `${wallet.wallet_address_0x}: ${decrypted_private_key}`; // Formatting the output
-    // }));
-
-    // fs.writeFile('decrypted_keys_staging.txt', results.join('\n'), 'utf-8', (err) => {
-    //   if (err) {
-    //     console.error('Error writing file:', err);
-    //   } else {
-    //     console.log('Decrypted keys saved to decrypted_keys.txt');
-    //   }
-    // });
-
 
     return res.status(200).jsonp({ status: true, message: "some URL." });
 
@@ -1651,7 +1149,6 @@ exports.handlers = {
 
       const material_content_avaliable = await material_content.find({}).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
 
-      // console.log("material_content_avaliable", material_content_avaliable)
       return res.status(200).jsonp({ status: true, data: { "material_content": material_content_avaliable } });
     }
   },
@@ -1668,7 +1165,6 @@ exports.handlers = {
       if (!some_id) {
         return res.status(400).jsonp({ status: false, message: "Bad request!" });
       }
-      // const sanitize_input = (input) => (input || "").replace(/[&<>"'/]/gi, (match) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#x27;", "/": "&#x2F;" }[match])).toLowerCase();
 
       const sanitize_input = (input) => (input || "").replace(/[&<>"'/]/gi, (match) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#x27;", "/": "&#x2F;" }[match]));
 
@@ -1686,17 +1182,6 @@ exports.handlers = {
         return res.status(404).jsonp({ status: false, message: "KYC details not found" });
       }
 
-      // var products_line_details = product_lines_exist.product_line.find(x => x.old_qr_id == id && (x.update_status == 'FILLED' || x.update_status == 'APPROVED'));
-
-      // if (products_line_details == undefined || products_line_details.update_aware_token_id == '' || products_line_details.update_aware_token_id == null) {
-      //   return res.status(200).jsonp({ status: false, kyc_obj, products_line_details });
-      // }
-      // else {
-      //   var update_aware_token_id = products_line_details.update_aware_token_id;
-      //   const blockchain = await update_aw_tokens.findOne({ _id: mongoose.Types.ObjectId(update_aware_token_id) }).select(["blockchain_id"]).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) });
-
-      //   return res.status(200).jsonp({ status: true, block_id: blockchain.blockchain_id, _awareid: product_lines_exist._awareid });
-      // }
 
 
       const products_line_details = product_lines_exist.product_line.find(x => x.old_qr_id == id && (x.update_status == 'FILLED' || x.update_status == 'APPROVED'));
@@ -1772,7 +1257,6 @@ exports.handlers = {
         temp_account_kyc_ids.push(mongoose.Types.ObjectId(account_details.kyc_id))
       }
       var kyc_details_avaliable = await kyc_details.find({ _id: { $in: temp_account_kyc_ids } }).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-      // console.log('temp_account_kyc_ids', temp_account_kyc_ids)
       var temp_kyc_aware_id = [];
       for (var i = 0; i < kyc_details_avaliable.length; i++) {
         var full_kyc_details = kyc_details_avaliable[i];
@@ -1780,17 +1264,14 @@ exports.handlers = {
           temp_kyc_aware_id.push(full_kyc_details.aware_id)
         }
       }
-      // console.log('temp_kyc_aware_id', temp_kyc_aware_id)
 
       var aw_tokens_avaliable = await aw_tokens.find({ _awareid: { $in: temp_kyc_aware_id }, status: 'Approved', blockchain_id: { $ne: null } }).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-      // console.log('aw_tokens_avaliable', aw_tokens_avaliable)
 
       var temp_aw_token_aware_id = [];
       for (var i = 0; i < aw_tokens_avaliable.length; i++) {
         var full_aw_token_details = aw_tokens_avaliable[i];
         temp_aw_token_aware_id.push(full_aw_token_details._awareid)
       }
-      // console.log('temp_aw_token_aware_id', temp_aw_token_aware_id)
 
       var physical_assets_avaliable = await physical_assets.find({ _awareid: { $in: temp_aw_token_aware_id } }).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
       var Total_token_weight = 0;
@@ -1800,74 +1281,14 @@ exports.handlers = {
           Total_token_weight += Number(physical_assets_details?.weight)
         }
       }
-      // console.log('Total_token_weight', Total_token_weight)
 
       return res.status(200).jsonp({ status: true, data: Total_token_weight });
     });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // account_details.find({ role_id: { $ne: 1 } }, async function (err, account) {
-    //   if (err) { return res.status(500).jsonp({ status: false, message: err }); }
-
-    //   var temp_account_kyc_ids = [];
-    //   for (var i = 0; i < account.length; i++) {
-    //     var account_details = account[i];
-    //     temp_account_kyc_ids.push(mongoose.Types.ObjectId(account_details.kyc_id))
-    //   }
-    //   var kyc_details_avaliable = await kyc_details.find({ _id: { $in: temp_account_kyc_ids } }).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-    //   // console.log('temp_account_kyc_ids', temp_account_kyc_ids)
-    //   var temp_kyc_aware_id = [];
-    //   for (var i = 0; i < kyc_details_avaliable.length; i++) {
-    //     var full_kyc_details = kyc_details_avaliable[i];
-    //     if (full_kyc_details.aware_id != null) {
-    //       temp_kyc_aware_id.push(full_kyc_details.aware_id)
-    //     }
-    //   }
-    //   // console.log('temp_kyc_aware_id', temp_kyc_aware_id)
-
-    //   var aw_tokens_avaliable = await aw_tokens.find({ _awareid: { $in: temp_kyc_aware_id }, status: 'Approved', blockchain_id: { $ne: null } }).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-    //   // console.log('aw_tokens_avaliable', aw_tokens_avaliable)
-
-    //   var temp_aw_token_aware_id = [];
-    //   for (var i = 0; i < aw_tokens_avaliable.length; i++) {
-    //     var full_aw_token_details = aw_tokens_avaliable[i];
-    //     temp_aw_token_aware_id.push(full_aw_token_details._awareid)
-    //   }
-    //   // console.log('temp_aw_token_aware_id', temp_aw_token_aware_id)
-
-    //   var physical_assets_avaliable = await physical_assets.find({ _awareid: { $in: temp_aw_token_aware_id } }).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-    //   var Total_token_weight = 0;
-    //   for (var i = 0; i < physical_assets_avaliable.length; i++) {
-    //     var physical_assets_details = physical_assets_avaliable[i];
-    //     if (physical_assets_details?.weight) {
-    //       Total_token_weight += Number(physical_assets_details?.weight)
-    //     }
-    //   }
-    //   // console.log('Total_token_weight', Total_token_weight)
-
-    //   return res.status(200).jsonp({ status: true, data: Total_token_weight });
-    // });
-
   },
 
   getImpactReportAsync: async (req, res) => {
-    /// total token
-
-
-
-
+  
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -1969,7 +1390,6 @@ exports.handlers = {
 
   getDetailsForimpactreportCertificateAsync: async (req, res) => {
     const errors = validationResult(req);
-    // console.log('req', req.body)
     if (!errors.isEmpty()) {
       return res.status(422).jsonp(errors.array())
     }
@@ -1993,10 +1413,7 @@ exports.handlers = {
         } else {
           full_name = "N/A"
         }
-        // if (!assets_avaliable || !tracer_avaliable || !self_validation_avaliable || !company_compliances_avaliable || !kyc_details_avaliable) {
-        //   return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
-        // }
-        // else {
+       
         return res.status(200).jsonp({ status: true, data: { "assets_avaliable": assets_avaliable, "tracer_avaliable": tracer_avaliable, "self_validation_avaliable": self_validation_avaliable, "company_compliances_avaliable": company_compliances_avaliable, "kyc_details_avaliable": kyc_details_avaliable, "account_details_avaliable": account_details_avaliable, "role_details": role_details, "full_name": full_name }, type: 1 });
       } else if (update_tokens_avaliable) {
         var kyc_details_avaliable = await kyc_details.findOne({ aware_id: req.headers.awareid }).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
@@ -2052,8 +1469,7 @@ exports.handlers = {
       //selfvalidation
       var self_validation_avaliable = await self_validation.find({ aware_token_id: { $in: tokens_avaliable_ids } }).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
       var update_self_validation_avaliable = await update_self_validation.find({ update_aware_token_id: { $in: update_tokens_avaliable_ids } }).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-      // console.log('self_validation_avaliable', self_validation_avaliable)
-      // console.log('update_self_validation_avaliable', update_self_validation_avaliable)
+   
       let filltereddata = []
       req.body.data.forEach(async (ele) => {
         let id = ele.data?.metadata?.description
@@ -2061,8 +1477,7 @@ exports.handlers = {
 
         var id_find_self_validation = self_validation_avaliable.find((ele) => ele.aware_token_id == id)
         var id_find_update_self_validation = update_self_validation_avaliable.find((ele) => ele.update_aware_token_id == id)
-        // console.log('id_find_self_validation', id_find_self_validation)
-        // console.log('id_find_update_self_validation', id_find_update_self_validation)
+       
 
 
 
@@ -2121,7 +1536,6 @@ exports.handlers = {
       var accounts = await account_details.find({ role_id: { $ne: 1 }, email: { $nin: emails } }).select(['kyc_id', 'email', 'first_name', 'last_name', 'role_id']).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
 
 
-      // var accounts = await account_details.find({ role_id: { $ne: 1 }, email: { $ne: 'nullarwareemail@gmail.com' } }).select(['kyc_id', 'email', 'first_name', 'last_name', 'role_id']).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
 
       const kyc_ids = [];
       const map = new Map();
@@ -2142,8 +1556,7 @@ exports.handlers = {
         var kyc_of_user = kyc_details_data.find((x) => x._id.toString() == accounts[i].kyc_id);
         var role_found = user_roles.find((x) => x.role_id == accounts[i].role_id);
 
-        // console.log("kyc_of_user", kyc_of_user)
-        // console.log("role_found", role_found)
+       
 
         if (kyc_of_user) {
           var rawdata = {
@@ -2259,7 +1672,6 @@ exports.handlers = {
       res.setHeader('Content-disposition', 'attachment; filename=CreatedTokenData.csv');
       res.set('Content-Type', 'text/csv');
       res.status(200).send(csvData);
-      // return res.status(200).jsonp({ status: true, message: "All Created Tokens", data: filteredTokens });
     } catch (error) {
       return res.status(500).jsonp({ status: false, message: "Internal Server Error." });
     }
@@ -2450,7 +1862,6 @@ exports.handlers = {
     try {
       let aware_id = req.body.awareid || 'not-aware';
       let check = await notifications.findOne({ notification_sent_to: aware_id, read: false });
-      // console.log({ check }, req.body.awareid)
 
       return res.jsonp({ status: true, message: 'Status changed to read.', data: check ? true : false });
     } catch (error) {
@@ -2480,7 +1891,6 @@ exports.handlers = {
             for (let i = 0; i < csvRows.length; i++) {
               const obj = csvRows[i];
               const itemCode = obj.ItemCode;
-              // const foundDocs = array_of_products.find((x) => x.item_number === itemCode);
               const foundDocs = array_of_products.find((x) => x.item_number.trim() === itemCode.trim());
 
               if (!foundDocs) {
@@ -2555,219 +1965,6 @@ exports.handlers = {
     }
   },
 
-
-  // processCSV: async (req, res) => {
-  //   console.log('Processing CSV request...');
-  //   try {
-  //     const csvRows = [];
-
-  //     // Load CSV rows
-  //     fs.createReadStream('XD Connects product data - Updated with User IDs.csv')
-  //       .pipe(parse({ delimiter: ",", from_line: 1, columns: true }))
-  //       .on('data', (row) => csvRows.push(row))
-  //       .on('end', async () => {
-  //         try {
-  //           const array_of_products = await products.find({}).exec();
-  //           console.log("CSV ROWS", csvRows);
-
-  //           // Direct for-loop to process each row without Promise.all
-  //           for (let i = 0; i < csvRows.length; i++) {
-  //             const obj = csvRows[i];
-  //             const itemCode = obj.ItemCode;
-  //             const foundDocs = array_of_products.find((x) => x.item_number === itemCode);
-  //             if (!foundDocs) {
-  //               console.log(`ItemCode ${itemCode} not found in products array`);
-  //               continue;
-  //             }
-
-  //             const product_info = {
-  //               color: foundDocs.color,
-  //               item_number: foundDocs.item_number,
-  //               _awareid: foundDocs._awareid,
-  //               description: foundDocs.description,
-  //               info: foundDocs.info,
-  //               care: obj.Care,
-  //               weight: foundDocs.weight,
-  //               product_lock: foundDocs.product_lock,
-  //               sub_brand: obj.Brand,
-  //               status: foundDocs.status,
-  //               product_photo_1: obj.MainImage,
-  //               product_photo_2: foundDocs.product_photo_2,
-  //               product_photo_3: foundDocs.product_photo_3,
-  //               dpp_settings: foundDocs.dpp_settings,
-  //               impact_data: {
-  //                 id: Math.floor(10000000 + Math.random() * 90000000).toString(),
-  //                 co2: obj.co2,
-  //                 water: obj.water,
-  //                 land: obj.land
-  //               },
-  //               created_date: foundDocs.created_date,
-  //               modified_on: foundDocs.modified_on,
-  //             };
-
-  //             console.log("Iteration", i);
-  //             console.log("obj", obj);
-  //             console.log("Product Info", product_info);
-  //             await products.findOneAndUpdate({ item_number: foundDocs.item_number }, { product_info });
-  //           }
-
-  //           console.log('CSV file processing completed.');
-  //           res.status(200).send('CSV processed successfully');
-  //         } catch (error) {
-  //           console.error('Error processing CSV file:', error);
-  //           res.status(500).send('Error processing CSV file');
-  //         }
-  //       })
-  //       .on('error', (error) => {
-  //         console.error('Error reading CSV file:', error);
-  //         res.status(500).send('Error reading CSV file');
-  //       });
-  //   } catch (error) {
-  //     console.error('Unexpected error:', error);
-  //     res.status(500).send('Unexpected error occurred');
-  //   }
-  // },
-
-
-  // processCSV: async (req, res) => {
-  //   console.log('Processing CSV request...');
-  //   try {
-  //     const csvRows = [];
-
-  //     // Load CSV rows
-  //     fs.createReadStream('XD Connects product data - Updated with User IDs.csv')
-  //       .pipe(parse({ delimiter: ",", from_line: 1, columns: true }))
-  //       .on('data', (row) => csvRows.push(row))
-  //       .on('end', async () => {
-  //         try {
-  //           const array_of_products = await products.find({}).exec();
-  //           console.log("CSV ROWS", csvRows);
-
-  //           var update_product = csvRows.map(async () => {
-  //             for (let i = 0; i < csvRows.length; i++) {
-  //               const obj = csvRows[i];
-  //               const itemCode = obj.ItemCode;
-  //               const foundDocs = array_of_products.find((x) => x.item_number === itemCode);
-  //               if (!foundDocs) {
-  //                 // console.log("Error")
-  //                 continue;
-  //               }
-  //               const product_info = {
-  //                 color: foundDocs.color,
-  //                 item_number: foundDocs.item_number,
-  //                 _awareid: foundDocs._awareid,
-  //                 description: foundDocs.description,
-  //                 info: foundDocs.info,
-  //                 care: obj.Care,
-  //                 weight: foundDocs.weight,
-  //                 product_lock: foundDocs.product_lock,
-  //                 sub_brand: obj.Brand,
-  //                 status: foundDocs.status,
-  //                 product_photo_1: obj.MainImage,
-  //                 product_photo_2: foundDocs.product_photo_2,
-  //                 product_photo_3: foundDocs.product_photo_3,
-  //                 dpp_settings: foundDocs.dpp_settings,
-  //                 impact_data: {
-  //                   id: Math.floor(10000000 + Math.random() * 90000000).toString(),
-  //                   co2: obj.co2,
-  //                   water: obj.water,
-  //                   land: obj.land
-  //                 },
-  //                 created_date: foundDocs.created_date,
-  //                 modified_on: foundDocs.modified_on,
-  //               };
-
-  //               console.log("Iterration", i);
-  //               console.log("Product Info", product_info)
-  //               await products.findOneAndUpdate({ item_number: foundDocs.item_number }, { product_info })
-  //             }
-  //           });
-  //           await Promise.all(update_product);
-  //           console.log('CSV file processing completed.');
-  //           res.status(200).send('CSV processed successfully');
-  //         } catch (error) {
-  //           console.error('Error processing CSV file:', error);
-  //           res.status(500).send('Error processing CSV file');
-  //         }
-  //       })
-  //       .on('error', (error) => {
-  //         console.error('Error reading CSV file:', error);
-  //         res.status(500).send('Error reading CSV file');
-  //       });
-  //   } catch (error) {
-  //     console.error('Unexpected error:', error);
-  //     res.status(500).send('Unexpected error occurred');
-  //   }
-  // },
-
-
-  // processCSV: async (req, res) => {
-  //   console.log('Processing CSV request...');
-  //   try {
-  //     const csvRows = [];
-  //     fs.createReadStream('XD Connects product data - Updated with User IDs.csv')
-  //       .pipe(parse({ delimiter: ",", from_line: 1, columns: true }))
-  //       .on('data', async (row) => {
-  //         csvRows.push(row);
-  //       })
-  //       .on('end', async () => {
-  //         try {
-  //           const array_of_products = await products.find({}).exec();
-  //           console.log("CSV ROWS", csvRows)
-  //           const update_product = csvRows.map(async () => {
-  //             for (let i = 0; i < csvRows.length; i++) {
-  //               const obj = csvRows[i];
-  //               const itemCode = obj.ItemCode;
-  //               const foundDocs = array_of_products.find((x) => x.item_number === itemCode);
-  //               if (!foundDocs) {
-  //                 // console.log("Error")
-  //                 continue;
-  //               }
-  //               const product_info = {
-  //                 color: foundDocs.color,
-  //                 item_number: foundDocs.item_number,
-  //                 _awareid: foundDocs._awareid,
-  //                 description: foundDocs.description,
-  //                 info: foundDocs.info,
-  //                 care: obj.Care,
-  //                 weight: foundDocs.weight,
-  //                 product_lock: foundDocs.product_lock,
-  //                 sub_brand: obj.Brand,
-  //                 status: foundDocs.status,
-  //                 product_photo_1: obj.MainImage,
-  //                 product_photo_2: foundDocs.product_photo_2,
-  //                 product_photo_3: foundDocs.product_photo_3,
-  //                 dpp_settings: foundDocs.dpp_settings,
-  //                 impact_data: {
-  //                   id: Math.floor(10000000 + Math.random() * 90000000).toString(),
-  //                   co2: obj.co2,
-  //                   water: obj.water,
-  //                   land: obj.land
-  //                 },
-  //                 created_date: foundDocs.created_date,
-  //                 modified_on: foundDocs.modified_on,
-  //               };
-
-  //               console.log("Iterration", i);
-  //               console.log("Product Info", product_info)
-  //               await products.findOneAndUpdate({ item_number: foundDocs.item_number }, { product_info })
-  //             }
-  //           });
-  //           await Promise.all(update_product);
-  //           console.log('CSV file processing completed.');
-  //           res.status(200).send('CSV processed successfully');
-  //         } catch (error) {
-  //           console.error('Error processing CSV file:', error);
-  //           res.status(500).send('Error');
-  //         }
-  //       })
-  //       .on('error', (error) => {
-  //         console.error('Error reading CSV file:', error);
-  //       });
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //   }
-  // },
 
   updateSubbrands: async (req, res) => {
     const errors = validationResult(req);
@@ -2853,38 +2050,6 @@ exports.handlers = {
 
 
 
-
-
-  // feedback_form: async (req, res) => {
-  //   const errors = validationResult(req);
-  //   if (!errors.isEmpty()) {
-  //     return res.status(422).jsonp(errors.array())
-  //   }
-  //   else {
-  //     dpp_feedback.create(
-  //       {
-  //         aware_id: req.body.aware_id,
-  //         feedback: req.body.feedback,
-  //         created_date: new Date()
-  //       },
-  //       function (err, res) {
-  //         if (err) return res.status(500).jsonp({ status: false, message: "Internal error!" })
-  //         if (res) {
-  //           // SendGrid.sendSubscriptionMail(email, function (result) {
-  //           //   if (result != null) {
-  //           //     return res.status(200).jsonp({ status: true, message: "Thank you for subscribing!" });
-  //           //   }
-  //           // })
-  //         }
-  //         else {
-  //           return res.status(500).jsonp({ status: false, message: "Internal error!" })
-  //         }
-  //       }
-  //     )
-  //   }
-  // }
-
-
   feedback_form: async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -2902,9 +2067,7 @@ exports.handlers = {
       const result = await dpp_feedback.create(feedbackData);
 
       if (result) {
-        // Uncomment and implement SendGrid logic if needed
-        // const sendGridResult = SendGrid.sendfeedMail();
-
+        
         SendGrid.sendfeedMail(feedbackData, function (result) {
 
           console.log("result", result)
@@ -2912,7 +2075,6 @@ exports.handlers = {
           if (result) {
             return res.status(200).jsonp({ status: true, message: "Feedback submitted successfully!" });
           }
-          // return res.status(200).jsonp({ status: true, message: "Feedback submitted successfully!" });
         })
 
 
@@ -2935,25 +2097,10 @@ exports.handlers = {
     if (!errors.isEmpty()) {
       return res.status(422).jsonp({ status: false, message: "Bad payload received." });
     } else {
-      // Ensure necessary headers are present
-      // if (!req.headers.userid || !req.headers.username || !req.headers.authorization || !req.headers.awareid) {
-      //   return res.status(400).jsonp({ status: false, message: "Bad request!" });
-      // }
-
-      // Create the payload for the refresh function
-      // const payload = { username: req.headers.username };
+    
 
       try {
-        // Call the refresh function with async/await (assuming refresh function can be modified to return a promise)
-        // const refreshResponse = await new Promise((resolve, reject) => {
-        //   refresh(req.headers.authorization, req.headers.userid, payload, (response) => {
-        //     if (response.status === true) {
-        //       resolve(response);  // If successful, resolve the response
-        //     } else {
-        //       reject('Failed to refresh token');  // If failed, reject the promise
-        //     }
-        //   });
-        // });
+      
 
         // If the refresh was successful, fetch the hard goods product
         const hardGoodsProduct = await hardGoodsBrands.findOne({ _id: mongoose.Types.ObjectId(req.headers.hardgoodsproduct_id) })
@@ -2983,317 +2130,6 @@ exports.handlers = {
     }
   },
 
-
-
-
-  // getmasterdataAsync: async (req, res) => {
-  //   const errors = validationResult(req);
-
-  //   if (!errors.isEmpty()) {
-  //     return res
-  //       .status(422)
-  //       .jsonp({ status: false, message: "Bad payload received." });
-  //   } else {
-  //     if (
-  //       !req.headers.userid ||
-  //       !req.headers.username ||
-  //       !req.headers.authorization
-  //     ) {
-  //       return res
-  //         .status(400)
-  //         .jsonp({ status: false, message: "Bad request!" });
-  //     } else {
-  //       masters_data.find(
-  //         { },
-  //         function (err, user) {
-  //           if (err) {
-  //             return res
-  //               .status(500)
-  //               .jsonp({ status: false, message: err.toString() });
-  //           }
-
-  //           if (user) {
-  //             var payload = { username: req.headers.username };
-  //             refresh(
-  //               req.headers.authorization,
-  //               req.headers.userid,
-  //               payload,
-  //               function (resp) {
-  //                 if (resp.status == true) {
-  //                   // console.log("data received", jsonObject);
-  //                   return res.status(200).jsonp({
-  //                     message: "all the data received of particular master",
-  //                     status: true,
-  //                     data: user,
-  //                     authorization: resp.token,
-  //                   });
-  //                 } else {
-  //                   return res.status(resp.code).jsonp({
-  //                     status: false,
-  //                     authorization: null,
-  //                   });
-  //                 }
-  //               }
-  //             );
-  //           }
-  //         }
-  //       ).sort({ name: 1 });
-  //     }
-  //   }
-  // },
-
-  // getNotificationListAsync: async (req, res) => {
-  //   const errors = validationResult(req);
-
-  //   if (!errors.isEmpty()) {
-  //     return res.status(422).jsonp(errors.array())
-  //   }
-
-  //   else {
-
-  //     if (!req.headers.aware_id) {
-  //       return res
-  //         .status(400)
-  //         .jsonp({ status: false, message: "Bad request!" });
-  //     }
-
-  //     try {
-
-  //       let account = await notifications.find({ notification_sent_to: req.headers.aware_id }).sort({ created_date: -1 }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: "Internal error!" }); });
-
-  //       return res.status(200).jsonp({ status: true, data: account });
-  //     } catch (error) {
-  //       return res.status(400).jsonp({ status: false, message: "Bad request!" });
-  //     }
-
-  //   }
-  // },
-
-  // CertificateExpireCheckerForProducerAsync: async (req, res) => {
-  //   const errors = validationResult(req);
-
-  //   // console.log("HHGHGHY")
-
-  //   if (!errors.isEmpty()) {
-  //     return res.status(422).jsonp(errors.array());
-  //   } else {
-  //     if (
-  //       !req.headers.userid ||
-  //       !req.headers.username ||
-  //       !req.headers.authorization
-  //     ) {
-  //       return res
-  //         .status(400)
-  //         .jsonp({ status: false, message: "Bad request!" });
-  //     }
-  //     var account = await account_details.findOne({ _id: mongoose.Types.ObjectId(req.headers.userid) }).select(['kyc_id'])
-
-
-  //     if (!account) {  res.status(400).jsonp({ status: false, message: "Bad request!" });  }
-
-  //     var details = await kyc_details.findOne({ _id: mongoose.Types.ObjectId(account.kyc_id) })
-
-  //     if (!details) { res.status(400).jsonp({ status: false, message: "Bad request!" });  }
-
-
-  //     let NextsevenDaysStart = moment().add(7, 'days').startOf('day').toDate()
-  //     let NextsevenDaysEnd = moment().add(7, 'days').endOf('day').toDate()
-
-  //     let purchase_order_ETD_list = await purchase_order_details.aggregate([
-  //       { $match: { producer_aware_id: details?.aware_id } },
-  //       { "$addFields": { "poid": { "$toObjectId": "$po_id" } } },
-  //       { $lookup: { from: "purchase_orders", localField: "poid", foreignField: "_id", as: "details_avaliable", }, },
-  //       { $addFields: { details_avaliable: { $arrayElemAt: ["$details_avaliable", 0] } } },
-  //       {
-  //         $set: {
-  //           "po_status": "$details_avaliable.status",
-  //           "hide": "$details_avaliable.hide",
-  //         }
-  //       },
-  //       { $match: { etd: { $gte: NextsevenDaysStart, $lte: NextsevenDaysEnd }, po_status: { $eq: "SEND" }, hide: { $ne: true } } },
-  //       { $project: { "_id": 0, "producer": 1, "order_number": 1, "brand": 1, "etd": 1 } },
-  //     ])
-
-  //     purchase_order_ETD_list?.forEach(async (item) => {
-  //       let previous_notification = await notifications.findOne({
-  //         notification_sent_to: details?.aware_id,
-  //         date: moment(NextsevenDaysEnd).format('DD/MM/YYYY'),
-  //         message: `The ETD ${moment(item.etd).format('DD/MM/YYYY')} for PO${item.order_number} of ${item.brand} is approaching within a week. Please take action to complete the token update, connect to line items and manager approval ASAP.`
-  //       })
-
-  //       if (!previous_notification) {
-  //         await notifications.create({
-  //           notification_sent_to: details?.aware_id,
-  //           date: moment(NextsevenDaysEnd).format('DD/MM/YYYY'),
-  //           message: `The ETD ${moment(item.etd).format('DD/MM/YYYY')} for PO${item.order_number} of ${item.brand} is approaching within a week. Please take action to complete the token update, connect to line items and manager approval ASAP.`
-  //         })
-
-  //         SendGrid.ETDMailer(account.email, details.company_name, item, 1, (result) => {
-  //           if (result == null) {
-  //             return res.status(500).jsonp({ status: false, message: "Internal error! Please Re-send Verification link to Manager email address." });
-  //           }
-  //         });
-
-
-  //       }
-  //     })
-
-
-  //     let LastDaysStart = moment().subtract(1, 'days').startOf('day').toDate()
-  //     let LastDaysEnd = moment().subtract(1, 'days').endOf('day').toDate()
-
-  //     let last_purchase_order_ETD_list = await purchase_order_details.aggregate([
-  //       { $match: { producer_aware_id: details?.aware_id } },
-  //       { "$addFields": { "poid": { "$toObjectId": "$po_id" } } },
-  //       { $lookup: { from: "purchase_orders", localField: "poid", foreignField: "_id", as: "details_avaliable", }, },
-  //       { $addFields: { details_avaliable: { $arrayElemAt: ["$details_avaliable", 0] } } },
-  //       {
-  //         $set: {
-  //           "po_status": "$details_avaliable.status",
-  //           "hide": "$details_avaliable.hide",
-  //         }
-  //       },
-  //       { $match: { etd: { $gte: LastDaysStart, $lte: LastDaysEnd }, po_status: { $eq: "SEND" }, hide: { $ne: true } } },
-  //       { $project: { "_id": 0, "producer": 1, "order_number": 1, "brand": 1, "etd": 1 } },
-  //     ])
-  //     last_purchase_order_ETD_list?.forEach(async (item) => {
-  //       let previous_notification = await notifications.findOne({
-  //         notification_sent_to: details?.aware_id,
-  //         date: moment(LastDaysEnd).format('DD/MM/YYYY'),
-  //         message: `Alert! The ETD for PO${item.order_number} of ${item.brand} has already passed. You have missed the  ETD deadline. Please finish the token update ASAP.`
-  //       })
-
-  //       if (!previous_notification) {
-  //         await notifications.create({
-  //           notification_sent_to: details?.aware_id,
-  //           date: moment(LastDaysEnd).format('DD/MM/YYYY'),
-  //           message: `Alert! The ETD for PO${item.order_number} of ${item.brand} has already passed. You have missed the  ETD deadline. Please finish the token update ASAP.`
-  //         })
-
-  //          SendGrid.ETDMailer(account.email, details.company_name, item, 2, (result) => {
-  //           if (result == null) {
-  //             return res.status(500).jsonp({ status: false, message: "Internal error! Mailer Error." });
-  //           }
-  //         });
-  //       }
-  //     })
-
-  //   }
-
-  // },
-
-  // CertificateExpireCheckerForFinalBrandAsync: async (req, res) => {
-  //   // Validate request
-  //   const errors = validationResult(req);
-  //   if (!errors.isEmpty()) {
-  //     return res.status(422).jsonp(errors.array());
-  //   }
-  //   const { userid, username, authorization, aware_id, email } = req.headers;
-  //   if (!userid || !username || !authorization || !aware_id) {
-  //     return res.status(400).jsonp({ status: false, message: "Bad request!" });
-  //   }
-
-  //   try {
-
-
-  //     let NextsevenDaysStart = moment().add(7, 'days').startOf('day').toDate()
-  //     let NextsevenDaysEnd = moment().add(7, 'days').endOf('day').toDate()
-
-  //     let purchase_order_ETD_list = await purchase_orders.aggregate([
-  //       { $match: { _awareid: aware_id, status: { $eq: "SEND" }, hide: { $ne: true } } },
-  //       { "$addFields": { "po_id": { "$toString": "$_id" } } },
-  //       { $lookup: { from: "purchase_order_details", localField: "po_id", foreignField: "po_id", as: "details_avaliable", }, },
-  //       { $addFields: { details_avaliable: { $arrayElemAt: ["$details_avaliable", 0] } } },
-  //       {
-  //         $set: {
-  //           "producer": "$details_avaliable.producer",
-  //           "order_number": "$details_avaliable.order_number",
-  //           "brand": "$details_avaliable.brand",
-  //           "etd": "$details_avaliable.etd"
-  //         }
-  //       },
-  //       { $match: { etd: { $gte: NextsevenDaysStart, $lte: NextsevenDaysEnd } } },
-  //       { $project: { "_id": 0, "producer": 1, "order_number": 1, "brand": 1, "etd": 1 } },
-  //     ])
-
-  //     purchase_order_ETD_list?.forEach(async (item) => {
-  //       let previous_notification = await notifications.findOne({
-  //         notification_sent_to: aware_id,
-  //         date: moment(NextsevenDaysEnd).format('DD/MM/YYYY'),
-  //         message: `The ETD for PO ${item.order_number}  sent to ${item.producer} is approaching within a week. Please take action to remind the ${item.producer}.`
-  //       })
-
-  //       if (!previous_notification) {
-  //         await notifications.create({
-  //           notification_sent_to: aware_id,
-  //           date: moment(NextsevenDaysEnd).format('DD/MM/YYYY'),
-  //           message: `The ETD for PO ${item.order_number}  sent to ${item.producer} is approaching within a week. Please take action to remind the ${item.producer}.`
-  //         })
-  //       }
-  //     })
-
-
-  //     let LastDaysStart = moment().subtract(1, 'days').startOf('day').toDate()
-  //     let LastDaysEnd = moment().subtract(1, 'days').endOf('day').toDate()
-
-  //     let last_purchase_order_ETD_list = await purchase_orders.aggregate([
-  //       { $match: { _awareid: aware_id, status: { $eq: "SEND" }, hide: { $ne: true } } },
-  //       { "$addFields": { "po_id": { "$toString": "$_id" } } },
-  //       { $lookup: { from: "purchase_order_details", localField: "po_id", foreignField: "po_id", as: "details_avaliable", }, },
-  //       { $addFields: { details_avaliable: { $arrayElemAt: ["$details_avaliable", 0] } } },
-  //       {
-  //         $set: {
-  //           "producer": "$details_avaliable.producer",
-  //           "order_number": "$details_avaliable.order_number",
-  //           "brand": "$details_avaliable.brand",
-  //           "etd": "$details_avaliable.etd"
-  //         }
-  //       },
-  //       { $match: { etd: { $gte: LastDaysStart, $lte: LastDaysEnd } } },
-  //       { $project: { "_id": 0, "producer": 1, "order_number": 1, "brand": 1, "etd": 1 } },
-  //     ])
-
-  //     last_purchase_order_ETD_list?.forEach(async (item) => {
-  //       let previous_notification = await notifications.findOne({
-  //         notification_sent_to: aware_id,
-  //         date: moment(LastDaysEnd).format('DD/MM/YYYY'),
-  //         message: `Alert! The ETD for PO${item.order_number} sent to ${item.producer} has already passed. ${item.producer} missed the token update deadline.`
-  //       })
-
-  //       if (!previous_notification) {
-  //         await notifications.create({
-  //           notification_sent_to: aware_id,
-  //           date: moment(LastDaysEnd).format('DD/MM/YYYY'),
-  //           message: `Alert! The ETD for PO${item.order_number} sent to ${item.producer} has already passed. ${item.producer} missed the token update deadline.`
-  //         })
-  //       }
-  //     })
-
-  //     // console.log({ purchase_order_ETD })
-
-  //     // return res.status(200).jsonp({
-  //     //   status: true,
-  //     //   data: true,
-  //     //   // authorization: resp.token,
-  //     // });
-  //     refresh(authorization, userid, { username }, resp => {
-  //       if (resp.status) {
-  //         return res.status(200).jsonp({ status: true, data: true, authorization: resp.token });
-  //       } else {
-  //         return res.status(resp.code).jsonp({ status: false, data: null, authorization: null });
-  //       }
-  //     });
-
-  //   } catch (error) {
-  //     loggerhandler.logger.error(`${error}, email:${email}`);
-  //     return res.status(500).jsonp({ status: false, message: error.toString() });
-  //   }
-
-  // },
-
-
-
-
 }
 function hmac_sha256_encode(value, key) {
   var hash = crypto.createHmac("sha256", key)
@@ -3313,9 +2149,7 @@ async function post_form(datas, url) {
   var result = await axios(options);
 
   if (result.status != 200) {
-    // geetest服务响应异常
-    // geetest service response exception
-    // console.log('Geetest Response Error, StatusCode:' + result.status);
+   
     throw new Error('Geetest Response Error')
   }
   return result.data;
@@ -3323,49 +2157,7 @@ async function post_form(datas, url) {
 
 
 
-// getAllCreatedTokenAsync: async (req, res) => {
-//   try {
-//     var exempted_email_exist = (await exempted_email.find({}).select(["email"])).map((ele) => ele.email)
-//     var kyc_ids = (await account_details.find({ role_id: { $ne: 1 }, email: { $nin: exempted_email_exist } }).select(['kyc_id']))
-//       .map((ele) => mongoose.Types.ObjectId(ele.kyc_id))
-//     var kyc_details_data = (await kyc_details.find({ _id: { $in: kyc_ids } }).select(['aware_id', 'company_name'])).filter(ele => ele.aware_id)
 
-//     if (kyc_details_data.length > 0) {
-//       let data = await Promise.all(kyc_details_data.map(async (ele) => {
-//         const Available_aw_token = await aw_tokens.find({ _awareid: ele.aware_id })
-//         const Available_update_aw_token = await update_aw_tokens.find({ _awareid: ele.aware_id })
-
-//         const filterd_aw_token = Available_aw_token.map((aware) => {
-//           return {
-//             "Token Type": aware.type_of_token,
-//             "Tokens Created ": aware.total_tokens,
-//             "Token Created By": ele.company_name,
-//             "Token Created On": aware.created_date
-//           }
-//         })
-//         const filterd_update_aw_token = Available_update_aw_token.map((update) => {
-//           return {
-//             "Token Type": update.type_of_token,
-//             "Tokens Created ": update.total_tokens,
-//             "Token Created By": ele.company_name,
-//             "Token Created On": update.created_date
-//           }
-//         })
-//         return [...filterd_aw_token, ...filterd_update_aw_token];
-//       }));
-
-//       let filtere_data = data.filter((ele) => ele).flat();
-//       return res.status(200).jsonp({ status: true, message: "Some URL.", data: filtere_data });
-
-//     }
-//     return res.status(200).jsonp({ status: true, message: "Some URL.", data: [] });
-
-//   } catch (error) {
-//     // Handle errors and log them
-//     console.error(error);
-//     return res.status(500).jsonp({ status: false, message: "Internal Server Error." });
-//   }
-// },
 
 
 
