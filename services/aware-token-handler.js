@@ -180,7 +180,6 @@ exports.handlers = {
                       .jsonp({ status: false, message: err.toString() });
                   }
 
-                  // var kyc_Details = await kyc_details.findOne({ _awareid: req.body._awareid_t }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
 
                   await aw_tokens
                     .findOneAndUpdate(
@@ -242,10 +241,7 @@ exports.handlers = {
                       .jsonp({ status: false, message: err.toString() });
                   }
 
-                  // var kyc_Details = await kyc_details.findOne({ _awareid: req.body._awareid_t }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-                  // await account_details.findOneAndUpdate({ kyc_id: kyc_Details._id.toString() }, { create_token_stepper: 2 }, { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
+                
                   await aw_tokens
                     .findOneAndUpdate(
                       {
@@ -527,15 +523,7 @@ exports.handlers = {
                 });
               }
 
-              // var assets_avaliable = await physical_assets.findOne({ _awareid: req.headers.awareid, aware_token_id: req.headers.aware_token_id }).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-
-              // if (!assets_avaliable) {
-              //   return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
-              // }
-              // else {
-              //   return res.status(200).jsonp({ status: true, data: assets_avaliable, authorization: resp.token });
-
-              // }
+           
             } else {
               return res
                 .status(resp.code)
@@ -555,7 +543,6 @@ exports.handlers = {
         .status(422)
         .jsonp({ status: false, message: "Bad payload received." });
     } else {
-      // console.log("body", req.body);
 
       const company_compliances_exist = await company_compliances
         .findOne({
@@ -604,10 +591,7 @@ exports.handlers = {
                       .jsonp({ status: false, message: err.toString() });
                   }
 
-                  // var kyc_Details = await kyc_details.findOne({ _awareid: req.body._awareid }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-                  // await account_details.findOneAndUpdate({ kyc_id: kyc_Details._id.toString() }, { create_token_stepper: 5 }, { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
+                 
                   await aw_tokens
                     .findOneAndUpdate(
                       {
@@ -656,10 +640,6 @@ exports.handlers = {
                       .status(500)
                       .jsonp({ status: false, message: err.toString() });
                   }
-
-                  // var kyc_Details = await kyc_details.findOne({ _awareid: req.body._awareid }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-                  // await account_details.findOneAndUpdate({ kyc_id: kyc_Details._id.toString() }, { create_token_stepper: 5 }, { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
 
                   await aw_tokens
                     .findOneAndUpdate(
@@ -1016,8 +996,7 @@ exports.handlers = {
         .status(422)
         .jsonp({ status: false, message: "Bad payload received." });
     } else {
-      // console.log("body",req.body)
-      // console.log("body",JSON.parse(req.body.sustainble_material))
+      
 
       let sustainble_material = JSON.parse(req.body.sustainble_material);
       const self_validation_exist = await self_validation
@@ -1062,10 +1041,7 @@ exports.handlers = {
                       .jsonp({ status: false, message: err.toString() });
                   }
 
-                  // var kyc_Details = await kyc_details.findOne({ _awareid: req.body._awareid }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-                  // await account_details.findOneAndUpdate({ kyc_id: kyc_Details._id.toString() }, { create_token_stepper: 3 }, { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
+                  
                   await aw_tokens
                     .findOneAndUpdate(
                       {
@@ -1109,10 +1085,6 @@ exports.handlers = {
                       .status(500)
                       .jsonp({ status: false, message: err.toString() });
                   }
-
-                  // var kyc_Details = await kyc_details.findOne({ _awareid: req.body._awareid }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-                  // await account_details.findOneAndUpdate({ kyc_id: kyc_Details._id.toString() }, { create_token_stepper: 3 }, { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
 
                   await aw_tokens
                     .findOneAndUpdate(
@@ -1230,10 +1202,6 @@ exports.handlers = {
               .jsonp({ status: false, message: ex.toString() });
           });
 
-        // var kyc_Details = await kyc_details.findOne({ _awareid: req.body._awareid }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-        // await account_details.findOneAndUpdate({ kyc_id: kyc_Details._id.toString() }, { create_token_stepper: 1 }, { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
         await aw_tokens
           .findOneAndUpdate(
             {
@@ -1262,10 +1230,7 @@ exports.handlers = {
               .jsonp({ status: false, message: ex.toString() });
           });
 
-        // var kyc_Details = await kyc_details.findOne({ _awareid: req.body._awareid }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-        // await account_details.findOneAndUpdate({ kyc_id: kyc_Details._id.toString() }, { create_token_stepper: 2 }, { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
+      
         await aw_tokens
           .findOneAndUpdate(
             {
@@ -1294,10 +1259,7 @@ exports.handlers = {
               .jsonp({ status: false, message: ex.toString() });
           });
 
-        // var kyc_Details = await kyc_details.findOne({ _awareid: req.body._awareid }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-        // await account_details.findOneAndUpdate({ kyc_id: kyc_Details._id.toString() }, { create_token_stepper: 3 }, { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
+        
         await aw_tokens
           .findOneAndUpdate(
             {
@@ -1337,91 +1299,7 @@ exports.handlers = {
     }
   },
 
-  // createTracerAsync: async (req, res) => {
-
-  //   const errors = validationResult(req);
-
-  //   if (!errors.isEmpty()) {
-  //     return res.status(422).jsonp({ status: false, message: "Bad payload received." })
-  //   }
-  //   else {
-
-  //     const tracer_exist = await tracer.findOne({ _awareid: req.body._awareid, aware_token_id: req.body.aware_token_id }).catch((ex) => {loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //     var payload = { username: req.headers.username };
-  //     refresh(req.headers.authorization, req.headers.userid, payload, function (resp) {
-  //       if (resp.status == true) {
-
-  //         if (tracer_exist) {
-
-  //           tracer.findOneAndUpdate({ _awareid: req.body._awareid, aware_token_id: req.body.aware_token_id },
-  //             {
-  //               _awareid: req.body._awareid,
-  //               aware_token_id: req.body.aware_token_id,
-  //               tracer_added: req.body.Traceradded,
-  //               type_selection: req.body.type_selection,
-  //               aware_tc_checked: req.body.awareTracerTC,
-  //               custom_tc_checked: req.body.customTracerTC,
-  //               aware_date: req.body.awareDate ? new Date(req.body.awareDate) : null,
-  //               custom_date : req.body.customDate ? new Date(req.body.customDate) : null,
-  //               custom_name: req.body.customName,
-  //               aware_licences: req.body.Awarelicence,
-  //               tracer_pdf: req.file ? req.file.filename.replace(/\s/g, "") : null
-  //             },
-  //             { new: true },
-  //             async function (err, user) {
-  //               if (err){loggerhandler.logger.error(`${err} ,email:${req.headers.email}`);
-  //                return res.status(500).jsonp({ status: false, message: err.toString() })}
-
-  //               // var kyc_Details = await aw_tokens.findOne({ _awareid: req.body._awareid }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //               // await account_details.findOneAndUpdate({ kyc_id: kyc_Details._id.toString() }, { create_token_stepper: 3 }, { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //               await aw_tokens.findOneAndUpdate({ _awareid: req.body._awareid, _id: mongoose.Types.ObjectId(req.body.aware_token_id) }, { create_token_stepper: 3 }, { new: true }).catch((ex) => {loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //               return res.status(200).jsonp({ status: true, message: "Information entered on Tracer page has been saved successfully", authorization: resp.token });
-
-  //             })
-  //         }
-  //         else {
-
-  //           tracer.create(
-  //             {
-  //               _awareid: req.body._awareid,
-  //               aware_token_id: req.body.aware_token_id,
-  //               tracer_added: req.body.Traceradded,
-  //               type_selection: req.body.type_selection,
-  //               aware_tc_checked: req.body.awareTracerTC,
-  //               custom_tc_checked: req.body.customTracerTC,
-  //               aware_date: req.body.awareDate ? new Date(req.body.awareDate) : null,
-  //               custom_date : req.body.customDate ? new Date(req.body.customDate) : null,
-  //               custom_name: req.body.customName,
-  //               aware_licences: req.body.Awarelicence,
-  //               tracer_pdf: req.file ? req.file.filename.replace(/\s/g, "") : null
-  //             },
-  //             async function (err, user) {
-  //               if (err){loggerhandler.logger.error(`${err} ,email:${req.headers.email}`);
-  //                return res.status(500).jsonp({ status: false, message: err.toString() })}
-
-  //               // var kyc_Details = await kyc_details.findOne({ _awareid: req.body._awareid }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //               // await account_details.findOneAndUpdate({ kyc_id: kyc_Details._id.toString() }, { create_token_stepper: 3 }, { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //               await aw_tokens.findOneAndUpdate({ _awareid: req.body._awareid, _id: mongoose.Types.ObjectId(req.body.aware_token_id) }, { create_token_stepper: 3 }, { new: true }).catch((ex) => {loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //               return res.status(200).jsonp({ status: true, message: "Information entered on Tracer page has been saved successfully", authorization: resp.token });
-
-  //             })
-
-  //         }
-  //       }
-  //       else {
-  //         return res.status(resp.code).jsonp({ status: false, message: null, authorization: null });
-  //       }
-  //     });
-
-  //   }
-  // },
+  
   createTracerAsync: async (req, res) => {
     const errors = validationResult(req);
 
@@ -1430,7 +1308,6 @@ exports.handlers = {
         .status(422)
         .jsonp({ status: false, message: "Bad payload received." });
     }
-    // console.log('hii',req.body)
     try {
       const tracerExist = await tracer.findOne({
         _awareid: req.body._awareid,
@@ -1826,7 +1703,6 @@ exports.handlers = {
                 jsonData.push(jsonObject);
               }
 
-              // console.log("jsonObject",jsonData)
               return res.status(200).jsonp({
                 status: true,
                 data: jsonData,
@@ -1882,7 +1758,6 @@ exports.handlers = {
                   .jsonp({ status: false, message: "Bad request!" });
               });
 
-            // console.log("aw_tokens_avaliable", aw_tokens_avaliable.length)
             var update_aw_tokens_avaliable = await update_aw_tokens
               .find({
                 _awareid: req.headers.awareid,
@@ -1897,12 +1772,10 @@ exports.handlers = {
                   .jsonp({ status: false, message: "Bad request!" });
               });
 
-            // console.log("update_aw_tokens_avaliable", update_aw_tokens_avaliable.length)
 
             var jsonData = [];
 
             if (aw_tokens_avaliable.length <= 0) {
-              // return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
             } else {
               var assets_avaliable = await physical_assets
                 .find({})
@@ -1936,12 +1809,10 @@ exports.handlers = {
                 jsonData.push(jsonObject);
               }
 
-              // return res.status(200).jsonp({ status: true, data: jsonData, authorization: resp.token });
             }
 
             if (update_aw_tokens_avaliable.length <= 0) {
-              // console.log("IN")
-              // return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
+           
             } else {
               var update_physical_asset_avaliable = await update_physical_asset
                 .find({})
@@ -1954,7 +1825,6 @@ exports.handlers = {
                     .jsonp({ status: false, message: "Bad request!" });
                 });
 
-              // console.log("update_physical_asset_avaliable", update_physical_asset_avaliable.length)
 
               for (var i = 0; i < update_aw_tokens_avaliable.length; i++) {
                 var temp_aw_token = update_aw_tokens_avaliable[i];
@@ -1978,10 +1848,8 @@ exports.handlers = {
                 jsonData.push(jsonObject);
               }
 
-              // return res.status(200).jsonp({ status: true, data: jsonData, authorization: resp.token });
             }
 
-            // console.log("jsonData", jsonData)
 
             return res.status(200).jsonp({
               status: true,
@@ -2536,180 +2404,7 @@ exports.handlers = {
     );
   },
 
-  // getallAwareTokenforParticularProducerAsync: async (req, res) => {
-  //   const errors = validationResult(req);
-
-  //   if (!errors.isEmpty()) {
-  //     return res.status(422).jsonp(errors.array());
-  //   } else {
-  //     if (
-  //       !req.headers.userid ||
-  //       !req.headers.username ||
-  //       !req.headers.authorization
-  //     ) {
-  //       return res
-  //         .status(400)
-  //         .jsonp({ status: false, message: "Bad request!" });
-  //     }
-
-  //     var payload = { username: req.headers.username };
-  //     refresh(
-  //       req.headers.authorization,
-  //       req.headers.userid,
-  //       payload,
-  //       async function (resp) {
-  //         if (resp.status == true) {
-  //           console.log("checker");
-  //           var manager_kyc_details_avaliable = await kyc_details
-  //             .findOne({
-  //               manager_id: mongoose.Types.ObjectId(req.headers.userid),
-  //             })
-  //             .catch((ex) => {
-  //               loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`);
-  //               return res
-  //                 .status(400)
-  //                 .jsonp({ status: false, message: "Bad request!" });
-  //             });
-
-  //           if (!manager_kyc_details_avaliable) {
-  //             return res
-  //               .status(200)
-  //               .jsonp({ status: true, data: null, authorization: resp.token });
-  //           }
-  //           var aw_tokens_avaliable = await aw_tokens
-  //             .find({ _awareid: manager_kyc_details_avaliable?.aware_id })
-  //             .catch((ex) => {
-  //               loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`);
-  //               return res
-  //                 .status(400)
-  //                 .jsonp({ status: false, message: "Bad request!" });
-  //             });
-  //           if (aw_tokens_avaliable.length <= 0) {
-  //             return res
-  //               .status(200)
-  //               .jsonp({ status: true, data: null, authorization: resp.token });
-  //           } else {
-  //             var kyc_details_avaliable = await kyc_details
-  //               .find({})
-  //               .catch((ex) => {
-  //                 loggerhandler.logger.error(
-  //                   `${ex} ,email:${req.headers.email}`
-  //                 );
-  //                 return res
-  //                   .status(400)
-  //                   .jsonp({ status: false, message: "Bad request!" });
-  //               });
-
-  //             var assets_avaliable = await physical_assets
-  //               .find({})
-  //               .catch((ex) => {
-  //                 loggerhandler.logger.error(
-  //                   `${ex} ,email:${req.headers.email}`
-  //                 );
-  //                 return res
-  //                   .status(400)
-  //                   .jsonp({ status: false, message: "Bad request!" });
-  //               });
-
-  //             var tracer_avaliable = await tracer.find({}).catch((ex) => {
-  //               loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`);
-  //               return res
-  //                 .status(400)
-  //                 .jsonp({ status: false, message: "Bad request!" });
-  //             });
-
-  //             var self_validation_avaliable = await self_validation
-  //               .find({})
-  //               .catch((ex) => {
-  //                 loggerhandler.logger.error(
-  //                   `${ex} ,email:${req.headers.email}`
-  //                 );
-  //                 return res
-  //                   .status(400)
-  //                   .jsonp({ status: false, message: "Bad request!" });
-  //               });
-
-  //             var company_compliances_avaliable = await company_compliances
-  //               .find({})
-  //               .catch((ex) => {
-  //                 loggerhandler.logger.error(
-  //                   `${ex} ,email:${req.headers.email}`
-  //                 );
-  //                 return res
-  //                   .status(400)
-  //                   .jsonp({ status: false, message: "Bad request!" });
-  //               });
-
-  //             var jsonData = [];
-  //             for (var i = 0; i < aw_tokens_avaliable.length; i++) {
-  //               var temp_aw_token = aw_tokens_avaliable[i];
-
-  //               var temp_assets_avaliable = assets_avaliable.find(
-  //                 (x) =>
-  //                   x._awareid == temp_aw_token._awareid &&
-  //                   x.aware_token_id == temp_aw_token._id
-  //               );
-  //               var temp_kyc_details_avaliable = kyc_details_avaliable.find(
-  //                 (x) => x.aware_id == temp_aw_token._awareid
-  //               );
-
-  //               var temp_tracer_avaliable = tracer_avaliable.find(
-  //                 (x) =>
-  //                   x._awareid == temp_aw_token._awareid &&
-  //                   x.aware_token_id == temp_aw_token._id
-  //               );
-  //               var temp_self_validation_avaliable =
-  //                 self_validation_avaliable.find(
-  //                   (x) =>
-  //                     x._awareid == temp_aw_token._awareid &&
-  //                     x.aware_token_id == temp_aw_token._id
-  //                 );
-  //               var temp_company_compliances_avaliable =
-  //                 company_compliances_avaliable.find(
-  //                   (x) =>
-  //                     x._awareid == temp_aw_token._awareid &&
-  //                     x.aware_token_id == temp_aw_token._id
-  //                 );
-
-  //               var jsonObject = {
-  //                 aw_tokens: temp_aw_token,
-  //                 assets_avaliable: assets_avaliable
-  //                   ? temp_assets_avaliable
-  //                   : null,
-  //                 kyc_details_avaliable: kyc_details_avaliable
-  //                   ? temp_kyc_details_avaliable
-  //                   : null,
-
-  //                 tracer_avaliable: temp_tracer_avaliable
-  //                   ? temp_tracer_avaliable
-  //                   : null,
-  //                 self_validation_avaliable: temp_self_validation_avaliable
-  //                   ? temp_self_validation_avaliable
-  //                   : null,
-  //                 company_compliances_avaliable:
-  //                   temp_company_compliances_avaliable
-  //                     ? temp_company_compliances_avaliable
-  //                     : null,
-  //               };
-
-  //               jsonData.push(jsonObject);
-  //             }
-
-  //             return res.status(200).jsonp({
-  //               status: true,
-  //               data: jsonData,
-  //               authorization: resp.token,
-  //             });
-  //           }
-  //         } else {
-  //           return res
-  //             .status(resp.code)
-  //             .jsonp({ status: false, data: null, authorization: null });
-  //         }
-  //       }
-  //     );
-  //   }
-  // },
+ 
 
   deleteAwareTokenAsync: async (req, res) => {
     const errors = validationResult(req);
@@ -2882,7 +2577,6 @@ exports.handlers = {
                   .jsonp({ status: false, message: "Bad request!" });
               });
 
-            // console.log("aw_tokens_avaliable", aw_tokens_avaliable)
 
             const output = [];
             const map = new Map();
@@ -3243,7 +2937,6 @@ exports.handlers = {
                       : null,
                   transaction_type: "created",
 
-                  // "historical_data": h_assets_avaliable ? {'assets_avaliable': h_assets_avaliable, 'tracer_avaliable': h_tracer_avaliable, 'self_validation_avaliable' : h_self_validation_avaliable, 'company_compliances_avaliable': h_company_compliances_avaliable} : null
                 };
 
                 jsonData.push(jsonObject);
@@ -3251,7 +2944,6 @@ exports.handlers = {
             }
 
             if (update_aw_tokens_avaliable.length <= 0) {
-              // return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
             } else {
               var selected_update_aware_token_avaliable =
                 await selected_update_aware_token.find({}).catch((ex) => {
@@ -3381,7 +3073,6 @@ exports.handlers = {
                       ? temp_transaction_history_avaliable
                       : null,
                   transaction_type: "updated",
-                  // "historical_data": h_assets_avaliable ? {'assets_avaliable': h_assets_avaliable, 'tracer_avaliable': h_tracer_avaliable, 'self_validation_avaliable' : h_self_validation_avaliable, 'company_compliances_avaliable': h_company_compliances_avaliable} : null
                 };
 
                 jsonData.push(jsonObject);
@@ -3389,13 +3080,10 @@ exports.handlers = {
             }
 
             if (transferred_tokens_avaliable.length <= 0) {
-              // return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
             } else {
-              // var jsonData = [];
               for (var i = 0; i < transferred_tokens_avaliable.length; i++) {
                 var temp_transferred_token = transferred_tokens_avaliable[i];
 
-                // console.log("temp_transferred_token", temp_transferred_token)
 
                 if (temp_transferred_token.token_base_type == "initiated") {
                   var temp_assets_avaliable = await physical_assets
@@ -3462,7 +3150,6 @@ exports.handlers = {
                           .jsonp({ status: false, message: "Bad request!" });
                       });
 
-                  // var temp_company_compliances_avaliable = await transaction_history.findOne({ _id: temp_transferred_token.historical_company_compliances_id }).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
 
                   var jsonObject = {
                     aw_tokens: null,
@@ -3485,7 +3172,6 @@ exports.handlers = {
                         ? temp_transaction_history_avaliable
                         : null,
                     transaction_type: "transferred",
-                    // "historical_data": h_assets_avaliable ? {'assets_avaliable': h_assets_avaliable, 'tracer_avaliable': h_tracer_avaliable, 'self_validation_avaliable' : h_self_validation_avaliable, 'company_compliances_avaliable': h_company_compliances_avaliable} : null
                   };
                 } else {
                   var temp_aw_token = await update_aw_tokens
@@ -3574,7 +3260,6 @@ exports.handlers = {
                           .jsonp({ status: false, message: "Bad request!" });
                       });
 
-                  // var temp_company_compliances_avaliable = await transaction_history.findOne({ _id: temp_transferred_token.historical_company_compliances_id }).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
 
                   var jsonObject = {
                     update_aw_tokens: temp_aw_token,
@@ -3602,17 +3287,14 @@ exports.handlers = {
                         ? temp_transaction_history_avaliable
                         : null,
                     transaction_type: "transferred",
-                    // "historical_data": h_assets_avaliable ? {'assets_avaliable': h_assets_avaliable, 'tracer_avaliable': h_tracer_avaliable, 'self_validation_avaliable' : h_self_validation_avaliable, 'company_compliances_avaliable': h_company_compliances_avaliable} : null
                   };
                 }
 
                 jsonData.push(jsonObject);
               }
 
-              // console.log("jsonObject",jsonData)
             }
 
-            // console.log("jsonData", jsonData)
             return res.status(200).jsonp({
               status: true,
               data: jsonData,
@@ -3739,10 +3421,7 @@ exports.handlers = {
             } else {
               full_name = "N/A";
             }
-            // if (!assets_avaliable || !tracer_avaliable || !self_validation_avaliable || !company_compliances_avaliable || !kyc_details_avaliable) {
-            //   return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
-            // }
-            // else {
+            
             return res.status(200).jsonp({
               status: true,
               data: {
@@ -3758,12 +3437,7 @@ exports.handlers = {
               authorization: resp.token,
             });
 
-            // // if (!assets_avaliable || !tracer_avaliable || !self_validation_avaliable || !company_compliances_avaliable || !kyc_details_avaliable) {
-            // //   return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
-            // // }
-            // // else {
-            // return res.status(200).jsonp({ status: true, data: { "assets_avaliable": assets_avaliable, "tracer_avaliable": tracer_avaliable, "self_validation_avaliable": self_validation_avaliable, "company_compliances_avaliable": company_compliances_avaliable, "kyc_details_avaliable": kyc_details_avaliable, "account_details_avaliable": account_details_avaliable }, authorization: resp.token });
-            // }
+            
           } else {
             return res
               .status(resp.code)
@@ -3841,7 +3515,6 @@ exports.handlers = {
                 const productLine = productLinesAvailable.find(
                   (line) => line.po_id == order._id.toString()
                 );
-                // const totalProductLine = productLine ? productLine.product_line.length : 0;
 
                 let total_product_line =
                   productLine && productLine.product_line
@@ -3862,7 +3535,6 @@ exports.handlers = {
                 .status(200)
                 .jsonp({ status: true, data, authorization: resp.token });
             } catch (ex) {
-              // loggerhandler.logger.error(`${ex}`);
               return res
                 .status(400)
                 .jsonp({ status: false, message: ex.message });
@@ -3936,43 +3608,7 @@ exports.handlers = {
     }
   },
 
-  //Shivam chauhan
-
-  // getProductLineFromBrandAsync: async (req, res) => {
-
-  //   const errors = validationResult(req);
-
-  //   if (!errors.isEmpty()) {
-  //     return res.status(422).jsonp(errors.array())
-  //   }
-  //   else {
-
-  //     if (!req.headers.userid || !req.headers.username || !req.headers.authorization || !req.headers.awareid || !req.headers.po_id) {
-  //       return res.status(400).jsonp({ status: false, message: "Bad request!" });
-  //     }
-
-  //     var payload = { username: req.headers.username };
-  //     refresh(req.headers.authorization, req.headers.userid, payload, async function (resp) {
-  //       if (resp.status == true) {
-
-  //         var product_lines_avaliable = await product_lines.findOne({ _awareid: req.headers.awareid, po_id: req.headers.po_id ,deleted:false}).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-
-  //         if (!product_lines_avaliable) {
-  //           return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
-  //         }
-  //         else {
-  //           return res.status(200).jsonp({ status: true, data: product_lines_avaliable, authorization: resp.token });
-
-  //         }
-
-  //       }
-  //       else {
-  //         return res.status(resp.code).jsonp({ status: false, data: null, authorization: null });
-  //       }
-  //     });
-
-  //   }
-  // },
+  
 
   getProductLineFromBrandAsync: async (req, res) => {
     const errors = validationResult(req);
@@ -3999,13 +3635,7 @@ exports.handlers = {
         payload,
         async function (resp) {
           if (resp.status == true) {
-            // var product_lines_avaliable = await product_lines.findOne({
-            //   _awareid: req.headers.awareid,
-            //   po_id: req.headers.po_id,
-            //   deleted: false,
-            //   'product_line.deleted': false,
-            //   // product_line: { $elemMatch: { deleted: false } }
-            // });
+           
 
             var product_lines_avaliable = await product_lines
               .findOne({
@@ -4271,93 +3901,7 @@ exports.handlers = {
     if (!errors.isEmpty()) {
       return res.status(422).jsonp(errors.array());
     } else {
-      // const response = await transaction_history.aggregate({
-      //   $match: {
-      //     createdAt: {
-      //       $gte: new Date("2016-01-01")
-      //     }
-      //   }
-      // }, {
-      //   $group: {
-      //     _id: {
-      //       "year":  { "$year": "$createdAt" },
-      //       "month": { "$month": "$createdAt" },
-      //       "day":   { "$dayOfMonth": "$createdAt" }
-      //     },
-      //     count:{$sum: 1}
-      //   }
-      // }).exec(function(err,data){
-      //   if (err) {
-      //     console.log('Error Fetching model');
-      //     console.log(err);
-      //   } else {
-      //     console.log(data);
-      //   }
-      // });
-      // console.log("response",response)
-      // const exemptedEmails = await exempted_email.find({});
-      // const emails = exemptedEmails.map((account) => account.email);
-      // // Fetch accounts available
-      // var accounts_avaliable = await account_details.find({ is_deleted: { $ne: true }, role_id: { $ne: 1 }, email: { $nin: emails } });
-      // var kyc_ids = accounts_avaliable.map((account) => account.kyc_id);
-      // // Fetch KYC details
-      // var kyc_Details = await kyc_details.find({ _id: { $in: kyc_ids }, is_deleted: { $ne: true } });
-      // var aware_ids = kyc_Details.map((kyc) => kyc.aware_id);
-      // var [
-      //   aw_tokens_found,
-      //   update_aw_tokens_found,
-      //   transferred_tokens_avaliable,
-      //   transaction_history_avalible,
-      //   roles,
-      // ] = await Promise.all([
-      //   aw_tokens.find({ _awareid: { $in: aware_ids }, hide_flag: { $ne: true } }),
-      //   update_aw_tokens.find({ _awareid: { $in: aware_ids } }),
-      //   transferred_tokens.find({ _awareid: { $in: aware_ids } }),
-      //   transaction_history.find({ _awareid: { $in: aware_ids } }),
-      //   user_role.find({}),
-      // ]);
-      // console.log("aw_tokens_found", aw_tokens_found.length)
-      // // console.log("roles",roles)
-      // var dataset = [];
-      // kyc_Details.forEach((kyc) => {
-      //   var account_found = accounts_avaliable.find((x) => x.kyc_id == kyc._id);
-      //   if (account_found) {
-      //     const type_of_producer = roles.find((x) => x.role_id == account_found.role_id).role_name;
-      //     var t1 = [];
-      //     var t2 = [];
-      //     var t3 = [];
-      //     var retrived_aw_tokens = aw_tokens_found.filter((x) => x._awareid == kyc.aware_id).map((y) => y._id);
-      //     if (retrived_aw_tokens.length > 0) {
-      //       const ft1 = transaction_history_avalible.filter((transaction) =>
-      //         retrived_aw_tokens.includes(mongoose.Types.ObjectId(transaction.aware_token_id))
-      //       );
-      //       // t1.push(ft1)
-      //       console.log("t1", ft1.length);
-      //     }
-      //     const retrived_update_aw_tokens = update_aw_tokens_found.filter((x) => x._awareid == kyc.aware_id).map((y) => y._id);
-      //     if (retrived_update_aw_tokens.length > 0) {
-      //       t1 = transaction_history_avalible.filter((transaction) =>
-      //         retrived_update_aw_tokens.includes(transaction.update_aware_token_id)
-      //       );
-      //     }
-      //     const retrived_transferred_tokens_avaliable = transferred_tokens_avaliable.filter((x) => x._awareid == kyc.aware_id);
-      //     if (retrived_transferred_tokens_avaliable.length > 0) {
-      //       // t3 = transaction_history_avalible.find((x) => x.update_aware_token_id == retrived_transferred_tokens_avaliable._id.toString());
-      //       t3 = transaction_history_avalible.filter((transaction) =>
-      //         retrived_transferred_tokens_avaliable.includes(transaction.update_aware_token_id)
-      //       );
-      //     }
-      //     if (kyc.aware_id) {
-      //       dataset.push({
-      //         company_name: kyc.company_name,
-      //         type_of_producer,
-      //         t1,
-      //         t2, t3
-      //       });
-      //     }
-      //   }
-      // });
-      // return res.status(200).jsonp({ status: true, data: { dataset } });
+     
     }
   },
 };
@@ -4366,82 +3910,4 @@ function escapeRegExp(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-// kyc_Details.forEach((kyc) => {
 
-//   const account_found = accounts_avaliable.find(x => x.kyc_id == kyc._id);
-
-//   const type_of_producer = roles.find(x => x.role_id == account_found.role_id).role_name;
-
-//   const retrived_aw_tokens = aw_tokens_found.filter((x) => x._awareid == kyc.aware_id);
-
-//   const retrived_update_aw_tokens = update_aw_tokens_found.filter(x => x._awareid == kyc.aware_id);
-
-//   const retrived_transferred_tokens_avaliable = transferred_tokens_avaliable.filter(x => x._awareid == kyc.aware_id);
-
-//   var Pellet = 0, Fiber = 0, Yarn = 0, Fabric = 0, Product = 0; Final_product = 0;
-//   retrived_aw_tokens.filter((item) => {
-//     if (item.type_of_token === 'Pellet') {
-//       Pellet = Pellet + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Fiber') {
-//       Fiber = Fiber + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Yarn') {
-//       Yarn = Yarn + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Fabric') {
-//       Fabric = Fabric + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Product') {
-//       Product = Product + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Final product') {
-//       Product = Product + item.avaliable_tokens;
-//     }
-//   });
-
-//   retrived_update_aw_tokens.filter((item) => {
-//     if (item.type_of_token === 'Pellet') {
-//       Pellet = Pellet + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Fiber') {
-//       Fiber = Fiber + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Yarn') {
-//       Yarn = Yarn + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Fabric') {
-//       Fabric = Fabric + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Product') {
-//       Product = Product + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Final product') {
-//       Product = Product + item.avaliable_tokens;
-//     }
-//   });
-
-//   retrived_transferred_tokens_avaliable.filter((item) => {
-//     if (item.type_of_token === 'Pellet') {
-//       Pellet = Pellet + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Fiber') {
-//       Fiber = Fiber + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Yarn') {
-//       Yarn = Yarn + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Fabric') {
-//       Fabric = Fabric + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Product') {
-//       Product = Product + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Final product') {
-//       Product = Product + item.avaliable_tokens;
-//     }
-//   });
-
-//   if (kyc.aware_id) dataset.push({ "company_name": kyc.company_name, type_of_producer, Pellet, Fiber, Yarn, Fabric, Fabric, Product })
-
-// });
