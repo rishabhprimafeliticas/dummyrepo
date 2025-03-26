@@ -37,98 +37,7 @@ const axios = require('axios');
 exports.handlers = {
 
 
-  // Products section
-  // createProductAsync: async (req, res) => {
-  //   console.log("reqqqq01", req.body)
-
-  //   const errors = validationResult(req);
-  //   if (!errors.isEmpty()) {
-  //     return res.status(422).jsonp({ status: false, message: "Bad payload received." })
-  //   }
-  //   else {
-  //     // let data = req.body.tostringify()
-  //     // var pictureArray = [];
-  //     // console.log("body", req.body)
-
-  //     // console.log("files", req.files)
-  //     // req.files.forEach(element => {
-  //     //   let filename = element.filename
-  //     //   pictureArray.push(filename.replace(/\s/g, ""))
-  //     // });
-  //     // console.log('pictureArray', pictureArray)
-  //     var products_exist = null;
-  //     if (req.body.product_id != 'null') {
-  //       products_exist = await products.findOne({ _awareid: req.body._awareid, _id: mongoose.Types.ObjectId(req.body.product_id) }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //     }
-
-  //     var payload = { username: req.headers.username };
-  //     // console.log(req.body.sub_brand,'subBrand');
-  //     refresh(req.headers.authorization, req.headers.userid, payload, function (resp) {
-  //       if (resp.status == true) {
-  //         // console.log("re.body", req.body)
-  //         // console.log('req.body.sub_brand', req.body.sub_brand)
-  //         if (products_exist) {
-  //           products.findOneAndUpdate({ _awareid: req.body._awareid, _id: mongoose.Types.ObjectId(req.body.product_id) },
-  //             {
-  //               sub_brand: req.body.sub_brand,
-  //               _awareid: req.body._awareid,
-  //               item_number: req.body.item_number,
-  //               description: req.body.description,
-  //               color: req.body.color,
-  //               info: req.body.info,
-  //               care: req.body.care == 'null' ? null : req.body.care,
-  //               weight: req.body.weight ? Number(req.body.weight) : null,
-  //               // photos: pictureArray,
-  //               status: req.body.sended_po_or_new_po == 'true' ? "SEND" : "CONCEPT",
-  //               product_lock: req.body.product_lock,
-  //               product_photo_1: req.body.product_photo_1 == 'null' ? null : req.body.product_photo_1,
-  //               product_photo_2: req.body.product_photo_2 == 'null' ? null : req.body.product_photo_2,
-  //               product_photo_3: req.body.product_photo_3 == 'null' ? null : req.body.product_photo_3,
-  //               impact_data: req.body.impact_data == 'null' ? null : JSON.parse(req.body.impact_data),
-  //               modified_on: new Date()
-
-  //             },
-  //             async function (err, purchaseorder) {
-  //               // console.log("purchaseorder",purchaseorder)
-  //               if (err) { loggerhandler.logger.error(`${err} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: err.toString() }) }
-
-  //               return res.status(200).jsonp({ status: true, message: "Product has been updated successfully", data: { "_id": products_exist._id, "_awareid": products_exist._awareid }, authorization: resp.token });
-
-  //             })
-  //         }
-  //         else {
-  //           products.create(
-  //             {
-  //               sub_brand: req.body.sub_brand,
-  //               _awareid: req.body._awareid,
-  //               item_number: req.body.item_number,
-  //               description: req.body.description,
-  //               color: req.body.color,
-  //               product_lock: req.body.product_lock,
-  //               info: req.body.info == 'null' ? null : req.body.info,
-  //               care: req.body.care == 'null' ? null : req.body.care,
-  //               weight: req.body.weight ? Number(req.body.weight) : null,
-  //               // photos: pictureArray,req.body.product_photo_1 == 'null' ? null : req.body.product_photo_1,
-  //               status: req.body.sended_po_or_new_po == 'true' ? "SEND" : "CONCEPT",
-  //               product_photo_1: req.body.product_photo_1 == 'null' ? null : req.body.product_photo_1,
-  //               product_photo_2: req.body.product_photo_2 == 'null' ? null : req.body.product_photo_2,
-  //               product_photo_3: req.body.product_photo_3 == 'null' ? null : req.body.product_photo_3,
-  //               impact_data: req.body.impact_data == 'null' ? null : JSON.parse(req.body.impact_data),
-  //               created_date: new Date()
-  //             },
-  //             async function (err, purchaseorder) {
-  //               if (err) { loggerhandler.logger.error(`${err} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: err.toString() }) }
-  //               return res.status(200).jsonp({ status: true, message: "Product has been added successfully", data: { "_id": purchaseorder._id, "_awareid": purchaseorder._awareid }, authorization: resp.token });
-  //             })
-  //         }
-  //       }
-  //       else {
-  //         return res.status(resp.code).jsonp({ status: false, data: null, authorization: null });
-  //       }
-  //     });
-  //   }
-  // },
+  
 
   createProductAsync: async (req, res) => {
     console.log("Request Body:", req.body);
@@ -177,8 +86,7 @@ exports.handlers = {
             modified_on: new Date(),
           };
 
-          // console.log("productDataproductData",productData);
-          // console.log("req.body.product_id",req.body.product_id);
+          
           // If the product exists, update it
           var kyc_details_available = await kyc_details.findOne({ aware_id: req.body._awareid })?.select(["sub_brand"]).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
           if (products_exist) {
@@ -197,7 +105,6 @@ exports.handlers = {
               }
             })
 
-            // console.log('deepakabc',products_exist);
 
 
             console.log('deepakabc', productData)
@@ -211,9 +118,7 @@ exports.handlers = {
               return res.status(500).jsonp({ status: false, message: err.toString() });
             });
 
-            // Generate the QR code after updating
-            // console.log("req.body._awareid", req.body._awareid);
-            // console.log("req.body.po_id", req.body.po_id);
+            
             console.log("req_body12303", req.body);
             const body_data = req.body
 
@@ -241,9 +146,7 @@ exports.handlers = {
               return res.status(500).jsonp({ status: false, message: err.toString() });
             });
 
-            // Generate the QR code after creation
-
-            // await callstack.newQRCodeUpdating(req.body._awareid, req.body.po_id, req.body);
+          
 
             return res.status(200).jsonp({
               status: true,
@@ -316,10 +219,8 @@ exports.handlers = {
 
           var products_data = await products.find({ _awareid: req.headers._awareid }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
 
-          // console.log("products_data", products_data);
           var product_lines_send = await product_lines.find({ _awareid: req.headers._awareid, product_line_status: "SEND", deleted: false }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
 
-          // console.log("product_lines_send", product_lines_send);
           var tempproducts_data = [];
           products_data.forEach((ele) => {
             tempproducts_data.push((String)(mongoose.Types.ObjectId(ele._id)))
@@ -332,7 +233,6 @@ exports.handlers = {
               temp_product_send_checkers1.push(ele.productid)
             })
           })
-          // console.log("temp_product_send_checkers1", temp_product_send_checkers1);
           const filteredArray = tempproducts_data.filter(value => temp_product_send_checkers1.includes(value));
 
           filteredArray.forEach(async (ele) => {
@@ -350,17 +250,13 @@ exports.handlers = {
               : kyc_details_available?.sub_brand.find((e) => e._id == ele.sub_brand)?.dpp_settings || null; // Otherwise, find and return the value from `sub_brand`, or `null` if not found           
 
 
-            // console.log({ kyc_details_available })
             return ({
               ...ele.toObject(),
-              // sub_brand: dpp_settings == null ? kyc_details_available.company_name : kyc_details_available?.sub_brand.find((e) => e._id == ele.sub_brand)?.name || (ele.sub_brand == req.headers._awareid ? kyc_details_available?.company_name : ''),
 
               sub_brand: kyc_details_available?.sub_brand.find((e) => e._id == ele.sub_brand)?.name || (ele.sub_brand == req.headers._awareid ? kyc_details_available?.company_name : ''),
               sub_brand_id: ele.sub_brand,
               dpp_settings: dpp_settings,
-              // brand_data: dpp_settings?.sub_brand?.find((e) => e._id == ele.sub_brand)?.brand_data || null,
               brand_data: kyc_details_available?.sub_brand?.find((e) => e._id == ele.sub_brand)?.brand_data || null,
-              // no_dpp_settings_companylogo: dpp_settings == null ? kyc_details_available.company_logo : kyc_details_available?.sub_brand.find((e) => e._id == ele.sub_brand)?.logo || null,
               no_dpp_settings_companylogo: (kyc_details_available?.sub_brand.find((e) => e._id == ele.sub_brand)?.logo) || (kyc_details_available.company_logo) || null,
 
               website: kyc_details_available.website
@@ -368,7 +264,6 @@ exports.handlers = {
           })
           console.log("latest_data", latest_data.length, latest_data);
 
-          // console.log("latest_data",latest_data)
 
           return res.status(200).jsonp({ status: true, data: latest_data, authorization: resp.token });
 
@@ -554,9 +449,7 @@ exports.handlers = {
     ) {
       return res.status(400).jsonp({ status: false, message: "Bad request!" });
     } else {
-      // if (!req.body._id) {
-      //   return res.status(422).jsonp("I know you have it in you, Try again!");
-      // }
+      
 
       var pictureArray = [];
       req.files.forEach(element => {
@@ -573,7 +466,6 @@ exports.handlers = {
         "/": "&#x2F;",
       };
       const reg = /[&<>"'/]/gi;
-      // var _id = req.body._id.replace(reg, (match) => map[match]);
 
       var payload = { username: req.headers.username };
       refresh(req.headers.authorization, req.headers.userid, payload, function (resp) {
@@ -581,20 +473,12 @@ exports.handlers = {
 
           products.findOneAndUpdate({ _awareid: req.body._awareid, _id: mongoose.Types.ObjectId(req.body.product_id) },
             {
-              // _awareid: req.body._awareid,
-              // item_number: req.body.item_number,
-              // description: req.body.description,
-              // color: req.body.color,
-              // info: req.body.info,
+             
               photos: pictureArray,
-              // status: "CONCEPT",
-              // product_photo_1: req.files.length > 0 ? req.files[0].filename.replace(/\s/g, "") : products_exist.product_photo_1,
-              // product_photo_2: req.files.length > 1 ? req.files[1].filename.replace(/\s/g, "") : products_exist.product_photo_2,
-              // product_photo_3: req.files.length > 2 ? req.files[2].filename.replace(/\s/g, "") : products_exist.product_photo_3,
+             
 
             },
             async function (err, purchaseorder) {
-              // console.log("purchaseorder",purchaseorder)
               if (err) { loggerhandler.logger.error(`${err} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: err.toString() }) }
 
               return res.status(200).jsonp({ status: true, message: "Selected products information has been updated successfully", data: { "_id": products_exist._id, "_awareid": products_exist._awareid }, authorization: resp.token });
@@ -643,90 +527,10 @@ exports.handlers = {
     }
   },
 
-  // getPurchaseOrdersAsync: async (req, res) => {
-
-  //   const errors = validationResult(req);
-
-  //   if (!errors.isEmpty()) {
-  //     return res.status(422).jsonp(errors.array())
-  //   }
-  //   else {
-
-  //     if (!req.headers.userid || !req.headers.username || !req.headers.authorization || !req.headers.awareid) {
-  //       return res.status(400).jsonp({ status: false, message: "Bad request!" });
-  //     }
-
-
-  //     var payload = { username: req.headers.username };
-  //     refresh(req.headers.authorization, req.headers.userid, payload, async function (resp) {
-  //       if (resp.status == true) {
-
-  //         var purchase_orders_avaliable = await purchase_orders.find({ _awareid: req.headers.awareid, deleted:false, hide: { $ne: true }, status: { $ne: "Approved" } }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-
-  //         if (purchase_orders_avaliable.length <= 0) {
-  //           return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
-  //         }
-  //         else {
-
-  //           var purchase_order_details_avaliable = await purchase_order_details.find({ _awareid: req.headers.awareid , deleted:false}).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-  //           var product_line_available = await product_lines.find({ _awareid: req.headers.awareid }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-
-
-  //           // var tracer_avaliable = await tracer.find({}).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-
-  //           // var self_validation_avaliable = await self_validation.find({}).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-
-  //           // var company_compliances_avaliable = await company_compliances.find({}).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-
-
-  //           var jsonData = [];
-  //           for (var i = 0; i < purchase_orders_avaliable.length; i++) {
-
-  //             var temp_purchase_orders = purchase_orders_avaliable[i];
-
-  //             var temp_purchase_order_details_avaliable = purchase_order_details_avaliable.find(x => x._awareid == temp_purchase_orders._awareid && x.po_id == temp_purchase_orders._id)
-  //             var temp_product_line_available = product_line_available.find(x => x._awareid == temp_purchase_orders._awareid && x.po_id == temp_purchase_orders._id);
-
-
-
-  //             let total_product_line = temp_product_line_available ? temp_product_line_available.product_line?.length : 0
-
-  //             let product_line_inprogress = temp_product_line_available ? temp_product_line_available.product_line?.some(ele => ele.update_status != "SELECT") : false
-  //             // var temp_tracer_avaliable = tracer_avaliable.find(x => x._awareid == temp_aw_token._awareid && x.aware_token_id == temp_aw_token._id)
-  //             // var temp_self_validation_avaliable = self_validation_avaliable.find(x => x._awareid == temp_aw_token._awareid && x.aware_token_id == temp_aw_token._id)
-  //             // var temp_company_compliances_avaliable = company_compliances_avaliable.find(x => x._awareid == temp_aw_token._awareid && x.aware_token_id == temp_aw_token._id)
-
-
-
-  //             var jsonObject = {
-  //               "purchase_orders": temp_purchase_orders,
-  //               "purchase_order_details_avaliable": temp_purchase_order_details_avaliable ? temp_purchase_order_details_avaliable : null,
-  //               total_product_line,
-  //               product_line_inprogress
-  //               // "tracer_avaliable": temp_tracer_avaliable ? temp_tracer_avaliable : null,
-  //               // "self_validation_avaliable": temp_self_validation_avaliable ? temp_self_validation_avaliable : null,
-  //               // "company_compliances_avaliable": temp_company_compliances_avaliable ? temp_company_compliances_avaliable : null
-  //             }
-
-  //             jsonData.push(jsonObject);
-  //           }
-
-  //           // console.log("jsonObject",jsonData)
-  //           return res.status(200).jsonp({ status: true, data: jsonData, authorization: resp.token });
-
-  //         }
-
-  //       }
-  //       else {
-  //         return res.status(resp.code).jsonp({ status: false, data: null, authorization: null });
-  //       }
-  //     });
-  //   }
-  // },
+  
 
 
   getPurchaseOrdersAsync: async (req, res) => {
-    // console.log("SHIVAM WORKING FINE");
 
     const errors = validationResult(req);
 
@@ -756,14 +560,6 @@ exports.handlers = {
             var purchase_order_details_avaliable = await purchase_order_details.find({ _awareid: req.headers.awareid, deleted: false }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
             var product_line_available = await product_lines.find({ _awareid: req.headers.awareid, deleted: false }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
 
-
-            // var tracer_avaliable = await tracer.find({}).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-
-            // var self_validation_avaliable = await self_validation.find({}).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-
-            // var company_compliances_avaliable = await company_compliances.find({}).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-
-
             var jsonData = [];
             for (var i = 0; i < purchase_orders_avaliable.length; i++) {
 
@@ -778,29 +574,20 @@ exports.handlers = {
                 ? temp_product_line_available.product_line.filter(item => item.deleted === false).length
                 : 0;
 
-              // console.log("Total product lines with deleted = false:", total_product_line);
 
               let product_line_inprogress = temp_product_line_available ? temp_product_line_available.product_line?.some(ele => ele.update_status != "SELECT") : false
-              // var temp_tracer_avaliable = tracer_avaliable.find(x => x._awareid == temp_aw_token._awareid && x.aware_token_id == temp_aw_token._id)
-              // var temp_self_validation_avaliable = self_validation_avaliable.find(x => x._awareid == temp_aw_token._awareid && x.aware_token_id == temp_aw_token._id)
-              // var temp_company_compliances_avaliable = company_compliances_avaliable.find(x => x._awareid == temp_aw_token._awareid && x.aware_token_id == temp_aw_token._id)
-
-
-
+            
               var jsonObject = {
                 "purchase_orders": temp_purchase_orders,
                 "purchase_order_details_avaliable": temp_purchase_order_details_avaliable ? temp_purchase_order_details_avaliable : null,
                 total_product_line,
                 product_line_inprogress
-                // "tracer_avaliable": temp_tracer_avaliable ? temp_tracer_avaliable : null,
-                // "self_validation_avaliable": temp_self_validation_avaliable ? temp_self_validation_avaliable : null,
-                // "company_compliances_avaliable": temp_company_compliances_avaliable ? temp_company_compliances_avaliable : null
+               
               }
 
               jsonData.push(jsonObject);
             }
 
-            // console.log("101jsonObject", jsonData)
             return res.status(200).jsonp({ status: true, data: jsonData, authorization: resp.token });
 
           }
@@ -859,9 +646,6 @@ exports.handlers = {
     }
     else {
 
-      // console.log(req.body)
-      // console.log(req.file)
-
       const purchase_order_details_exist = await purchase_order_details.findOne({ _awareid: req.body._awareid, po_id: req.body.po_id, deleted: false }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
 
       var payload = { username: req.headers.username };
@@ -880,7 +664,6 @@ exports.handlers = {
                 date: req.body.date,
                 order_number: req.body.order_number,
                 country: req.body.country,
-                // geo_location:req.body.geo_location,
                 address: req.body.address,
                 etd: etd,
                 producer: req.body.producer,
@@ -906,7 +689,6 @@ exports.handlers = {
               date: req.body.date,
               order_number: req.body.order_number,
               country: req.body.country,
-              // geo_location:req.body.geo_location,
               address: req.body.address,
               etd: etd,
               producer: req.body.producer,
@@ -949,7 +731,6 @@ exports.handlers = {
       refresh(req.headers.authorization, req.headers.userid, payload, async function (resp) {
         if (resp.status == true) {
 
-          // var purchase_order_details_avaliable = await purchase_order_details.findOne({ _awareid: req.headers.awareid, po_id: req.headers.po_id, deleted:false }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
 
           var purchase_order_details_avaliable = await purchase_order_details.aggregate([
             { $match: { _awareid: req.headers.awareid, po_id: req.headers.po_id, } },
@@ -965,27 +746,19 @@ exports.handlers = {
           }
           else {
             return res.status(200).jsonp({ status: true, data: purchase_order_details_avaliable[0], authorization: resp.token });
-
           }
-
         }
         else {
           return res.status(resp.code).jsonp({ status: false, data: null, authorization: null });
         }
       });
-
-
-
-
     }
   },
 
 
-  // modified by Harish Nishad
   deletePurchaseOrderAsync: async (req, res) => {
 
     const errors = validationResult(req);
-    // console.log('hi', req.body)
     if (!errors.isEmpty()) {
       return res.status(422).jsonp({ status: false, message: "Bad payload received." })
     }
@@ -1019,28 +792,13 @@ exports.handlers = {
           if (getconcetptcount == 1) {
             await products.findByIdAndUpdate({ _id: mongoose.Types.ObjectId(tempproduct_lines_length_exist_po_id[i]) }, { status: "CONCEPT" }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
           } else {
-            // console.log("Concept remaining")
           }
         } else {
-          // console.log("conceptmainhan nhi hey", conceptmainhan)
         }
       }
 
 
-      // let data = await product_lines.findOne({po_id: req.body.po_id,deleted:false});
-      // console.log(data);
-      // data.product_line.find((e)=>{
-      //   if(e.update_status!='SELECT')return res.status(200).jsonp({ status: true, message: "Can't delete This PO", authorization: resp.token });
-      // })
-      // // console.log('why', tempproduct_lines_length_exist_po_id)
-      // await purchase_orders.deleteOne({ _awareid: req.body._awareid, _id: mongoose.Types.ObjectId(req.body.po_id) }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-      // await purchase_order_details.deleteOne({ _awareid: req.body._awareid, po_id: req.body.po_id }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-      // await product_lines.deleteOne({ _awareid: req.body._awareid, po_id: req.body.po_id }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-      // await generate_qr.deleteOne({ _awareid: req.body._awareid, po_id: req.body.po_id }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
+    
       var payload = { username: req.headers.username };
       refresh(req.headers.authorization, req.headers.userid, payload, async function (resp) {
         if (resp.status == true) {
@@ -1050,7 +808,6 @@ exports.handlers = {
           if (dataIfAny) {
             return res.status(200).jsonp({ status: false, message: "Can't delete This PO", authorization: resp.token });
           }
-          // console.log('why', tempproduct_lines_length_exist_po_id)
           await purchase_orders.findOneAndUpdate({ _awareid: req.body._awareid, _id: mongoose.Types.ObjectId(req.body.po_id), deleted: false },
             { $set: { deleted: true } },
             { new: true }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
@@ -1080,7 +837,6 @@ exports.handlers = {
     }
   },
 
-  // modified by Harish Nishad
   createProductLineAsync: async (req, res) => {
     const errors = validationResult(req);
     console.log("reqqqqqqq", req.body);
@@ -1121,7 +877,6 @@ exports.handlers = {
 
                 var product_lines_finds = await product_lines.find({ _awareid: req.body._awareid, status: "CONCEPT", deleted: false }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
                 var product_avaliable = await products.find({ _awareid: req.body._awareid, status: "CONCEPT" }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-                // console.log('product_lines_avaliable2', product_lines_finds.length)
                 product_lines_finds.forEach(async (item) => {
                   await item.product_line.forEach(async (val) => {
                     await product_avaliable.forEach(async (ele) => {
@@ -1152,7 +907,6 @@ exports.handlers = {
             var temparray = []
             var product_lines_finds = await product_lines.find({ _awareid: req.body._awareid, status: "CONCEPT", deleted: false }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
             var product_avaliable = await products.find({ _awareid: req.body._awareid, status: "CONCEPT" }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-            // console.log('product_lines_avaliable2', product_lines_finds.length)
             product_lines_finds.forEach(async (item) => {
               await item.product_line.forEach(async (val) => {
                 await product_avaliable.forEach(async (ele) => {
@@ -1180,72 +934,6 @@ exports.handlers = {
     }
   },
 
-  // modified by Harish Nishad
-  // getProductLineAsync: async (req, res) => {
-
-  //   const errors = validationResult(req);
-
-  //   if (!errors.isEmpty()) {
-  //     return res.status(422).jsonp(errors.array())
-  //   }
-  //   else {
-
-  //     if (!req.headers.userid || !req.headers.username || !req.headers.authorization || !req.headers.awareid || !req.headers.po_id) {
-  //       return res.status(400).jsonp({ status: false, message: "Bad request!" });
-  //     }
-
-  //     var payload = { username: req.headers.username };
-  //     refresh(req.headers.authorization, req.headers.userid, payload, async function (resp) {
-  //       if (resp.status == true) {
-
-  //         var product_lines_avaliable = await product_lines.findOne({ _awareid: req.headers.awareid, po_id: req.headers.po_id ,deleted:false}).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-
-
-  //         console.log("product_lines_avaliable", product_lines_avaliable)
-  //         if (!product_lines_avaliable) {
-  //           return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
-  //         }
-  //         else {
-  //           let product = product_lines_avaliable.toObject();
-  //           for (let e of product.product_line) {
-  //             if (e.update_aware_token_id) {
-  //               let transferred_tokens_available = await transferred_tokens.findOne({ historical_update_aware_token_id: e.update_aware_token_id }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-  //               e.historical_send_aw_tokens_id = transferred_tokens_available?.historical_send_aw_tokens_id;
-  //             }
-  //           }
-  //           let final_data = [];
-  //           console.log("get_product_lines_async", product.product_line);
-
-  //           // Filter the product_line array where 'deleted' is false
-  //           final_data = product.product_line.filter(item => item.deleted === false);
-
-  //           console.log("final_datafinal_datafinal_data",final_data);
-  //           if (final_data.length > 0) {
-  //             console.log("Filtered data:", final_data);
-
-  //             return res.status(200).jsonp({ status: true, data: final_data, authorization: resp.token });
-  //           } else {
-  //             console.log("No data found where deleted is false");
-
-  //             return res.status(404).jsonp({ status: false, message: "No data found where deleted is false", authorization: resp.token });
-  //           }
-
-  //         }
-
-  //       }
-  //       else {
-  //         return res.status(resp.code).jsonp({ status: false, data: null, authorization: null });
-  //       }
-  //     });
-
-
-
-
-  //   }
-  // },
-
-
-  //Shivam chauhan
 
   getProductLineAsync: async (req, res) => {
     const errors = validationResult(req);
@@ -1310,12 +998,7 @@ exports.handlers = {
 
           return res.status(200).jsonp({ status: true, data: final_data, authorization: resp.token });
 
-          // Return filtered data if found, otherwise return no data message
-          // if (final_data.product_line.length > 0 ) {
-          //   return res.status(200).jsonp({ status: true, data: final_data, authorization: resp.token });
-          // } else {
-          //   console.log("No data found where deleted is false");
-          //   return res.status(404).jsonp({ status: false, message: "No data found where deleted is false", authorization: resp.token });
+         
           // }
         } catch (ex) {
           // General error handling for the entire try block
@@ -1390,7 +1073,6 @@ exports.handlers = {
             { arrayFilters: [{ "product_line.id": req.body.id }], new: true }
           ).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
 
-          // console.log("product_lines_avaliable", req.body.quantity, product_lines_avaliable)
           if (!product_lines_avaliable) {
             return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
           }
@@ -1417,14 +1099,9 @@ exports.handlers = {
         }
       }
       );
-
-
-
-
     }
   },
 
-  // modified by Harish Nishad
   sendPoToProducer: async (req, res) => {
 
     const errors = validationResult(req);
@@ -1464,94 +1141,6 @@ exports.handlers = {
   },
 
 
-
-
-
-
-
-  //Harish Nishad
-  // generateQR: async (req, res) => {
-  //   const errors = validationResult(req);
-  //   if (!errors.isEmpty()) {
-  //     return res.status(422).jsonp(errors.array());
-  //   }
-  //   else {
-  //     var payload = { username: req.headers.username };
-  //     refresh(req.headers.authorization, req.headers.userid, payload, async function (resp) {
-  //       if (resp.status == true) {
-
-
-  //         const product_lines_exist = await product_lines.findOneAndUpdate({ _awareid: req.body._awareid, po_id: req.body.po_id }, { $set: { 'product_line.$[].generated': true } }, { new: true }).catch((ex) => { loggerhandler.logger.error(`${ex}, email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }); });
-  //         // const product_lines_exist = await product_lines.findOne({ _awareid: req.body._awareid, po_id: req.body.po_id ,deleted:false}).catch((ex) => {loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-  //         console.log("product_lines_exist", product_lines_exist);
-  //         if (product_lines_exist) {
-
-
-  //           // var temparray = [];
-  //           // var tempobj = {};
-  //           // product_lines_exist.product_line.forEach((item) => {
-  //           //   tempobj = {
-  //           //     id: item.id,
-  //           //     order_number: item.order_number,
-  //           //     product: item.product,
-  //           //     color: item.color,
-  //           //     quantity: item.quantity,
-  //           //     item_number: item.item_number,
-  //           //     description: item.description,
-  //           //     productid: item.productid,
-  //           //     existproduct: item.existproduct,
-  //           //     update_aware_token_id: item.update_aware_token_id,
-  //           //     update_status: item.update_status,
-  //           //     generated: true
-  //           //     // generated: false //Abhishek
-
-  //           //   }
-  //           //   temparray.push(tempobj);
-  //           // })
-  //           // console.log("temparray", temparray);{qrcode_status:true}
-  //           // console.log({ product_lines_exist })
-  //           await purchase_order_details.findOneAndUpdate({ _awareid: req.body._awareid, po_id: req.body.po_id, deleted:false }, { qrcode_status: true }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-
-  //           // await product_lines.findOneAndUpdate({ _awareid: req.body._awareid, po_id: req.body.po_id ,deleted:false}, { product_line: temparray })
-  //           const output = [];
-  //           const map = new Map();
-  //           for (const item of product_lines_exist.product_line) {
-  //             if (!map.has(item.id.toString())) {
-  //               map.set(item.id.toString(), true); // set any value to Map
-  //               output.push(item.id.toString());
-  //             }
-  //           }
-
-
-
-  //           await Promise.allSettled(
-  //             output.map(async (id) => {
-  //               await callstack.updatingQR(req.body._awareid, req.body.po_id, id, req);
-  //             })
-  //           ).catch((error) => {
-  //             loggerhandler.logger.error(`${error} ,email:${req.headers.email}`);
-  //           })
-  //           return res.status(200).jsonp({ status: true, message: "QR Codes have been generated successfully", authorization: resp.token });
-
-  //         } else {
-  //           return res.status(200).jsonp({ status: true, message: "Product Line is not exist", authorization: resp.token });
-  //         }
-
-
-
-  //       }
-  //       else {
-  //         return res.status(resp.code).jsonp({ status: false, message: null, authorization: null });
-  //       }
-  //     });
-
-
-
-  //   }
-
-  // },
-
-  //Shivam chauhan
 
   generateQR: async (req, res) => {
     const errors = validationResult(req);
@@ -1596,21 +1185,6 @@ exports.handlers = {
       // Get unique product IDs to avoid redundant updates
       const uniqueProductIds = [...new Set(product_lines_exist.product_line.map(item => item.id.toString()))];
 
-      // Use Promise.all for concurrent execution of updating QR codes
-
-
-
-      // await Promise.all(
-      //   uniqueProductIds.map(async (id) => {
-      //     try {
-      //       await callstack.updatingQR(req.body._awareid, req.body.po_id, id, req);
-      //     } catch (error) {
-      //       loggerhandler.logger.error(`${error}, email:${req.headers.email}`);
-      //     }
-      //   })
-      // );
-
-
       const results = await Promise.all(
         uniqueProductIds.map(async (id) => {
           try {
@@ -1639,117 +1213,7 @@ exports.handlers = {
   },
 
 
-  //Harish Nishad
-  // getqrCode: async (req, res) => {
-  //   const errors = validationResult(req);
-  //   if (!errors.isEmpty()) {
-  //     return res.status(422).jsonp(errors.array());
-  //   }
-  //   else {
-  //     var payload = { username: req.headers.username };
-  //     refresh(req.headers.authorization, req.headers.userid, payload, async function (resp) {
-  //       if (resp.status == true) {
-
-  //         // var product_lines_exists = await product_lines.findOne({ _awareid: req.headers._awareid, po_id: req.headers.po_id,deleted:false }).catch((ex) => {loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //         // if (product_lines_exists) {
-
-  //         //   var tempdeletearray = [];
-  //         //   var tempdelobj = {};
-
-  //         //   product_lines_exists.product_line.forEach((item) => {
-
-  //         //     if (item.id === req.headers.product_line) {
-
-  //         //       tempdelobj = {
-  //         //         id: item.id,
-  //         //         order_number: item.order_number,
-  //         //         product: item.product,
-  //         //         color: item.color,
-  //         //         quantity: item.quantity,
-  //         //         item_number: item.item_number,
-  //         //         description: item.description,
-  //         //         generated: item.generated,
-  //         //         productid: item.productid,
-  //         //         update_aware_token_id: item.update_aware_token_id,
-  //         //         update_status: item.update_status,
-  //         //         existproduct: item.existproduct
-  //         //       }
-  //         //       tempdeletearray.push(tempdelobj);
-  //         //     }
-  //         //     else if (item.id !== req.headers.product_line) {
-
-  //         //       tempdelobj = {
-  //         //         id: item.id,
-  //         //         order_number: item.order_number,
-  //         //         product: item.product,
-  //         //         color: item.color,
-  //         //         quantity: item.quantity,
-  //         //         item_number: item.item_number,
-  //         //         description: item.description,
-  //         //         generated: item.generated,
-  //         //         productid: item.productid,
-  //         //         existproduct: item.existproduct,
-  //         //         update_aware_token_id: item.update_aware_token_id,
-  //         //         update_status: item.update_status,
-  //         //       }
-  //         //       tempdeletearray.push(tempdelobj);
-  //         //     }
-  //         //     else {
-
-  //         //     }
-  //         //   })
-
-  //         //   await product_lines.findOneAndUpdate({ _awareid: req.headers._awareid, po_id: req.headers.po_id,deleted:false }, { product_line: tempdeletearray })
-  //         // }
-  //         // else {
-  //         //   return res.status(200).jsonp({ status: true, message: "product Line is Not Exists", data: null, authorization: resp.token });
-  //         // }
-
-
-
-  //         // const qr_code_exist = await qr_codes.findOne({ product_line: req.headers.product_line }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //         // if (qr_code_exist == null) {
-
-  //         const itemid = req.headers.product_line;
-  //         const output = [];
-
-  //         const map = new Map();
-  //         if (!map.has(itemid.toString())) {
-  //           map.set(itemid.toString(), true); // set any value to Map
-  //           output.push(itemid.toString());
-  //         }
-
-  //         await Promise.allSettled(
-  //           output.map(async (id) => {
-  //             await callstack.updatingQR(req.headers._awareid, req.headers.po_id, id, req);
-  //           })
-  //         ).catch((error) => {
-  //           loggerhandler.logger.error(`${error} ,email:${req.headers.email}`);
-  //         })
-
-  //         console.log("req.headers.product_line", req.headers.product_line);
-  //         const qr_code_exist = await qr_codes.findOne({ product_line: req.headers.product_line }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //         console.log("qr_code_exist", qr_code_exist);
-  //         return res.status(200).jsonp({ status: true, message: "QR Code has been generated successfully", data: qr_code_exist, authorization: resp.token });
-  //         // }
-  //         // else {
-  //         //   return res.status(200).jsonp({ status: true, message: "QR Code is Already generated", data: qr_code_exist, authorization: resp.token });
-  //         // }
-
-  //       }
-  //       else {
-  //         return res.status(resp.code).jsonp({ status: false, message: null, authorization: null });
-  //       }
-  //     });
-  //   }
-  // },
-
-
-  //SHIVAM CHAUHAN
-
+ 
   getqrCode: async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -1767,15 +1231,6 @@ exports.handlers = {
             map.set(itemid.toString(), true); // set any value to Map
             output.push(itemid.toString());
           }
-
-          // await Promise.allSettled(
-          //   output.map(async (id) => {
-          //     await callstack.updatingQR(req.headers._awareid, req.headers.po_id, id, req);
-          //   })
-          // ).catch((error) => {
-          //   loggerhandler.logger.error(`${error} ,email:${req.headers.email}`);
-          // })
-
 
           const results = await Promise.all(
             output.map(async (id) => {
@@ -1799,28 +1254,13 @@ exports.handlers = {
           // console.log("req.headers.product_line", req.headers.product_line);
           var qr_code_exist = await qr_codes.findOne({ product_line: req.headers.product_line }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
 
-          // qr_code_exist.brand_names = validBrandNames;
-
-          // qr_code_exist = { ...qr_code_exist, brand_names: validBrandNames };
-
-          // console.log("qr_code_exist",qr_code_exist)
-
-          // Convert the Mongoose document to a plain JavaScript object
           let qr_code_obj = qr_code_exist.toObject();
 
           // Now modify the object in memory
           qr_code_obj.brand_names = validBrandNames;
 
-          // console.log("qr_code_obj", qr_code_obj);
-
-
-          // console.log("qr_code_exist", qr_code_exist);
           return res.status(200).jsonp({ status: true, message: "QR Code has been generated successfully", data: qr_code_obj, authorization: resp.token });
-          // }
-          // else {
-          //   return res.status(200).jsonp({ status: true, message: "QR Code is Already generated", data: qr_code_exist, authorization: resp.token });
-          // }
-
+         
         }
         else {
           return res.status(resp.code).jsonp({ status: false, message: null, authorization: null });
@@ -1829,7 +1269,6 @@ exports.handlers = {
     }
   },
 
-  //Harish Nishad
   deleteqrAsync: async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -1850,13 +1289,7 @@ exports.handlers = {
                 { $set: { 'product_line.$[elem].generated': false } },
                 { new: true, arrayFilters: [{ 'elem.id': req.body.product_line }] });
 
-              // const tempdeletearray = productLine.product_line.map(item => ({ ...item, generated: item.id === req.body.product_line ? false : item.generated }));
-              // const tempdeletearray = productLine.product_line.map(item => {
-              //   const tempUpdateObj = { ...item, generated: item.id === req.body.product_line ? false : item.generated };
-              //   return tempUpdateObj;
-              // });
               console.log({ tempdeletearray })
-              // await product_lines.findOneAndUpdate({ _awareid: req.body._awareid, po_id: req.body.po_id ,deleted:false}, { product_line: tempdeletearray });
             }
             return res.status(200).jsonp({ status: true, message: "QR Code has been deleted successfully", authorization: resp.token });
           } catch (ex) {
@@ -1864,56 +1297,7 @@ exports.handlers = {
             return res.status(500).jsonp({ status: false, message: ex.toString() });
           }
 
-          // const product_lines_find = await product_lines.findOne({ _awareid: req.body._awareid, po_id: req.body.po_id,deleted:false }).catch((ex) => {loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-          // if (product_lines_find) {
-          //   await qr_codes.findOneAndUpdate({ product_line: req.body.product_line }, { qr_code: null, generated: false }).catch((ex) => {loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-          //   var tempdeletearray = [];
-          //   var tempdelobj = [];
-          //   // console.log("product_lines_find",product_lines_find,req.body.product_line);
-          //   product_lines_find.product_line.forEach((item) => {
-          //     if (item.id === req.body.product_line) {
-          //       tempdelobj = {
-          //         id: item.id,
-          //         order_number: item.order_number,
-          //         product: item.product,
-          //         color: item.color,
-          //         quantity: item.quantity,
-          //         item_number: item.item_number,
-          //         description: item.description,
-          //         generated: false,
-          //         productid: item.productid,
-          //         existproduct: item.existproduct,
-          //         update_aware_token_id: item.update_aware_token_id,
-          //         update_status: item.update_status,
-          //       }
-          //       tempdeletearray.push(tempdelobj);
-          //     } else if (item.id !== req.body.product_line) {
-          //       tempdelobj = {
-          //         id: item.id,
-          //         order_number: item.order_number,
-          //         product: item.product,
-          //         color: item.color,
-          //         quantity: item.quantity,
-          //         item_number: item.item_number,
-          //         description: item.description,
-          //         generated: item.generated,
-          //         productid: item.productid,
-          //         existproduct: item.existproduct,
-          //         update_aware_token_id: item.update_aware_token_id,
-          //         update_status: item.update_status,
-          //       }
-          //       tempdeletearray.push(tempdelobj);
-          //     } else {
-          //       // console.log("Is Not found")
-          //     }
-          //   })
-          //   // console.log("temparray", tempdeletearray)
-          //   await product_lines.findOneAndUpdate({ _awareid: req.body._awareid, po_id: req.body.po_id ,deleted:false}, { product_line: tempdeletearray })
-          //   return res.status(200).jsonp({ status: true, message: "QR Code has been deleted successfully", authorization: resp.token });
-          // } else {
-          //   return res.status(200).jsonp({ status: true, message: "QR Code Deleting Failed", authorization: resp.token });
-          // }
-
+         
         } else {
           return res.status(resp.code).jsonp({ status: false, message: null, authorization: null });
         }
@@ -1930,66 +1314,10 @@ exports.handlers = {
       return res.status(422).jsonp(errors.array());
     }
     else {
-      // console.log('body', req.body)
       var payload = { username: req.headers.username };
       refresh(req.headers.authorization, req.headers.userid, payload, async function (resp) {
 
-        // if (resp.status == true) {
-        //   const product_lines_find_update = await product_lines.findOne({ _awareid: req.body._awareid, po_id: req.body.po_id ,deleted:false}).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-        //   if (product_lines_find_update) {
-
-        //     var tempUpdatearray = [];
-        //     var tempUpdateobj = [];
-        //     product_lines_find_update.product_line.forEach((item) => {
-
-        //       if (item.id === req.body.product_line) {
-        //         // console.log("item",item,"req.headers.product_line",req.headers.product_line);
-        //         tempUpdateobj = {
-        //           id: item.id,
-        //           order_number: item.order_number,
-        //           product: item.product,
-        //           color: item.color,
-        //           quantity: item.quantity,
-        //           item_number: item.item_number,
-        //           description: item.description,
-        //           generated: true,
-        //           // generated: false, //Abhishek
-
-        //           productid: item.productid,
-        //           existproduct: item.existproduct,
-        //           update_aware_token_id: item.update_aware_token_id,
-        //           update_status: item.update_status,
-        //         }
-        //         tempUpdatearray.push(tempUpdateobj);
-        //       } else if (item.id !== req.body.product_line) {
-        //         //  console.log("product_lines_find is Not found",product_lines_find);
-        //         tempUpdateobj = {
-        //           id: item.id,
-        //           order_number: item.order_number,
-        //           product: item.product,
-        //           color: item.color,
-        //           quantity: item.quantity,
-        //           item_number: item.item_number,
-        //           description: item.description,
-        //           generated: item.generated,
-        //           productid: item.productid,
-        //           existproduct: item.existproduct,
-        //           update_aware_token_id: item.update_aware_token_id,
-        //           update_status: item.update_status,
-        //         }
-        //         tempUpdatearray.push(tempUpdateobj);
-        //       } else {
-        //         // console.log("Is")
-        //       }
-        //     })
-        //     // console.log("temparray", tempUpdatearray)
-        //     await product_lines.findOneAndUpdate({ _awareid: req.body._awareid, po_id: req.body.po_id ,deleted:false}, { product_line: tempUpdatearray })
-        //     return res.status(200).jsonp({ status: true, message: "QR Code has been generated successfully", authorization: resp.token });
-        //   } else {
-        //     return res.status(200).jsonp({ status: true, message: "Generate Update Failed", authorization: resp.token });
-        //   }
-        // } 
-
+      
         if (resp.status) {
           try {
             const productLinesToUpdate = await product_lines.findOne({ _awareid: req.body._awareid, po_id: req.body.po_id, deleted: false });
@@ -2005,7 +1333,6 @@ exports.handlers = {
                 loggerhandler.logger.error(`${error} ,email:${req.headers.email}`);
               })
 
-              // await product_lines.findOneAndUpdate({ _awareid: req.body._awareid, po_id: req.body.po_id ,deleted:false}, { product_line: tempUpdateArray });
               return res.status(200).jsonp({ status: true, message: "QR Code has been generated successfully", authorization: resp.token });
             } else {
               return res.status(200).jsonp({ status: true, message: "Generate Update Failed", authorization: resp.token });
@@ -2023,7 +1350,6 @@ exports.handlers = {
     }
   },
 
-  //Harish Nishad 
   deleteResetPurchaseOrdersAsync: async (req, res) => {
 
     const errors = validationResult(req);
@@ -2066,25 +1392,20 @@ exports.handlers = {
             if (getconcetptcount == 1) {
               await products.findByIdAndUpdate({ _id: mongoose.Types.ObjectId(tempproduct_lines_length_exist_po_id[i]) }, { status: "CONCEPT" }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
             } else {
-              // console.log("Concept remaining")
             }
           } else {
-            // console.log("conceptmainhan nhi hey", conceptmainhan)
           }
         }
 
 
 
-        //----------------------------
 
         await product_lines.deleteOne({ _awareid: req.body._awareid, po_id: req.body.po_id }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
 
         await purchase_orders.findOneAndUpdate({ _awareid: req.body._awareid, _id: mongoose.Types.ObjectId(req.body.po_id), deleted: false }, { create_token_stepper: 1 }, { new: true }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-        // console.log("req.body.type", req.body.type);
 
       } else if (req.body.type == 'qr_codes') {
 
-        // console.log("req.body.type", req.body.type);
 
 
         await generate_qr.deleteOne({ _awareid: req.body._awareid, po_id: req.body.po_id }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
@@ -2121,7 +1442,6 @@ exports.handlers = {
     }
     else {
       var product_lines_finds = await product_lines.findOne({ _awareid: req.body._awareid, po_id: req.body.po_id, deleted: false }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-      // console.log("product_lines_finds", product_lines_finds);
       let temp_product_lines = product_lines_finds.product_line.filter((item) => item.productid != req.body.productid)
       product_lines.findOneAndUpdate(
         { _awareid: req.body._awareid, po_id: req.body.po_id, deleted: false },
@@ -2152,7 +1472,6 @@ exports.handlers = {
                 }
                 var product_lines_length_checker = await product_lines.findOne({ _awareid: req.body._awareid, po_id: req.body.po_id, deleted: false }).select(['product_line']).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
 
-                // console.log("product_lines_length_checker",product_lines_length_checker)
                 if (product_lines_length_checker.product_line.length == 0) {
                   await purchase_orders.findOneAndUpdate({ _awareid: req.body._awareid, _id: mongoose.Types.ObjectId(req.body.po_id), deleted: false }, { create_token_stepper: 2 }, { new: true }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
                 }
@@ -2177,7 +1496,6 @@ exports.handlers = {
   },
 
   getProductLinesAsync: async (req, res) => {
-    console.log("SHIVAM");
 
     const errors = validationResult(req);
 
@@ -2412,147 +1730,14 @@ exports.handlers = {
       // Update product data
       return res.status(200).json({ status: true, message: "DPP settings have been saved successfully", data: kycDetails.sub_brand, authorization: resp.token });
 
-      // thid code hide by deepak for bug num 1857
-      // const productsToUpdate = await products.find({ _awareid: aware_id, sub_brand: _id });
-      // if (Array.isArray(productsToUpdate)) {
-      //   await Promise.all(productsToUpdate.map(e => {
-      //     if (e.sub_brand === _id) {
-      //       Object.assign(e, { ...e, dpp_settings });
-      //       return e.save();
-      //     }
-      //   }));
-      //   return res.status(200).json({ status: true, message: "DPP settings have been saved successfully", data: kycDetails.sub_brand, authorization: resp.token });
-      // } else {
-      //   return res.status(400).json({ status: false, message: "Products data retrieval failed", authorization: resp.token });
-      // }
+    
     } else {
       return res.status(resp.code).json({ status: false, message: null, authorization: null });
     }
 
   },
 
-  // postDppConfigurationsOnBrandLevel: async (req, res) => {
-
-  //   console.log("req.body", req.body, req.headers.username)
-
-  //   var payload = { username: req.headers.username };
-  //   refresh(req.headers.authorization, req.headers.userid, payload, async function (resp) {
-  //     if (resp.status == true) {
-
-  //       const { aware_id, _id, care, impact, circularity, journey_level,
-  //         sustainable_material_score, brand_data, header_background_color, button_accent_color } = req.body;
-
-  //       let dpp_settings = {
-  //         care, impact, circularity, journey_level,
-  //         sustainable_material_score, brand_data, header_background_color, button_accent_color
-  //       };
-
-  //       let kycDetailsAvialable = await kyc_details.findOne({ aware_id: aware_id });
-
-  //       if (!kycDetailsAvialable) return res.status(400).jsonp({ status: false, message: "Bad request!", authorization: resp.token });
-
-  //       let flag = true;
-  //       kycDetailsAvialable.sub_brand.map((e) => {
-  //         if (e._id.toString() == _id) {
-  //           flag = false;
-  //           e.name ? e.name = e.name : null;
-  //           e.logo ? e.logo = e.logo : null;
-  //           e.location ? e.location = e.location : null;
-  //           e.circularity ? e.circularity = e.circularity : null;
-  //           e.brand_data ? e.brand_data = e.brand_data : null;
-  //           dpp_settings ? e.dpp_settings = dpp_settings : null;
-  //         }
-  //         return;
-  //       })
-
-  //       if (flag) return res.status(400).json({ status: true, message: "Bad request!", authorization: resp.token });
-
-  //       kycDetailsAvialable.save().catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!", authorization: resp.token }); });
-
-
-
-  //       //master reset this we can comment later
-  //       // var products_data_Updated = await products.find({ _awareid: aware_id, sub_brand: _id }).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-
-  //       const products_data_Updated = await products.find({ _awareid: aware_id, sub_brand: _id })
-  //         .catch((ex) => {
-  //           loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`);
-  //           return res.status(500).jsonp({ status: false, message: ex.toString() });
-  //         });
-
-  //       // products_data_Updated.map((e) => {
-  //       //   if (e.sub_brand == _id) {
-  //       //     e._awareid = e._awareid;
-  //       //     e.item_number = e.item_number;
-  //       //     e.description = e.description;
-  //       //     e.color = e.color;
-  //       //     e.info = e.info;
-  //       //     e.care = e.care;
-  //       //     e.weight = e.weight;
-  //       //     e.product_lock = e.product_lock;
-  //       //     e.sub_brand = e.sub_brand;
-  //       //     e.status = e.status;
-  //       //     e.product_photo_1 = e.product_photo_1;
-  //       //     e.product_photo_2 = e.product_photo_2;
-  //       //     e.product_photo_3 = e.product_photo_3;
-  //       //     e.dpp_settings = dpp_settings;
-  //       //     e.created_date = e.created_date;
-  //       //     e.care = e.care;
-  //       //   }
-  //       //   return;
-  //       // })
-
-
-  //       // products_data_Updated.save().catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!", authorization: resp.token }); });
-
-
-  //       if (Array.isArray(products_data_Updated)) {
-  //         // Iterate over each document and update the fields
-  //         const updatePromises = products_data_Updated.map(async (e) => {
-  //           if (e.sub_brand == _id) {
-  //             // Update fields
-  //             e._awareid = e._awareid;
-  //             e.item_number = e.item_number;
-  //             e.description = e.description;
-  //             e.color = e.color;
-  //             e.info = e.info;
-  //             e.care = e.care;
-  //             e.weight = e.weight;
-  //             e.product_lock = e.product_lock;
-  //             e.sub_brand = e.sub_brand;
-  //             e.status = e.status;
-  //             e.product_photo_1 = e.product_photo_1;
-  //             e.product_photo_2 = e.product_photo_2;
-  //             e.product_photo_3 = e.product_photo_3;
-  //             e.dpp_settings = dpp_settings;
-  //             e.created_date = e.created_date;
-  //             e.care = e.care;
-
-  //             // Save each updated document
-  //             return e.save();
-  //           }
-  //         });
-
-  //         // Execute all save operations
-  //         await Promise.all(updatePromises)
-  //           .then(() =>
-  //             res.status(200).json({ status: true, message: "DPP settings have been saved successfully", data: kycDetailsAvialable.sub_brand, authorization: resp.token })
-  //             // res.status(200).jsonp({ status: true, message: "Update successful" })
-  //           )
-  //           .catch((ex) => res.status(400).jsonp({ status: false, message: "Bad request!", authorization: resp.token }));
-  //       } else {
-  //         // Handle case when products_data_Updated is not an array
-  //         return res.status(400).json({ status: true, message: "Bad request!", authorization: resp.token });
-  //       }
-  //     }
-  //     else {
-  //       return res.status(resp.code).jsonp({ status: false, message: null, authorization: null });
-  //     }
-  //   })
-
-
-  // },
+  
 
   resetDppConfigurationOnBrandLevel: async (req, res) => {
 
@@ -2720,10 +1905,6 @@ exports.handlers = {
     }
   },
 
-
-
-  //SHIVAM CHAUHAN
-
   add_hardGoodsProduct: async (req, res) => {
     console.log("working1", req.body);
     const errors = validationResult(req);
@@ -2804,36 +1985,13 @@ exports.handlers = {
                 modified_on: created_current_date,
                 producerlogo: req.body.producerlogo === "null" ? null : req.body.producerlogo,
                 url: '',
-                // name: req.body.photoattached ? req.body.photoattached.split('/').pop() : null,
-                // photoattached: req.body.photoattached === "null" ? null : req.body.photoattached,
+                
               },
               { new: true }
             );
 
             console.log("updatedBrand101", updatedBrand);
-            // const imageUrl = updatedBrand.url;
-            // if (!imageUrl || typeof imageUrl !== 'string') {
-            //     console.error('Invalid image URL');
-            // } else {
-            //     console.log('Image URL:', imageUrl);
-            //         const uploadDirectory = path.join(__dirname, '../uploads');
-            //     fs.mkdirSync(uploadDirectory, { recursive: true });
-
-            //     const downloadImage = async (url) => {
-            //         try {
-            //             const fileName = path.basename(url);
-            //             const filePath = path.join(uploadDirectory, fileName);
-
-            //             const response = await axios.get(url, { responseType: 'arraybuffer' });
-            //             fs.writeFileSync(filePath, response.data);
-            //             console.log(`Image saved: ${fileName}`);
-            //         } catch (error) {
-            //             console.error(`Failed to download image: ${url}`, error);
-            //         }
-            //     };
-
-            //     await downloadImage(imageUrl);
-            // }
+          
             return res.status(200).jsonp({
               status: true,
               message: "Product has been updated successfully.",
@@ -2892,36 +2050,12 @@ exports.handlers = {
               modified_on: created_current_date,
               producerlogo: req.body.producerlogo === "null" ? null : req.body.producerlogo,
               url: "",
-              // name: req.body.photoattached ? req.body.photoattached.split('/').pop() : null,
-              // photoattached: req.body.photoattached === "null" ? null : req.body.photoattached,
+            
             });
-            console.log("purchaseorder", purchaseorder);
-            // const imageUrl = purchaseorder.url;
-            // if (!imageUrl || typeof imageUrl !== 'string') {
-            //     console.error('Invalid image URL');
-            // } else {
-            //     console.log('Image URL:', imageUrl);
-            //         const uploadDirectory = path.join(__dirname, '../uploads');
-            //     fs.mkdirSync(uploadDirectory, { recursive: true });
-
-            //     const downloadImage = async (url) => {
-            //         try {
-            //             const fileName = path.basename(url);
-            //             const filePath = path.join(uploadDirectory, fileName);
-
-            //             const response = await axios.get(url, { responseType: 'arraybuffer' });
-            //             fs.writeFileSync(filePath, response.data);
-            //             console.log(`Image saved: ${fileName}`);
-            //         } catch (error) {
-            //             console.error(`Failed to download image: ${url}`, error);
-            //         }
-            //     };
-
-            //     await downloadImage(imageUrl);
+          
             // }
             return res.status(200).jsonp({
               status: true,
-              // message: "Product has been successfully added.",
               message: "Product has been added successfully.",
               data: { "_id": purchaseorder._id, "_awareid": purchaseorder._awareid },
               authorization: resp.token,
@@ -2935,7 +2069,6 @@ exports.handlers = {
   },
 
   downloadHardGoodsProductQR: async (req, res) => {
-    // console.log("working121212")
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(422).jsonp({ status: false, message: "Bad payload received." })
@@ -2960,40 +2093,12 @@ exports.handlers = {
     }
   },
 
-  // deletehardGoodsProduct: async (req, res) => {
-  //   const errors = validationResult(req);
-  //   if (!errors.isEmpty()) {
-  //     return res.status(422).jsonp({ status: false, message: "Bad payload received." })
-  //   }
-  //   else {
 
-  //     var payload = { username: req.headers.username };
-
-  //     if(!req.headers._id){
-  //       return res.status(401).jsonp({ status: false, message: "ID Not Found", authorization: res.token });
-  //     }else{
-  //       await hardGoodsBrands.findByIdAndUpdate(
-  //         { _awareid: req.headers._awareid, _id: mongoose.Types.ObjectId(req.headers._id) },
-  //         { $set: { deleted: true } }
-  //     );
-  //     }
-
-  //     refresh(req.headers.authorization, req.headers.userid, payload, function (res) {
-  //       if (res.status == true) {
-  //         return res.status(200).jsonp({ status: true, message: "Selected Brand has been deleted successfully", authorization: res.token });
-  //       }
-  //       else {
-  //         return res.status(resp.code).jsonp({ status: false, message: null, authorization: null });
-  //       }
-  //     });
-  //   }
-  // },
 
 
   deletehardGoodsProduct: async (req, res) => {
     // console.log("shivam chauhan");
     try {
-      console.log("Shivam is working on this");
 
       // Validate the incoming request
       const errors = validationResult(req);
@@ -3088,319 +2193,7 @@ exports.handlers = {
     }
   },
 
-  // importHardGoodsProducts: async (req, res) => {
-  //   console.log("req_body202",);
-  //   try {
-  //     // console.log("working1", req.body);
-  //     // Step 1: Validate the incoming request payload
-  //     const errors = validationResult(req);
-  //     if (!errors.isEmpty()) {
-  //       return res.status(422).json({ status: false, message: "Bad payload received." });
-  //     }
-
-  //     // Step 2: Extract data from the request
-  //     const { importData } = req.body;
-
-  //     // console.log("working2", JSON.parse(importData));
-  //     if (!importData || !Array.isArray(JSON.parse(importData)) || JSON.parse(importData).length === 0) {
-  //       return res.status(400).json({ status: false, message: "No data provided for import." });
-  //     }
-
-  //     // Step 3: Get user details and validate authorization
-  //     const { authorization, userid, username } = req.headers;
-  //     if (!authorization || !userid || !username) {
-  //       return res.status(401).json({ status: false, message: "Missing authorization details." });
-  //     }
-
-  //     // Step 4: Refresh the authorization token and validate user
-  //     const payload = { username: req.headers.username };
-  //     refresh(authorization, userid, payload, function (refreshResponse) {
-
-  //       if (refreshResponse.status !== true) {
-  //         return res.status(refreshResponse.code).json({ status: false, message: "Unauthorized access.", authorization: null });
-  //       }
-
-  //       // Step 5: Prepare the data for insertion (add any missing data like created_date if needed)
-  //       const dataToInsert = JSON.parse(importData).map(item => ({
-  //         ...item,
-  //         created_date: new Date(),
-  //         created_by: username, // Optionally you could add who created the record
-  //       }));
-
-  //       // Step 6: Insert the data into the database
-  //       console.log("dataToInsert",dataToInsert);
-  //       hardGoodsBrands.create(dataToInsert, async (err, purchaseorder) => {
-  //         if (err) {
-  //           loggerhandler.logger.error(`Error: ${err.message}, email: ${req.headers.email}`);
-  //           return res.status(500).json({ status: false, message: `An error occurred while inserting data: ${err.message}` });
-  //         }
-
-
-  //         // Step 7: Send success response with new purchaseorder details
-  //         return res.status(200).json({
-  //           status: true,
-  //           message: "Hard Goods Product has been added successfully.",
-  //           data: {
-  //             "_id": purchaseorder._id,
-  //             "_awareid": purchaseorder._awareid
-  //           },
-  //           authorization: refreshResponse.token
-  //         });
-  //       });
-  //     });
-  //   } catch (err) {
-  //     // Catch unexpected errors and log them
-  //     loggerhandler.logger.error(`Error: ${err.message}, email: ${req.headers.email}`);
-  //     return res.status(500).json({ status: false, message: `An error occurred: ${err.message}` });
-  //   }
-  // },
-
-  // importHardGoodsProducts: async (req, res) => {
-  //   console.log("req_body202");
-  //   try {
-  //     // Step 1: Validate the incoming request payload
-  //     const errors = validationResult(req);
-  //     if (!errors.isEmpty()) {
-  //       return res.status(422).json({ status: false, message: "Bad payload received." });
-  //     }
-
-  //     // Step 2: Extract data from the request
-  //     const { importData } = req.body;
-
-  //     if (!importData || !Array.isArray(JSON.parse(importData)) || JSON.parse(importData).length === 0) {
-  //       return res.status(400).json({ status: false, message: "No data provided for import." });
-  //     }
-
-  //     // Step 3: Get user details and validate authorization
-  //     const { authorization, userid, username } = req.headers;
-  //     if (!authorization || !userid || !username) {
-  //       return res.status(401).json({ status: false, message: "Missing authorization details." });
-  //     }
-
-  //     // Step 4: Refresh the authorization token and validate user
-  //     const payload = { username: req.headers.username };
-  //     refresh(authorization, userid, payload, async function (refreshResponse) {
-  //       if (refreshResponse.status !== true) {
-  //         return res.status(refreshResponse.code).json({ status: false, message: "Unauthorized access.", authorization: null });
-  //       }
-
-  //       // Step 5: Prepare the data for insertion (add any missing data like created_date if needed)
-  //       const dataToInsert = JSON.parse(importData).map(item => ({
-  //         ...item,
-  //         created_date: new Date(),
-  //         created_by: username, // Optionally you could add who created the record
-  //       }));
-
-  //       // Step 6: Insert the data into the database
-  //       console.log("dataToInsert", dataToInsert);
-
-  //       try {
-  //         const purchaseorder = await hardGoodsBrands.create(dataToInsert);
-
-  //         // You can extract the _id values here, but not return them in the response.
-  //         const insertedIds = purchaseorder.map(doc => doc._id);
-  //         console.log("insertedIds", insertedIds);
-
-  //         return res.status(200).json({
-  //           status: true,
-  //           message: "Hard Goods Product has been added successfully.",
-  //           data: {
-  //             "_id": purchaseorder[0]._id,  // You can still send details for the first inserted doc if needed
-  //             "_awareid": purchaseorder[0]._awareid // If you want to send the _awareid for the first inserted document
-  //           },
-  //           authorization: refreshResponse.token
-  //         });
-
-  //         for(let i = 0;i<insertedIds.length;i++){
-  //           const hard_goods_exist = await hardGoodsBrands.findOneAndUpdate(
-  //             { _id: mongoose.Types.ObjectId(insertedIds[i]) },
-  //             { $set: { 'qr_generated': true } },
-  //             { new: true } // Returns the updated document
-  //           )
-
-  //           console.log("hard_goods_exist",hard_goods_exist);
-
-  //           if(hard_goods_exist){
-
-  //             const output = [];
-  //             const map = new Map();
-
-  //             // Assuming hard_goods_exist has an `id` (or other unique identifier)
-  //             if (!map.has(hard_goods_exist._id.toString())) {
-  //               map.set(hard_goods_exist._id.toString(), true); // set the id
-  //               output.push(hard_goods_exist._id.toString());
-  //             }
-
-  //             console.log({output});
-
-
-
-  //             // Generate QR for each unique product in the product_line
-  //             await Promise.allSettled(
-  //               output.map(async (id) => {
-  //                 await callstack.updating_importData_hard_goods_QR(req.body._awareid, id, req , res);
-  //               })
-  //             ).catch((error) => {
-  //               loggerhandler.logger.error(`${error}, email:${req.headers.email}`);
-  //             });
-  //             console.log("shivam_207");
-  //           }
-
-  //         }
-
-
-
-  //         // Step 7: Send success response with new purchaseorder details
-  //         return res.status(200).json({
-  //           status: true,
-  //           message: "Hard Goods Product has been added successfully.",
-  //           data: {
-  //             "_id": purchaseorder[0]._id,  // You can still send details for the first inserted doc if needed
-  //             "_awareid": purchaseorder[0]._awareid // If you want to send the _awareid for the first inserted document
-  //           },
-  //           authorization: refreshResponse.token
-  //         });
-  //       } catch (err) {
-  //         loggerhandler.logger.error(`Error: ${err.message}, email: ${req.headers.email}`);
-  //         return res.status(500).json({ status: false, message: `An error occurred while inserting data: ${err.message}` });
-  //       }
-  //     });
-  //   } catch (err) {
-  //     // Catch unexpected errors and log them
-  //     loggerhandler.logger.error(`Error: ${err.message}, email: ${req.headers.email}`);
-  //     return res.status(500).json({ status: false, message: `An error occurred: ${err.message}` });
-  //   }
-  // },
-
-
-  //wait
-  // importHardGoodsProducts: async (req, res) => {
-  //   console.log("req_body202");
-  //   try {
-  //     // Step 1: Validate the incoming request payload
-  //     const errors = validationResult(req);
-  //     if (!errors.isEmpty()) {
-  //       return res.status(422).json({ status: false, message: "Bad payload received." });
-  //     }
-
-  //     // Step 2: Extract data from the request
-  //     const { importData } = req.body;
-
-  //     if (!importData || !Array.isArray(JSON.parse(importData)) || JSON.parse(importData).length === 0) {
-  //       return res.status(400).json({ status: false, message: "No data provided for import." });
-  //     }
-
-  //     // Step 3: Get user details and validate authorization
-  //     const { authorization, userid, username } = req.headers;
-  //     if (!authorization || !userid || !username) {
-  //       return res.status(401).json({ status: false, message: "Missing authorization details." });
-  //     }
-
-  //     // Step 4: Refresh the authorization token and validate user
-  //     const payload = { username: req.headers.username };
-  //     refresh(authorization, userid, payload, async function (refreshResponse) {
-  //       if (refreshResponse.status !== true) {
-  //         return res.status(refreshResponse.code).json({ status: false, message: "Unauthorized access.", authorization: null });
-  //       }
-
-  //       // Step 5: Prepare the data for insertion
-  //       const dataToInsert = JSON.parse(importData).map(item => ({
-  //         ...item,
-  //         created_date: new Date(),
-  //         created_by: username,
-  //       }));
-
-  //       // Step 6: Insert the data into the database
-  //       // console.log("dataToInsert" );
-  //       try {
-  //         const purchaseorder = await hardGoodsBrands.create(dataToInsert);
-
-  //         // Extract inserted IDs
-  //         const insertedIds = purchaseorder.map(doc => doc._id);
-  //         console.log("insertedIds", insertedIds);
-
-  //         // Step 7: Immediately send the success response
-
-
-  //         // res.status(200).json({
-  //         //   status: true,
-  //         //   message: "Hard Goods Product has been added successfully.",
-  //         //   data: {
-  //         //     "_id": purchaseorder[0]._id,
-  //         //     "_awareid": purchaseorder[0]._awareid
-  //         //   },
-  //         //   authorization: refreshResponse.token
-  //         // });
-
-  //         // Step 8: Process each inserted product and generate QR codes in the background
-  //         const qrCodeData = []; // This will store the QR codes to send in the response
-
-  //         const updatePromises = insertedIds.map(async (id) => {
-  //           const hard_goods_exist = await hardGoodsBrands.findOneAndUpdate(
-  //             { _id: mongoose.Types.ObjectId(id) },
-  //             { $set: { 'qr_generated': true } },
-  //             { new: true }
-  //           );
-
-  //           if (hard_goods_exist) {
-  //             const output = [];
-  //             const map = new Map();
-
-  //             if (!map.has(hard_goods_exist._id.toString())) {
-  //               map.set(hard_goods_exist._id.toString(), true);
-  //               output.push(hard_goods_exist._id.toString());
-  //             }
-
-  //             // Generate QR codes for each unique product
-  //             await Promise.allSettled(
-  //               output.map(async (id) => {
-  //                 const qrCodeUrl = await callstack.updating_importData_hard_goods_QR(req.body._awareid, id, req, res);
-  //                 console.log("qrCodeUrl",qrCodeUrl.hard_goods_id);
-  //                 if (qrCodeUrl) {
-  //                   qrCodeData.push({ productId: id, qrCodeUrl });
-  //                 }
-  //               })
-  //             ).catch((error) => {
-  //               loggerhandler.logger.error(`${error}, email:${req.headers.email}`);
-  //             });
-
-  //             // After QR generation, store them if necessary
-  //             const imported_qr_download = await generate_hard_good_qrs.findOne({ _id: new mongoose.Types.ObjectId(id) });
-  //             if (imported_qr_download) {
-  //               qrCodeData.push({
-  //                 productId: id,
-  //                 qrDownloadUrl: imported_qr_download.hard_good_qr
-  //               });
-  //             }
-  //           }
-  //         });
-
-  //         // Wait for all background tasks to complete (QR generation and updates)
-  //         const promises_response = await Promise.all(updatePromises);
-
-  //         // After QR codes are generated and downloaded, send them in the response
-  //         // console.log("Generated QR Codes:", qrCodeData);
-
-  //         // Send response with all QR codes
-  //         return res.status(200).json({
-  //           status: true,
-  //           message: "QR codes generated successfully.",
-  //           qrCodes: qrCodeData,
-  //           authorization: refreshResponse.token,
-  //           promises_response
-  //         });
-
-  //       } catch (err) {
-  //         loggerhandler.logger.error(`Error: ${err.message}, email: ${req.headers.email}`);
-  //         return res.status(500).json({ status: false, message: `An error occurred while inserting data: ${err.message}` });
-  //       }
-  //     });
-  //   } catch (err) {
-  //     loggerhandler.logger.error(`Error: ${err.message}, email: ${req.headers.email}`);
-  //     return res.status(500).json({ status: false, message: `An error occurred: ${err.message}` });
-  //   }
-  // },
-
+  
   importHardGoodsProducts: async (req, res) => {
     console.log("req_body202", req.size);
     console.log("Request size in bytes:", Buffer.byteLength(JSON.stringify(req.body), 'utf8'));
@@ -3439,15 +2232,7 @@ exports.handlers = {
           return res.status(refreshResponse.code).json({ status: false, message: "Unauthorized access.", authorization: null });
         }
 
-        // Step 5: Prepare the data for insertion
-        // const dataToInsert = parsedData.map(item => ({
-        //   ...item,
-        //   url: item.photoattached,
-        //   product_photo_1: item.photoattached.split('/').pop().split('?')[0], 
-        //   created_date: new Date(),
-        //   created_by: username,
-        // }));
-        // Function to check and append a default image extension if needed
+        
         const addExtensionIfMissing = (fileName) => {
           const validExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
 
@@ -3492,10 +2277,7 @@ exports.handlers = {
             { _id: 1 }
           ).distinct('_id');
 
-          // const qrDownloadData = await generate_hard_good_qrs.find(
-          //   { _id: { $in: uniqueIds } },
-          //   { _id: 1, hard_good_qr: 1 }
-          // );
+        
 
           const qrDownloadData = await generate_hard_good_qrs.find(
             { _id: { $in: uniqueIds } }
@@ -3516,12 +2298,6 @@ exports.handlers = {
             console.log("req.body", req.body.importData)
             console.log("qrCodeUrl", qrCodeUrl)
             
-            // let importDatatoSend = [];
-            // try {
-            //   importDatatoSend = JSON.parse(req.body.importData); 
-            // } catch (error) {
-            //   console.error("Error parsing importData:", error);
-            // }
             if (qrCodeUrl) {
               qrCodeData.push({ productId: id, qrCodeUrl});
             }
@@ -3605,52 +2381,7 @@ exports.handlers = {
               console.error('Error in downloading images:', error);
             });
 
-          //   const downloadPromises = dataToInsert.map((data, index) => {
-          //     if (data && data.url) {
-          //       let fileName = data.product_photo_1;
-
-          //       return (
-          //         async () => {
-          //           for (let i = 0; i < retries; i++) {
-          //             try {
-          //               const response = await axios.get(data.url, { responseType: 'arraybuffer' });
-
-          //               const contentType = response.headers['content-type'];
-          //               let extension = '';
-          //               if (contentType.includes('image/jpeg')) {
-          //                 extension = '.jpg';
-          //               } else if (contentType.includes('image/png')) {
-          //                 extension = '.png';
-          //               } else if (contentType.includes('image/gif')) {
-          //                 extension = '.gif';
-          //               }
-
-          //               if (!fileName.includes('.')) {
-          //                 fileName += extension || '.jpg';
-          //               }
-          //               await fs.promises.writeFile(path.join(uploadDirectory, fileName), response.data);
-          //               console.log(`Image saved: ${fileName}`);
-          //               return;
-          //             } catch (error) {
-          //               console.error(`Error downloading image (attempt ${i + 1}):`, error);
-          //               if (i === retries - 1) {
-          //                 console.log(`Failed to download image after ${retries} attempts: ${data.url}`);
-          //               }
-          //             }
-          //           }
-          //         })();
-          //     } else {
-          //       console.log(`No image URL found for item at index ${index}`);
-          //       return Promise.resolve();
-          //     }
-          //   });
-
-          //   await Promise.all(downloadPromises);
-          // };
-
-          // downloadImages().catch((error) => {
-          //   console.error('Error in downloading images:', error);
-          // });
+ 
           ArrayOfImages.forEach((url, index) => {
             if (url) {
               // const fileName = url.split('/').pop();
@@ -3661,10 +2392,6 @@ exports.handlers = {
             }
           });
 
-          // Image Upload End
-
-
-          // Send response with all QR codes
           return res.status(200).json({
             status: true,
             message: "Product has been successfully imported. QR codes will be downloaded shortly.",
@@ -3875,10 +2602,6 @@ exports.handlers = {
           return res.status(refreshResponse.code).json({ status: false, message: "Unauthorized access.", authorization: null });
         }
 
-
-
-
-
         // Step 5: Prepare the data for insertion (add any missing data like created_date if needed)
         const dataToInsert = JSON.parse(importData).map(item => ({
           ...item,
@@ -3980,8 +2703,6 @@ exports.handlers = {
       return res.status(500).jsonp({ status: false, message: error.message, authorization: null });
     }
   },
-
-  //SHIVAM CHAUHAN
 
 
 
