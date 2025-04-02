@@ -257,11 +257,22 @@ router.post(
   asyncHandler(awaretokenhandler.handlers.postDigitalTwinAsync)
 );
 
+router.get(
+  '/v1/traceability_report',
+  asyncHandler(awaretokenhandler.handlers.traceabilityReport)
+)
+
 //done
 router.get(
   "/v2/get_digital_twin",
   verify,
   asyncHandler(awaretokenhandler.handlers.getDigitalTwinAsync)
+);
+
+//done
+router.get(
+  "/v3/get_digital_twin",
+  asyncHandler(awaretokenhandler.handlers.getDigitalTwinAsyncV3)
 );
 
 //done
