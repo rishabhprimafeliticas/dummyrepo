@@ -259,8 +259,15 @@ router.post(
 
 router.get(
   '/v1/traceability_report',
+  verify,
   asyncHandler(awaretokenhandler.handlers.traceabilityReport)
-)
+);
+
+router.get(
+  "/v1/get_sankey_diagram_data",
+  verify,
+  asyncHandler(awaretokenhandler.handlers.getSankeyDiagramData)
+);
 
 //done
 router.get(
@@ -272,6 +279,7 @@ router.get(
 //done
 router.get(
   "/v3/get_digital_twin",
+  verify,
   asyncHandler(awaretokenhandler.handlers.getDigitalTwinAsyncV3)
 );
 
