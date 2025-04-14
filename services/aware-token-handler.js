@@ -111,14 +111,14 @@ exports.handlers = {
         payload,
         async function (resp) {
           if (resp.status == true) {
-            const validation = await validateTokenStepper(req, res, 2);
-            if (!validation.valid) {
-              return res.status(validation.statusCode).jsonp({
-                status: false,
-                message: validation.message,
-                authorization: resp.token,
-              });
-            }
+            // const validation = await validateTokenStepper(req, res, 2);
+            // if (!validation.valid) {
+            //   return res.status(validation.statusCode).jsonp({
+            //     status: false,
+            //     message: validation.message,
+            //     authorization: resp.token,
+            //   });
+            // }
 
             var compositionstring = "";
 
@@ -271,7 +271,10 @@ exports.handlers = {
                         _awareid: req.body._awareid_t,
                         _id: mongoose.Types.ObjectId(req.body.aware_token_id),
                       },
-                      { create_token_stepper: 2 },
+                      {
+                        create_token_stepper: 2,
+                        type_of_token: req.body.aware_token_type_t,
+                      },
                       { new: true }
                     )
                     .catch((ex) => {
@@ -595,14 +598,14 @@ exports.handlers = {
         payload,
         async function (resp) {
           if (resp.status == true) {
-            const validation = await validateTokenStepper(req, res, 5);
-            if (!validation.valid) {
-              return res.status(validation.statusCode).jsonp({
-                status: false,
-                message: validation.message,
-                authorization: resp.token,
-              });
-            }
+            // const validation = await validateTokenStepper(req, res, 5);
+            // if (!validation.valid) {
+            //   return res.status(validation.statusCode).jsonp({
+            //     status: false,
+            //     message: validation.message,
+            //     authorization: resp.token,
+            //   });
+            // }
 
             if (company_compliances_exist) {
               company_compliances.findOneAndUpdate(
@@ -1224,14 +1227,14 @@ exports.handlers = {
         payload,
         async function (resp) {
           if (resp.status == true) {
-            const validation = await validateTokenStepper(req, res, 4);
-            if (!validation.valid) {
-              return res.status(validation.statusCode).jsonp({
-                status: false,
-                message: validation.message,
-                authorization: resp.token,
-              });
-            }
+            // const validation = await validateTokenStepper(req, res, 4);
+            // if (!validation.valid) {
+            //   return res.status(validation.statusCode).jsonp({
+            //     status: false,
+            //     message: validation.message,
+            //     authorization: resp.token,
+            //   });
+            // }
             if (self_validation_exist) {
               self_validation.findOneAndUpdate(
                 {
@@ -1636,14 +1639,14 @@ exports.handlers = {
         payload,
         async function (resp) {
           if (resp.status == true) {
-            const validation = await validateTokenStepper(req, res, 3);
-            if (!validation.valid) {
-              return res.status(validation.statusCode).jsonp({
-                status: false,
-                message: validation.message,
-                authorization: resp.token,
-              });
-            }
+            // const validation = await validateTokenStepper(req, res, 3);
+            // if (!validation.valid) {
+            //   return res.status(validation.statusCode).jsonp({
+            //     status: false,
+            //     message: validation.message,
+            //     authorization: resp.token,
+            //   });
+            // }
 
             const updateData = {
               _awareid: req.body._awareid,
@@ -1924,7 +1927,6 @@ exports.handlers = {
         req.headers.userid,
         payload,
         async function (resp) {
-          console.log("req.headers", req.headers);
           if (resp.status == true) {
             const kyc_details_avaliable = await kyc_details
               .findOne({ aware_id: req.headers.awareid })
@@ -1935,8 +1937,6 @@ exports.handlers = {
                   .status(400)
                   .jsonp({ status: false, message: "Bad request!" });
               });
-
-            console.log("kyc_details_avaliable", kyc_details_avaliable);
 
             if (!kyc_details_avaliable) {
               return res.status(200).jsonp({
@@ -1953,8 +1953,7 @@ exports.handlers = {
               })
               .select("first_name last_name role_id");
 
-            console.log("account_details_avaliable", account_details_avaliable);
-
+            // console.log("kyc_details_avaliable", kyc_details_avaliable)
             const assets_avaliable = await physical_assets
               .findOne({
                 _awareid: req.headers.awareid,
@@ -1966,8 +1965,6 @@ exports.handlers = {
                   .status(400)
                   .jsonp({ status: false, message: "Bad request!" });
               });
-
-            console.log("assets_avaliable", assets_avaliable);
 
             const tracer_avaliable = await tracer
               .findOne({
@@ -1981,8 +1978,6 @@ exports.handlers = {
                   .jsonp({ status: false, message: "Bad request!" });
               });
 
-            console.log("tracer_avaliable", tracer_avaliable);
-
             const self_validation_avaliable = await self_validation
               .findOne({
                 _awareid: req.headers.awareid,
@@ -1994,8 +1989,6 @@ exports.handlers = {
                   .status(400)
                   .jsonp({ status: false, message: "Bad request!" });
               });
-
-            console.log("self_validation_avaliable", self_validation_avaliable);
 
             const company_compliances_avaliable = await company_compliances
               .findOne({
@@ -2009,11 +2002,6 @@ exports.handlers = {
                   .jsonp({ status: false, message: "Bad request!" });
               });
 
-            console.log(
-              "company_compliances_avaliable",
-              company_compliances_avaliable
-            );
-
             const aw_tokens_avaliable = await aw_tokens
               .findOne({
                 _awareid: req.headers.awareid,
@@ -2026,17 +2014,13 @@ exports.handlers = {
                   .jsonp({ status: false, message: "Bad request!" });
               });
 
-            console.log("aw_tokens_avaliable", aw_tokens_avaliable);
-
-            const awareTokenId = aw_tokens_avaliable?._id;
+            const awareTokenId = aw_tokens_avaliable._id;
 
             const transaction_history_data = await transaction_history
               .findOne({
                 aware_token_id: awareTokenId,
               })
               .sort({ created_date: -1 });
-
-            console.log("transaction_history_data", transaction_history_data);
 
             let transferred_data = [];
             // Find selected_aware_tokens documents
@@ -2048,68 +2032,58 @@ exports.handlers = {
               },
             });
 
-            console.log("selectedAwareTokens", selectedAwareTokens);
-
             // Loop through each selected_aware_token document
-            if (transaction_history_data && selectedAwareTokens.length > 0) {
-              for (let i = 0; i < selectedAwareTokens.length; i++) {
-                console.log("Inside outer loop");
-                // Skip if no selected_tokens array or it's empty
+            for (let i = 0; i < selectedAwareTokens.length; i++) {
+              // Skip if no selected_tokens array or it's empty
+              if (
+                !selectedAwareTokens[i].selected_tokens ||
+                selectedAwareTokens[i].selected_tokens.length === 0
+              ) {
+                continue;
+              }
+
+              // For each selected_aware_token, get the receiver information
+              const selectedReceiver = await selected_receiver.findOne({
+                send_aware_token_id: selectedAwareTokens[i].send_aware_token_id,
+              });
+
+              if (!selectedReceiver) {
+                continue;
+              }
+
+              // Get the company name for the receiver
+              const kycDetailsData = await kyc_details
+                .findOne({
+                  aware_id: selectedReceiver._receiver_awareid,
+                })
+                .select("company_name");
+
+              if (!kycDetailsData) {
+                continue;
+              }
+
+              // Loop through selected_tokens array in this document
+              for (
+                let j = 0;
+                j < selectedAwareTokens[i].selected_tokens.length;
+                j++
+              ) {
+                const token = selectedAwareTokens[i].selected_tokens[j];
+
+                // Check if this token matches our awareTokenId
                 if (
-                  !selectedAwareTokens[i].selected_tokens ||
-                  selectedAwareTokens[i].selected_tokens.length === 0
+                  token.aware_token_id &&
+                  token.aware_token_id.toString() === awareTokenId.toString()
                 ) {
-                  continue;
-                }
+                  // Build the new data object
+                  const newData = {
+                    _id: selectedAwareTokens[i]._id,
+                    total_tokens: Number(token.To_be_Send),
+                    created_date: selectedAwareTokens[i].created_date,
+                    company_name: kycDetailsData.company_name,
+                  };
 
-                // For each selected_aware_token, get the receiver information
-                const selectedReceiver = await selected_receiver.findOne({
-                  send_aware_token_id:
-                    selectedAwareTokens[i].send_aware_token_id,
-                });
-
-                console.log("selectedReceiver", selectedReceiver);
-
-                if (!selectedReceiver) {
-                  continue;
-                }
-
-                // Get the company name for the receiver
-                const kycDetailsData = await kyc_details
-                  .findOne({
-                    aware_id: selectedReceiver._receiver_awareid,
-                  })
-                  .select("company_name");
-
-                if (!kycDetailsData) {
-                  continue;
-                }
-
-                // Loop through selected_tokens array in this document
-                for (
-                  let j = 0;
-                  j < selectedAwareTokens[i].selected_tokens.length;
-                  j++
-                ) {
-                  console.log("Inside inner loop");
-                  const token = selectedAwareTokens[i].selected_tokens[j];
-
-                  // Check if this token matches our awareTokenId
-                  if (
-                    token.aware_token_id &&
-                    token.aware_token_id.toString() === awareTokenId.toString()
-                  ) {
-                    console.log("inside inner loop if");
-                    // Build the new data object
-                    const newData = {
-                      _id: selectedAwareTokens[i]._id,
-                      total_tokens: Number(token.To_be_Send),
-                      created_date: selectedAwareTokens[i].created_date,
-                      company_name: kycDetailsData.company_name,
-                    };
-
-                    transferred_data.push(newData);
-                  }
+                  transferred_data.push(newData);
                 }
               }
             }
@@ -3283,7 +3257,21 @@ exports.handlers = {
         payload,
         async function (resp) {
           if (resp.status == true) {
-            let aw_token = await aw_tokens
+            let aw_token = await aw_tokens.findOneAndUpdate({
+              _awareid: req.body._awareid,
+              _id: mongoose.Types.ObjectId(req.body.aware_token_id),
+            });
+
+            if (aw_token && aw_token.status.toLowerCase() === "send") {
+              console.log("Inside send if");
+              return res.status(200).jsonp({
+                status: true,
+                message: "Already in the SEND state",
+                authorization: resp.token,
+              });
+            }
+
+            aw_token = await aw_tokens
               .findOneAndUpdate(
                 {
                   _awareid: req.body._awareid,
@@ -3298,15 +3286,6 @@ exports.handlers = {
                   .status(400)
                   .jsonp({ status: false, message: "Bad request!" });
               });
-
-            if (aw_token && aw_token.status.toLowerCase() === "send") {
-              console.log("Inside send if");
-              return res.status(200).jsonp({
-                status: true,
-                message: "Already in the SEND state",
-                authorization: resp.token,
-              });
-            }
 
             let physical_asset_avaliable = await physical_assets
               .findOne({ aware_token_id: req.body.aware_token_id })
@@ -3326,7 +3305,6 @@ exports.handlers = {
                   .jsonp({ status: false, message: "Bad request!" });
               });
 
-            console.log("aw_token", aw_token);
             await notifications.create({
               notification_sent_to: kyc_detail?.manager_id || "",
               message: `You have received a new request for ${
@@ -4818,8 +4796,6 @@ exports.handlers = {
               });
             }
 
-            console.log("hierarchicalData", hierarchicalData);
-
             // Flatten the tree using a helper function
             const flattenedData = [];
             function flattenTree(node, level = 1) {
@@ -5720,7 +5696,7 @@ async function getReceiverData(tokenId) {
 async function buildTraceabilityTree(
   tokenId,
   depth = 0,
-  maxDepth = 3,
+  maxDepth = 10,
   transferredToken = null
 ) {
   // Prevent infinite recursion
