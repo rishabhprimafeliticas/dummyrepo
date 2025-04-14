@@ -6,6 +6,11 @@ var awaretokenhandler = require("../services/aware-token-handler");
 const { verify } = require("../middleware");
 var _ = require("lodash");
 var multer = require("multer");
+const {
+  ensureCreateTokenExists,
+  ensureCreateTokenAccessibleAndHandleDeleteLock,
+  ensureCreateTokenEditableAndLock,
+} = require("../middleware/tokenLockMiddleware");
 var limits = {
   // allow only 1 file per request
   fileSize: 7340032, // 2 MB (max file size)
@@ -140,6 +145,12 @@ router.post(
   asyncHandler(awaretokenhandler.handlers.storeSourceAddressAsync)
 );
 
+router.post(
+  "/v2/post_production_address_async",
+  verify,
+  asyncHandler(awaretokenhandler.handlers.storeProductionAddressAsync)
+);
+
 router.get(
   "/v2/getsourceaddressasync",
   verify,
@@ -179,6 +190,8 @@ router.post(
     // // check('sustainable_process_certificates').not().isEmpty().withMessage("I know you have it in you, Try again!").escape(),
   ],
   verify,
+  ensureCreateTokenExists,
+  ensureCreateTokenEditableAndLock,
   asyncHandler(awaretokenhandler.handlers.createPhysicalAssestAsync)
 );
 
@@ -199,6 +212,8 @@ router.post(
     // check('chemical_compliance_certificates').not().isEmpty().withMessage("I know you have it in you, Try again!").escape(),
   ],
   verify,
+  ensureCreateTokenExists,
+  ensureCreateTokenEditableAndLock,
   asyncHandler(awaretokenhandler.handlers.createCompanyComplianceAsync)
 );
 
@@ -215,6 +230,8 @@ router.post(
   upload.array("uploadedImages[]"),
   [check("_awareid").escape()],
   verify,
+  ensureCreateTokenExists,
+  ensureCreateTokenEditableAndLock,
   asyncHandler(awaretokenhandler.handlers.createSelfValidationAsync)
 );
 
@@ -239,6 +256,8 @@ router.post(
   upload2.single("upload_pdf"),
   [],
   verify,
+  ensureCreateTokenExists,
+  ensureCreateTokenEditableAndLock,
   asyncHandler(awaretokenhandler.handlers.createTracerAsync)
 );
 
@@ -254,11 +273,13 @@ router.post(
   "/v2/post_digital_twin",
   [],
   verify,
+  ensureCreateTokenExists,
+  ensureCreateTokenEditableAndLock,
   asyncHandler(awaretokenhandler.handlers.postDigitalTwinAsync)
 );
 
 router.get(
-  '/v1/traceability_report',
+  "/v1/traceability_report",
   verify,
   asyncHandler(awaretokenhandler.handlers.traceabilityReport)
 );
@@ -276,6 +297,11 @@ router.get(
   asyncHandler(awaretokenhandler.handlers.getDigitalTwinAsync)
 );
 
+router.get(
+  "/v2/get_token_statistics",
+  asyncHandler(awaretokenhandler.handlers.getTokenStatisticsAsync)
+);
+
 //done
 router.get(
   "/v3/get_digital_twin",
@@ -288,6 +314,8 @@ router.post(
   "/v2/delete_aware_token",
   [check("_awareid").escape(), check("aware_token_id").escape()],
   verify,
+  ensureCreateTokenExists,
+  ensureCreateTokenAccessibleAndHandleDeleteLock,
   asyncHandler(awaretokenhandler.handlers.deleteAwareTokenAsync)
 );
 
