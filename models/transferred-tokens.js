@@ -35,6 +35,7 @@ const transferredTokensSchema = new mongoose.Schema({
     historical_selected_transaction_certificates_id: { type: mongoose.Schema.Types.ObjectId, required: false, default: null },
     historical_selected_proof_of_deliveries_id: { type: mongoose.Schema.Types.ObjectId, required: false, default: null },
     blochchain_transaction_history_id: { type: mongoose.Schema.Types.ObjectId, required: false, default: null },
+    linked_transaction_history_id: { type: mongoose.Schema.Types.ObjectId, required: false, default: null },
     created_date: { type: Date, required: false,default: Date.now },
     modified_on: { type: Date, required: false, default: Date.now },
 });
