@@ -1,3 +1,4 @@
+const { Schema } = require("mongoose");
 var mongoose = require("mongoose");
 
 const AwTokensSchema = new mongoose.Schema({
@@ -13,6 +14,8 @@ const AwTokensSchema = new mongoose.Schema({
   blockchain_id: { type: String, required: false, default: null },
   hide_flag: { type: Boolean, required: false },
   message: { type: String, required: false },
+  reviewedBy: { type: Schema.Types.ObjectId, ref: "accounts", default: null },
+  reviewedOn: { type: Date, required: false, default: null },
   created_date: { type: Date, required: false, default: Date.now },
   modified_on: { type: Date, required: false, default: Date.now },
 });
