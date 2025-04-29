@@ -13,7 +13,7 @@ const aw_tokens = require("../models/aw_tokens");
 const wallets = require("../models/wallets");
 const notifications = require("../models/notifications");
 const transferred_tokens = require("../models/transferred-tokens");
-// const transferred_tokens = require('../models/account_details');
+
 const transaction_history = require("../models/transaction_history");
 const purchase_order_details = require("../models/purchase_order_details");
 const products = require("../models/products");
@@ -111,22 +111,13 @@ exports.handlers = {
         payload,
         async function (resp) {
           if (resp.status == true) {
-            // const validation = await validateTokenStepper(req, res, 2);
-            // if (!validation.valid) {
-            //   return res.status(validation.statusCode).jsonp({
-            //     status: false,
-            //     message: validation.message,
-            //     authorization: resp.token,
-            //   });
-            // }
-
             var compositionstring = "";
 
             var arr = req.body.compositionArrayMain;
 
             arr.forEach(function (i, idx, array) {
               var element = array[idx];
-              // console.log('element: ', element)
+
               if (idx === array.length - 1) {
                 compositionstring =
                   compositionstring +
@@ -155,7 +146,7 @@ exports.handlers = {
             });
 
             var aware_asset_id = `${req.body._awareid_t} - ${req.body.aware_token_type_t} - ${req.body.material_specs_t} - ${compositionstring} - ${req.body.main_color_t} - ${req.body.production_lot_t}`;
-            // console.log('aware_asset_id', aware_asset_id)
+
             if (asset_alread_exist) {
               physical_assets.findOneAndUpdate(
                 {
@@ -196,8 +187,6 @@ exports.handlers = {
                       .status(500)
                       .jsonp({ status: false, message: err.toString() });
                   }
-
-                  // var kyc_Details = await kyc_details.findOne({ _awareid: req.body._awareid_t }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
 
                   await aw_tokens
                     .findOneAndUpdate(
@@ -260,10 +249,6 @@ exports.handlers = {
                       .status(500)
                       .jsonp({ status: false, message: err.toString() });
                   }
-
-                  // var kyc_Details = await kyc_details.findOne({ _awareid: req.body._awareid_t }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-                  // await account_details.findOneAndUpdate({ kyc_id: kyc_Details._id.toString() }, { create_token_stepper: 2 }, { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
 
                   await aw_tokens
                     .findOneAndUpdate(
@@ -548,16 +533,6 @@ exports.handlers = {
                   authorization: resp.token,
                 });
               }
-
-              // var assets_avaliable = await physical_assets.findOne({ _awareid: req.headers.awareid, aware_token_id: req.headers.aware_token_id }).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-
-              // if (!assets_avaliable) {
-              //   return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
-              // }
-              // else {
-              //   return res.status(200).jsonp({ status: true, data: assets_avaliable, authorization: resp.token });
-
-              // }
             } else {
               return res
                 .status(resp.code)
@@ -577,8 +552,6 @@ exports.handlers = {
         .status(422)
         .jsonp({ status: false, message: "Bad payload received." });
     } else {
-      // console.log("body", req.body);
-
       const company_compliances_exist = await company_compliances
         .findOne({
           _awareid: req.body._awareid,
@@ -598,15 +571,6 @@ exports.handlers = {
         payload,
         async function (resp) {
           if (resp.status == true) {
-            // const validation = await validateTokenStepper(req, res, 5);
-            // if (!validation.valid) {
-            //   return res.status(validation.statusCode).jsonp({
-            //     status: false,
-            //     message: validation.message,
-            //     authorization: resp.token,
-            //   });
-            // }
-
             if (company_compliances_exist) {
               company_compliances.findOneAndUpdate(
                 {
@@ -634,10 +598,6 @@ exports.handlers = {
                       .status(500)
                       .jsonp({ status: false, message: err.toString() });
                   }
-
-                  // var kyc_Details = await kyc_details.findOne({ _awareid: req.body._awareid }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-                  // await account_details.findOneAndUpdate({ kyc_id: kyc_Details._id.toString() }, { create_token_stepper: 5 }, { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
 
                   await aw_tokens
                     .findOneAndUpdate(
@@ -687,10 +647,6 @@ exports.handlers = {
                       .status(500)
                       .jsonp({ status: false, message: err.toString() });
                   }
-
-                  // var kyc_Details = await kyc_details.findOne({ _awareid: req.body._awareid }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-                  // await account_details.findOneAndUpdate({ kyc_id: kyc_Details._id.toString() }, { create_token_stepper: 5 }, { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
 
                   await aw_tokens
                     .findOneAndUpdate(
@@ -792,7 +748,6 @@ exports.handlers = {
         .status(422)
         .jsonp({ status: false, message: "Bad payload received." });
     } else {
-      // Verify required header
       if (!req.headers.kyc_id) {
         return res
           .status(400)
@@ -808,7 +763,6 @@ exports.handlers = {
         zipcode,
       } = req.body;
 
-      // Format full address string
       let address = "";
       if (address_line_one && address_line_one !== "") {
         address = address + address_line_one.trim();
@@ -837,7 +791,6 @@ exports.handlers = {
         async function (resp) {
           if (resp.status == true) {
             try {
-              // Update KYC details with geo location
               const kycDetails = await kyc_details.findOneAndUpdate(
                 { _id: mongoose.Types.ObjectId(req.headers.kyc_id) },
                 {
@@ -1032,10 +985,8 @@ exports.handlers = {
 
             const searchTerm = req.query.search ? req.query.search.trim() : "";
             if (searchTerm.length > 0) {
-              // Escape special characters in the search term
               const escapedSearchTerm = escapeRegExp(searchTerm);
 
-              // Conditions for searching individual fields
               const fieldConditions = [
                 { _awareid: new RegExp(escapedSearchTerm, "i") },
                 { source_name: new RegExp(escapedSearchTerm, "i") },
@@ -1047,7 +998,6 @@ exports.handlers = {
                 { zipcode: new RegExp(escapedSearchTerm, "i") },
               ];
 
-              // Condition for searching concatenated address fields
               const addressSearchCondition = {
                 $expr: {
                   $regexMatch: {
@@ -1080,10 +1030,8 @@ exports.handlers = {
                 },
               };
 
-              // Combine individual field searches and concatenated address search
               const orConditions = [...fieldConditions, addressSearchCondition];
 
-              // Apply filters with search conditions
               const existingFilter = { ...filters };
               delete existingFilter.search;
               filters.$and = [{ ...existingFilter }, { $or: orConditions }];
@@ -1204,9 +1152,6 @@ exports.handlers = {
         .status(422)
         .jsonp({ status: false, message: "Bad payload received." });
     } else {
-      // console.log("body",req.body)
-      // console.log("body",JSON.parse(req.body.sustainble_material))
-
       let sustainble_material = JSON.parse(req.body.sustainble_material);
       const self_validation_exist = await self_validation
         .findOne({
@@ -1227,14 +1172,6 @@ exports.handlers = {
         payload,
         async function (resp) {
           if (resp.status == true) {
-            // const validation = await validateTokenStepper(req, res, 4);
-            // if (!validation.valid) {
-            //   return res.status(validation.statusCode).jsonp({
-            //     status: false,
-            //     message: validation.message,
-            //     authorization: resp.token,
-            //   });
-            // }
             if (self_validation_exist) {
               self_validation.findOneAndUpdate(
                 {
@@ -1257,10 +1194,6 @@ exports.handlers = {
                       .status(500)
                       .jsonp({ status: false, message: err.toString() });
                   }
-
-                  // var kyc_Details = await kyc_details.findOne({ _awareid: req.body._awareid }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-                  // await account_details.findOneAndUpdate({ kyc_id: kyc_Details._id.toString() }, { create_token_stepper: 3 }, { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
 
                   await aw_tokens
                     .findOneAndUpdate(
@@ -1305,10 +1238,6 @@ exports.handlers = {
                       .status(500)
                       .jsonp({ status: false, message: err.toString() });
                   }
-
-                  // var kyc_Details = await kyc_details.findOne({ _awareid: req.body._awareid }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-                  // await account_details.findOneAndUpdate({ kyc_id: kyc_Details._id.toString() }, { create_token_stepper: 3 }, { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
 
                   await aw_tokens
                     .findOneAndUpdate(
@@ -1426,10 +1355,6 @@ exports.handlers = {
               .jsonp({ status: false, message: ex.toString() });
           });
 
-        // var kyc_Details = await kyc_details.findOne({ _awareid: req.body._awareid }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-        // await account_details.findOneAndUpdate({ kyc_id: kyc_Details._id.toString() }, { create_token_stepper: 1 }, { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
         await aw_tokens
           .findOneAndUpdate(
             {
@@ -1458,10 +1383,6 @@ exports.handlers = {
               .jsonp({ status: false, message: ex.toString() });
           });
 
-        // var kyc_Details = await kyc_details.findOne({ _awareid: req.body._awareid }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-        // await account_details.findOneAndUpdate({ kyc_id: kyc_Details._id.toString() }, { create_token_stepper: 2 }, { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
         await aw_tokens
           .findOneAndUpdate(
             {
@@ -1489,10 +1410,6 @@ exports.handlers = {
               .status(500)
               .jsonp({ status: false, message: ex.toString() });
           });
-
-        // var kyc_Details = await kyc_details.findOne({ _awareid: req.body._awareid }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-        // await account_details.findOneAndUpdate({ kyc_id: kyc_Details._id.toString() }, { create_token_stepper: 3 }, { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
 
         await aw_tokens
           .findOneAndUpdate(
@@ -1533,91 +1450,6 @@ exports.handlers = {
     }
   },
 
-  // createTracerAsync: async (req, res) => {
-
-  //   const errors = validationResult(req);
-
-  //   if (!errors.isEmpty()) {
-  //     return res.status(422).jsonp({ status: false, message: "Bad payload received." })
-  //   }
-  //   else {
-
-  //     const tracer_exist = await tracer.findOne({ _awareid: req.body._awareid, aware_token_id: req.body.aware_token_id }).catch((ex) => {loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //     var payload = { username: req.headers.username };
-  //     refresh(req.headers.authorization, req.headers.userid, payload, function (resp) {
-  //       if (resp.status == true) {
-
-  //         if (tracer_exist) {
-
-  //           tracer.findOneAndUpdate({ _awareid: req.body._awareid, aware_token_id: req.body.aware_token_id },
-  //             {
-  //               _awareid: req.body._awareid,
-  //               aware_token_id: req.body.aware_token_id,
-  //               tracer_added: req.body.Traceradded,
-  //               type_selection: req.body.type_selection,
-  //               aware_tc_checked: req.body.awareTracerTC,
-  //               custom_tc_checked: req.body.customTracerTC,
-  //               aware_date: req.body.awareDate ? new Date(req.body.awareDate) : null,
-  //               custom_date : req.body.customDate ? new Date(req.body.customDate) : null,
-  //               custom_name: req.body.customName,
-  //               aware_licences: req.body.Awarelicence,
-  //               tracer_pdf: req.file ? req.file.filename.replace(/\s/g, "") : null
-  //             },
-  //             { new: true },
-  //             async function (err, user) {
-  //               if (err){loggerhandler.logger.error(`${err} ,email:${req.headers.email}`);
-  //                return res.status(500).jsonp({ status: false, message: err.toString() })}
-
-  //               // var kyc_Details = await aw_tokens.findOne({ _awareid: req.body._awareid }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //               // await account_details.findOneAndUpdate({ kyc_id: kyc_Details._id.toString() }, { create_token_stepper: 3 }, { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //               await aw_tokens.findOneAndUpdate({ _awareid: req.body._awareid, _id: mongoose.Types.ObjectId(req.body.aware_token_id) }, { create_token_stepper: 3 }, { new: true }).catch((ex) => {loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //               return res.status(200).jsonp({ status: true, message: "Information entered on Tracer page has been saved successfully", authorization: resp.token });
-
-  //             })
-  //         }
-  //         else {
-
-  //           tracer.create(
-  //             {
-  //               _awareid: req.body._awareid,
-  //               aware_token_id: req.body.aware_token_id,
-  //               tracer_added: req.body.Traceradded,
-  //               type_selection: req.body.type_selection,
-  //               aware_tc_checked: req.body.awareTracerTC,
-  //               custom_tc_checked: req.body.customTracerTC,
-  //               aware_date: req.body.awareDate ? new Date(req.body.awareDate) : null,
-  //               custom_date : req.body.customDate ? new Date(req.body.customDate) : null,
-  //               custom_name: req.body.customName,
-  //               aware_licences: req.body.Awarelicence,
-  //               tracer_pdf: req.file ? req.file.filename.replace(/\s/g, "") : null
-  //             },
-  //             async function (err, user) {
-  //               if (err){loggerhandler.logger.error(`${err} ,email:${req.headers.email}`);
-  //                return res.status(500).jsonp({ status: false, message: err.toString() })}
-
-  //               // var kyc_Details = await kyc_details.findOne({ _awareid: req.body._awareid }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //               // await account_details.findOneAndUpdate({ kyc_id: kyc_Details._id.toString() }, { create_token_stepper: 3 }, { new: true }).catch((ex) => { return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //               await aw_tokens.findOneAndUpdate({ _awareid: req.body._awareid, _id: mongoose.Types.ObjectId(req.body.aware_token_id) }, { create_token_stepper: 3 }, { new: true }).catch((ex) => {loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(500).jsonp({ status: false, message: ex.toString() }) })
-
-  //               return res.status(200).jsonp({ status: true, message: "Information entered on Tracer page has been saved successfully", authorization: resp.token });
-
-  //             })
-
-  //         }
-  //       }
-  //       else {
-  //         return res.status(resp.code).jsonp({ status: false, message: null, authorization: null });
-  //       }
-  //     });
-
-  //   }
-  // },
   createTracerAsync: async (req, res) => {
     const errors = validationResult(req);
 
@@ -1626,7 +1458,7 @@ exports.handlers = {
         .status(422)
         .jsonp({ status: false, message: "Bad payload received." });
     }
-    // console.log('hii',req.body)
+
     try {
       const tracerExist = await tracer.findOne({
         _awareid: req.body._awareid,
@@ -1639,15 +1471,6 @@ exports.handlers = {
         payload,
         async function (resp) {
           if (resp.status == true) {
-            // const validation = await validateTokenStepper(req, res, 3);
-            // if (!validation.valid) {
-            //   return res.status(validation.statusCode).jsonp({
-            //     status: false,
-            //     message: validation.message,
-            //     authorization: resp.token,
-            //   });
-            // }
-
             const updateData = {
               _awareid: req.body._awareid,
               aware_token_id: req.body.aware_token_id,
@@ -1808,7 +1631,6 @@ exports.handlers = {
                   .jsonp({ status: false, message: "Bad request!" });
               });
 
-            // console.log("kyc_details_avaliable", kyc_details_avaliable)
             var assets_avaliable = await physical_assets
               .findOne({
                 _awareid: req.headers.awareid,
@@ -1953,7 +1775,6 @@ exports.handlers = {
               })
               .select("first_name last_name role_id");
 
-            // console.log("kyc_details_avaliable", kyc_details_avaliable)
             const assets_avaliable = await physical_assets
               .findOne({
                 _awareid: req.headers.awareid,
@@ -2007,6 +1828,7 @@ exports.handlers = {
                 _awareid: req.headers.awareid,
                 _id: req.headers.aware_token_id,
               })
+              .populate("reviewedBy")
               .catch((ex) => {
                 loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`);
                 return res
@@ -2016,14 +1838,12 @@ exports.handlers = {
 
             const awareTokenId = aw_tokens_avaliable._id;
 
-            const transaction_history_data = await transaction_history
-              .findOne({
-                aware_token_id: awareTokenId,
-              })
-              .sort({ created_date: -1 });
+            const transaction_history_data = await transaction_history.findOne({
+              aware_token_id: awareTokenId,
+            });
 
             let transferred_data = [];
-            // Find selected_aware_tokens documents
+
             const selectedAwareTokens = await selected_aware_token.find({
               selected_tokens: {
                 $elemMatch: {
@@ -2032,9 +1852,7 @@ exports.handlers = {
               },
             });
 
-            // Loop through each selected_aware_token document
             for (let i = 0; i < selectedAwareTokens.length; i++) {
-              // Skip if no selected_tokens array or it's empty
               if (
                 !selectedAwareTokens[i].selected_tokens ||
                 selectedAwareTokens[i].selected_tokens.length === 0
@@ -2042,7 +1860,6 @@ exports.handlers = {
                 continue;
               }
 
-              // For each selected_aware_token, get the receiver information
               const selectedReceiver = await selected_receiver.findOne({
                 send_aware_token_id: selectedAwareTokens[i].send_aware_token_id,
               });
@@ -2051,7 +1868,6 @@ exports.handlers = {
                 continue;
               }
 
-              // Get the company name for the receiver
               const kycDetailsData = await kyc_details
                 .findOne({
                   aware_id: selectedReceiver._receiver_awareid,
@@ -2062,7 +1878,6 @@ exports.handlers = {
                 continue;
               }
 
-              // Loop through selected_tokens array in this document
               for (
                 let j = 0;
                 j < selectedAwareTokens[i].selected_tokens.length;
@@ -2070,12 +1885,10 @@ exports.handlers = {
               ) {
                 const token = selectedAwareTokens[i].selected_tokens[j];
 
-                // Check if this token matches our awareTokenId
                 if (
                   token.aware_token_id &&
                   token.aware_token_id.toString() === awareTokenId.toString()
                 ) {
-                  // Build the new data object
                   const newData = {
                     _id: selectedAwareTokens[i]._id,
                     total_tokens: Number(token.To_be_Send),
@@ -2258,7 +2071,6 @@ exports.handlers = {
                 jsonData.push(jsonObject);
               }
 
-              // console.log("jsonObject",jsonData)
               return res.status(200).jsonp({
                 status: true,
                 data: jsonData,
@@ -2314,7 +2126,6 @@ exports.handlers = {
                   .jsonp({ status: false, message: "Bad request!" });
               });
 
-            // console.log("aw_tokens_avaliable", aw_tokens_avaliable.length)
             var update_aw_tokens_avaliable = await update_aw_tokens
               .find({
                 _awareid: req.headers.awareid,
@@ -2329,12 +2140,9 @@ exports.handlers = {
                   .jsonp({ status: false, message: "Bad request!" });
               });
 
-            // console.log("update_aw_tokens_avaliable", update_aw_tokens_avaliable.length)
-
             var jsonData = [];
 
             if (aw_tokens_avaliable.length <= 0) {
-              // return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
             } else {
               var assets_avaliable = await physical_assets
                 .find({})
@@ -2367,13 +2175,9 @@ exports.handlers = {
 
                 jsonData.push(jsonObject);
               }
-
-              // return res.status(200).jsonp({ status: true, data: jsonData, authorization: resp.token });
             }
 
             if (update_aw_tokens_avaliable.length <= 0) {
-              // console.log("IN")
-              // return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
             } else {
               var update_physical_asset_avaliable = await update_physical_asset
                 .find({})
@@ -2385,8 +2189,6 @@ exports.handlers = {
                     .status(400)
                     .jsonp({ status: false, message: "Bad request!" });
                 });
-
-              // console.log("update_physical_asset_avaliable", update_physical_asset_avaliable.length)
 
               for (var i = 0; i < update_aw_tokens_avaliable.length; i++) {
                 var temp_aw_token = update_aw_tokens_avaliable[i];
@@ -2409,11 +2211,7 @@ exports.handlers = {
 
                 jsonData.push(jsonObject);
               }
-
-              // return res.status(200).jsonp({ status: true, data: jsonData, authorization: resp.token });
             }
-
-            // console.log("jsonData", jsonData)
 
             return res.status(200).jsonp({
               status: true,
@@ -2443,16 +2241,13 @@ exports.handlers = {
       return res.status(400).jsonp({ status: false, message: "Bad request!" });
     }
 
-    // Pagination variables
     const page = parseInt(req.query.page, 10) || 1;
     const limit = parseInt(req.query.limit, 10) || 10;
     const skip = (page - 1) * limit;
 
-    // Filter to exclude concept or processing tokens
     const excludeRegex = new RegExp("^concept$", "i");
     let statusMatch = { status: { $not: excludeRegex } };
 
-    // Add status filter if provided
     if (req.query.status) {
       const statusRegex = new RegExp(
         "^" + escapeRegExp(req.query.status.toLowerCase()) + "$",
@@ -2461,7 +2256,6 @@ exports.handlers = {
       statusMatch = { status: statusRegex };
     }
 
-    // Search term filtering
     const searchTerm = req.query.search ? req.query.search.trim() : "";
     let searchMatch = {};
     let searchRegex = null;
@@ -2490,12 +2284,9 @@ exports.handlers = {
       async function (resp) {
         if (resp.status === true) {
           try {
-            // Create aggregation pipeline
             const pipeline = [
-              // Stage 1: Match aw_tokens that meet status criteria
               { $match: statusMatch },
 
-              // Stage 2: Lookup physical_assets
               {
                 $lookup: {
                   from: "physical_assets",
@@ -2532,7 +2323,6 @@ exports.handlers = {
                 },
               },
 
-              // Stage 3: Lookup kyc_details
               {
                 $lookup: {
                   from: "kyc_details",
@@ -2554,7 +2344,6 @@ exports.handlers = {
                 },
               },
 
-              // Stage 4: Apply search filter if provided
               ...(searchTerm.length > 0
                 ? [
                     {
@@ -2570,7 +2359,6 @@ exports.handlers = {
                   ]
                 : []),
 
-              // Stage 5: Format the output - convert arrays to single objects or null
               {
                 $addFields: {
                   assets_available: {
@@ -2590,7 +2378,6 @@ exports.handlers = {
                 },
               },
 
-              // Stage 6: Create final structure
               {
                 $project: {
                   aw_tokens: {
@@ -2603,7 +2390,6 @@ exports.handlers = {
                 },
               },
 
-              // Stage 7: Remove unwanted nested fields from update_aw_tokens
               {
                 $unset: [
                   "aw_tokens.physical_asset",
@@ -2613,14 +2399,12 @@ exports.handlers = {
                 ],
               },
 
-              // Stage 11: Sort by created_date descending (newest first)
               {
                 $sort: {
                   "assets_available.created_date": -1,
                 },
               },
 
-              // Stage 12: Get total count for pagination
               {
                 $facet: {
                   metadata: [{ $count: "total" }],
@@ -2629,7 +2413,6 @@ exports.handlers = {
               },
             ];
 
-            // Execute aggregation pipeline
             const aggregationResult = await aw_tokens
               .aggregate(pipeline, { allowDiskUse: true })
               .catch((ex) => {
@@ -2639,7 +2422,6 @@ exports.handlers = {
                   .jsonp({ status: false, message: "Bad request!" });
               });
 
-            // Extract results and metadata
             const result = aggregationResult[0];
             const totalDocuments =
               result.metadata.length > 0 ? result.metadata[0].total : 0;
@@ -2700,16 +2482,13 @@ exports.handlers = {
       return res.status(400).jsonp({ status: false, message: "Bad request!" });
     }
 
-    // Pagination variables
     const page = parseInt(req.query.page, 10) || 1;
     const limit = parseInt(req.query.limit, 10) || 10;
     const skip = (page - 1) * limit;
 
-    // Filter to exclude concept or processing tokens
     const excludeRegex = new RegExp("^concept$", "i");
     let statusMatch = { status: { $not: excludeRegex } };
 
-    // Add status filter if provided
     if (req.query.status) {
       const statusRegex = new RegExp(
         "^" + escapeRegExp(req.query.status.toLowerCase()) + "$",
@@ -2718,7 +2497,6 @@ exports.handlers = {
       statusMatch = { status: statusRegex };
     }
 
-    // Search term filtering
     const searchTerm = req.query.search ? req.query.search.trim() : "";
     let searchMatch = {};
     let searchRegex = null;
@@ -2769,12 +2547,9 @@ exports.handlers = {
               _awareid: manager_kyc_details_avaliable?.aware_id,
             };
 
-            // Create aggregation pipeline
             const pipeline = [
-              // Stage 1: Match aw_tokens that meet status criteria
               { $match: combinedMatch },
 
-              // Stage 2: Lookup physical_assets
               {
                 $lookup: {
                   from: "physical_assets",
@@ -2811,7 +2586,6 @@ exports.handlers = {
                 },
               },
 
-              // Stage 3: Lookup kyc_details
               {
                 $lookup: {
                   from: "kyc_details",
@@ -2833,7 +2607,6 @@ exports.handlers = {
                 },
               },
 
-              // Stage 7: Apply search filter if provided
               ...(searchTerm.length > 0
                 ? [
                     {
@@ -2849,7 +2622,6 @@ exports.handlers = {
                   ]
                 : []),
 
-              // Stage 8: Format the output - convert arrays to single objects or null
               {
                 $addFields: {
                   assets_available: {
@@ -2869,7 +2641,6 @@ exports.handlers = {
                 },
               },
 
-              // Stage 9: Create final structure
               {
                 $project: {
                   aw_tokens: {
@@ -2882,7 +2653,6 @@ exports.handlers = {
                 },
               },
 
-              // Stage 10: Remove unwanted nested fields from update_aw_tokens
               {
                 $unset: [
                   "aw_tokens.physical_asset",
@@ -2892,14 +2662,12 @@ exports.handlers = {
                 ],
               },
 
-              // Stage 11: Sort by created_date descending (newest first)
               {
                 $sort: {
                   "assets_available.created_date": -1,
                 },
               },
 
-              // Stage 12: Get total count for pagination
               {
                 $facet: {
                   metadata: [{ $count: "total" }],
@@ -2908,7 +2676,6 @@ exports.handlers = {
               },
             ];
 
-            // Execute aggregation pipeline
             const aggregationResult = await aw_tokens
               .aggregate(pipeline)
               .catch((ex) => {
@@ -2918,7 +2685,6 @@ exports.handlers = {
                   .jsonp({ status: false, message: "Bad request!" });
               });
 
-            // Extract results and metadata
             const result = aggregationResult[0];
             const totalDocuments =
               result.metadata.length > 0 ? result.metadata[0].total : 0;
@@ -2966,181 +2732,6 @@ exports.handlers = {
     );
   },
 
-  // getallAwareTokenforParticularProducerAsync: async (req, res) => {
-  //   const errors = validationResult(req);
-
-  //   if (!errors.isEmpty()) {
-  //     return res.status(422).jsonp(errors.array());
-  //   } else {
-  //     if (
-  //       !req.headers.userid ||
-  //       !req.headers.username ||
-  //       !req.headers.authorization
-  //     ) {
-  //       return res
-  //         .status(400)
-  //         .jsonp({ status: false, message: "Bad request!" });
-  //     }
-
-  //     var payload = { username: req.headers.username };
-  //     refresh(
-  //       req.headers.authorization,
-  //       req.headers.userid,
-  //       payload,
-  //       async function (resp) {
-  //         if (resp.status == true) {
-  //           console.log("checker");
-  //           var manager_kyc_details_avaliable = await kyc_details
-  //             .findOne({
-  //               manager_id: mongoose.Types.ObjectId(req.headers.userid),
-  //             })
-  //             .catch((ex) => {
-  //               loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`);
-  //               return res
-  //                 .status(400)
-  //                 .jsonp({ status: false, message: "Bad request!" });
-  //             });
-
-  //           if (!manager_kyc_details_avaliable) {
-  //             return res
-  //               .status(200)
-  //               .jsonp({ status: true, data: null, authorization: resp.token });
-  //           }
-  //           var aw_tokens_avaliable = await aw_tokens
-  //             .find({ _awareid: manager_kyc_details_avaliable?.aware_id })
-  //             .catch((ex) => {
-  //               loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`);
-  //               return res
-  //                 .status(400)
-  //                 .jsonp({ status: false, message: "Bad request!" });
-  //             });
-  //           if (aw_tokens_avaliable.length <= 0) {
-  //             return res
-  //               .status(200)
-  //               .jsonp({ status: true, data: null, authorization: resp.token });
-  //           } else {
-  //             var kyc_details_avaliable = await kyc_details
-  //               .find({})
-  //               .catch((ex) => {
-  //                 loggerhandler.logger.error(
-  //                   `${ex} ,email:${req.headers.email}`
-  //                 );
-  //                 return res
-  //                   .status(400)
-  //                   .jsonp({ status: false, message: "Bad request!" });
-  //               });
-
-  //             var assets_avaliable = await physical_assets
-  //               .find({})
-  //               .catch((ex) => {
-  //                 loggerhandler.logger.error(
-  //                   `${ex} ,email:${req.headers.email}`
-  //                 );
-  //                 return res
-  //                   .status(400)
-  //                   .jsonp({ status: false, message: "Bad request!" });
-  //               });
-
-  //             var tracer_avaliable = await tracer.find({}).catch((ex) => {
-  //               loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`);
-  //               return res
-  //                 .status(400)
-  //                 .jsonp({ status: false, message: "Bad request!" });
-  //             });
-
-  //             var self_validation_avaliable = await self_validation
-  //               .find({})
-  //               .catch((ex) => {
-  //                 loggerhandler.logger.error(
-  //                   `${ex} ,email:${req.headers.email}`
-  //                 );
-  //                 return res
-  //                   .status(400)
-  //                   .jsonp({ status: false, message: "Bad request!" });
-  //               });
-
-  //             var company_compliances_avaliable = await company_compliances
-  //               .find({})
-  //               .catch((ex) => {
-  //                 loggerhandler.logger.error(
-  //                   `${ex} ,email:${req.headers.email}`
-  //                 );
-  //                 return res
-  //                   .status(400)
-  //                   .jsonp({ status: false, message: "Bad request!" });
-  //               });
-
-  //             var jsonData = [];
-  //             for (var i = 0; i < aw_tokens_avaliable.length; i++) {
-  //               var temp_aw_token = aw_tokens_avaliable[i];
-
-  //               var temp_assets_avaliable = assets_avaliable.find(
-  //                 (x) =>
-  //                   x._awareid == temp_aw_token._awareid &&
-  //                   x.aware_token_id == temp_aw_token._id
-  //               );
-  //               var temp_kyc_details_avaliable = kyc_details_avaliable.find(
-  //                 (x) => x.aware_id == temp_aw_token._awareid
-  //               );
-
-  //               var temp_tracer_avaliable = tracer_avaliable.find(
-  //                 (x) =>
-  //                   x._awareid == temp_aw_token._awareid &&
-  //                   x.aware_token_id == temp_aw_token._id
-  //               );
-  //               var temp_self_validation_avaliable =
-  //                 self_validation_avaliable.find(
-  //                   (x) =>
-  //                     x._awareid == temp_aw_token._awareid &&
-  //                     x.aware_token_id == temp_aw_token._id
-  //                 );
-  //               var temp_company_compliances_avaliable =
-  //                 company_compliances_avaliable.find(
-  //                   (x) =>
-  //                     x._awareid == temp_aw_token._awareid &&
-  //                     x.aware_token_id == temp_aw_token._id
-  //                 );
-
-  //               var jsonObject = {
-  //                 aw_tokens: temp_aw_token,
-  //                 assets_avaliable: assets_avaliable
-  //                   ? temp_assets_avaliable
-  //                   : null,
-  //                 kyc_details_avaliable: kyc_details_avaliable
-  //                   ? temp_kyc_details_avaliable
-  //                   : null,
-
-  //                 tracer_avaliable: temp_tracer_avaliable
-  //                   ? temp_tracer_avaliable
-  //                   : null,
-  //                 self_validation_avaliable: temp_self_validation_avaliable
-  //                   ? temp_self_validation_avaliable
-  //                   : null,
-  //                 company_compliances_avaliable:
-  //                   temp_company_compliances_avaliable
-  //                     ? temp_company_compliances_avaliable
-  //                     : null,
-  //               };
-
-  //               jsonData.push(jsonObject);
-  //             }
-
-  //             return res.status(200).jsonp({
-  //               status: true,
-  //               data: jsonData,
-  //               authorization: resp.token,
-  //             });
-  //           }
-  //         } else {
-  //           return res
-  //             .status(resp.code)
-  //             .jsonp({ status: false, data: null, authorization: null });
-  //         }
-  //       }
-  //     );
-  //   }
-  // },
-
   deleteAwareTokenAsync: async (req, res) => {
     const errors = validationResult(req);
 
@@ -3173,7 +2764,6 @@ exports.handlers = {
               message: "Create token request has been deleted successfully",
               authorization: resp.token,
             });
-            //Token Create request has been deleted successfully
           } else {
             return res
               .status(resp.code)
@@ -3257,14 +2847,13 @@ exports.handlers = {
         payload,
         async function (resp) {
           if (resp.status == true) {
-            let aw_token = await aw_tokens.findOneAndUpdate({
+            let aw_token = await aw_tokens.findOne({
               _awareid: req.body._awareid,
               _id: mongoose.Types.ObjectId(req.body.aware_token_id),
             });
 
             if (aw_token && aw_token.status.toLowerCase() === "send") {
-              console.log("Inside send if");
-              return res.status(200).jsonp({
+              return res.status(401).jsonp({
                 status: true,
                 message: "Already in the SEND state",
                 authorization: resp.token,
@@ -3325,18 +2914,14 @@ exports.handlers = {
                   .jsonp({ status: false, message: "Bad request!" });
               });
 
-            // console.log("aw_tokens_avaliable", aw_tokens_avaliable)
-
             const output = [];
             const map = new Map();
             for (const item of aw_tokens_avaliable) {
               if (!map.has(mongoose.Types.ObjectId(item._id))) {
-                map.set(mongoose.Types.ObjectId(item._id), true); // set any value to Map
+                map.set(mongoose.Types.ObjectId(item._id), true);
                 output.push(mongoose.Types.ObjectId(item._id));
               }
             }
-
-            // console.log("output", output)
 
             await aw_tokens.deleteMany({ _id: { $in: output } }).catch((ex) => {
               loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`);
@@ -3559,9 +3144,6 @@ exports.handlers = {
                   .jsonp({ status: false, message: "Bad request!" });
               });
 
-            // console.log("aw_tokens_avaliable", aw_tokens_avaliable)
-            // console.log("update_aw_tokens_avaliable", update_aw_tokens_avaliable)
-
             var transferred_tokens_avaliable = await transferred_tokens
               .find({
                 _awareid: req.headers.awareid,
@@ -3578,7 +3160,6 @@ exports.handlers = {
             var jsonData = [];
 
             if (aw_tokens_avaliable.length <= 0) {
-              // return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
             } else {
               var assets_avaliable = await physical_assets
                 .find({})
@@ -3631,7 +3212,6 @@ exports.handlers = {
                     .jsonp({ status: false, message: "Bad request!" });
                 });
 
-              // var jsonData = [];
               for (var i = 0; i < aw_tokens_avaliable.length; i++) {
                 var temp_aw_token = aw_tokens_avaliable[i];
 
@@ -3685,8 +3265,6 @@ exports.handlers = {
                       ? temp_transaction_history_avaliable
                       : null,
                   transaction_type: "created",
-
-                  // "historical_data": h_assets_avaliable ? {'assets_avaliable': h_assets_avaliable, 'tracer_avaliable': h_tracer_avaliable, 'self_validation_avaliable' : h_self_validation_avaliable, 'company_compliances_avaliable': h_company_compliances_avaliable} : null
                 };
 
                 jsonData.push(jsonObject);
@@ -3694,7 +3272,6 @@ exports.handlers = {
             }
 
             if (update_aw_tokens_avaliable.length <= 0) {
-              // return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
             } else {
               var selected_update_aware_token_avaliable =
                 await selected_update_aware_token.find({}).catch((ex) => {
@@ -3759,7 +3336,6 @@ exports.handlers = {
                     .jsonp({ status: false, message: "Bad request!" });
                 });
 
-              // var jsonData = [];
               for (var i = 0; i < update_aw_tokens_avaliable.length; i++) {
                 var temp_aw_token = update_aw_tokens_avaliable[i];
 
@@ -3824,7 +3400,6 @@ exports.handlers = {
                       ? temp_transaction_history_avaliable
                       : null,
                   transaction_type: "updated",
-                  // "historical_data": h_assets_avaliable ? {'assets_avaliable': h_assets_avaliable, 'tracer_avaliable': h_tracer_avaliable, 'self_validation_avaliable' : h_self_validation_avaliable, 'company_compliances_avaliable': h_company_compliances_avaliable} : null
                 };
 
                 jsonData.push(jsonObject);
@@ -3832,13 +3407,9 @@ exports.handlers = {
             }
 
             if (transferred_tokens_avaliable.length <= 0) {
-              // return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
             } else {
-              // var jsonData = [];
               for (var i = 0; i < transferred_tokens_avaliable.length; i++) {
                 var temp_transferred_token = transferred_tokens_avaliable[i];
-
-                // console.log("temp_transferred_token", temp_transferred_token)
 
                 if (temp_transferred_token.token_base_type == "initiated") {
                   var temp_assets_avaliable = await physical_assets
@@ -3905,8 +3476,6 @@ exports.handlers = {
                           .jsonp({ status: false, message: "Bad request!" });
                       });
 
-                  // var temp_company_compliances_avaliable = await transaction_history.findOne({ _id: temp_transferred_token.historical_company_compliances_id }).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-
                   var jsonObject = {
                     aw_tokens: null,
                     transferred_token: temp_transferred_token,
@@ -3928,7 +3497,6 @@ exports.handlers = {
                         ? temp_transaction_history_avaliable
                         : null,
                     transaction_type: "transferred",
-                    // "historical_data": h_assets_avaliable ? {'assets_avaliable': h_assets_avaliable, 'tracer_avaliable': h_tracer_avaliable, 'self_validation_avaliable' : h_self_validation_avaliable, 'company_compliances_avaliable': h_company_compliances_avaliable} : null
                   };
                 } else {
                   var temp_aw_token = await update_aw_tokens
@@ -4017,8 +3585,6 @@ exports.handlers = {
                           .jsonp({ status: false, message: "Bad request!" });
                       });
 
-                  // var temp_company_compliances_avaliable = await transaction_history.findOne({ _id: temp_transferred_token.historical_company_compliances_id }).catch((ex) => { return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-
                   var jsonObject = {
                     update_aw_tokens: temp_aw_token,
                     transferred_token: temp_transferred_token,
@@ -4045,17 +3611,13 @@ exports.handlers = {
                         ? temp_transaction_history_avaliable
                         : null,
                     transaction_type: "transferred",
-                    // "historical_data": h_assets_avaliable ? {'assets_avaliable': h_assets_avaliable, 'tracer_avaliable': h_tracer_avaliable, 'self_validation_avaliable' : h_self_validation_avaliable, 'company_compliances_avaliable': h_company_compliances_avaliable} : null
                   };
                 }
 
                 jsonData.push(jsonObject);
               }
-
-              // console.log("jsonObject",jsonData)
             }
 
-            // console.log("jsonData", jsonData)
             return res.status(200).jsonp({
               status: true,
               data: jsonData,
@@ -4076,9 +3638,7 @@ exports.handlers = {
 
     if (!errors.isEmpty()) {
       return res.status(422).jsonp(errors.array());
-    }
-    // jvj
-    else {
+    } else {
       if (
         !req.headers.userid ||
         !req.headers.username ||
@@ -4175,17 +3735,14 @@ exports.handlers = {
 
             var full_name = "";
 
-            if (self_validation_avaliable.sustainble_material.length > 0) {
+            if (self_validation_avaliable?.sustainble_material?.length > 0) {
               full_name =
                 self_validation_avaliable?.sustainble_material?.slice(-1)[0]
                   .validateInfo?.fullname;
             } else {
               full_name = "N/A";
             }
-            // if (!assets_avaliable || !tracer_avaliable || !self_validation_avaliable || !company_compliances_avaliable || !kyc_details_avaliable) {
-            //   return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
-            // }
-            // else {
+
             return res.status(200).jsonp({
               status: true,
               data: {
@@ -4200,13 +3757,6 @@ exports.handlers = {
               },
               authorization: resp.token,
             });
-
-            // // if (!assets_avaliable || !tracer_avaliable || !self_validation_avaliable || !company_compliances_avaliable || !kyc_details_avaliable) {
-            // //   return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
-            // // }
-            // // else {
-            // return res.status(200).jsonp({ status: true, data: { "assets_avaliable": assets_avaliable, "tracer_avaliable": tracer_avaliable, "self_validation_avaliable": self_validation_avaliable, "company_compliances_avaliable": company_compliances_avaliable, "kyc_details_avaliable": kyc_details_avaliable, "account_details_avaliable": account_details_avaliable }, authorization: resp.token });
-            // }
           } else {
             return res
               .status(resp.code)
@@ -4284,7 +3834,6 @@ exports.handlers = {
                 const productLine = productLinesAvailable.find(
                   (line) => line.po_id == order._id.toString()
                 );
-                // const totalProductLine = productLine ? productLine.product_line.length : 0;
 
                 let total_product_line =
                   productLine && productLine.product_line
@@ -4305,7 +3854,6 @@ exports.handlers = {
                 .status(200)
                 .jsonp({ status: true, data, authorization: resp.token });
             } catch (ex) {
-              // loggerhandler.logger.error(`${ex}`);
               return res
                 .status(400)
                 .jsonp({ status: false, message: ex.message });
@@ -4379,44 +3927,6 @@ exports.handlers = {
     }
   },
 
-  //Shivam chauhan
-
-  // getProductLineFromBrandAsync: async (req, res) => {
-
-  //   const errors = validationResult(req);
-
-  //   if (!errors.isEmpty()) {
-  //     return res.status(422).jsonp(errors.array())
-  //   }
-  //   else {
-
-  //     if (!req.headers.userid || !req.headers.username || !req.headers.authorization || !req.headers.awareid || !req.headers.po_id) {
-  //       return res.status(400).jsonp({ status: false, message: "Bad request!" });
-  //     }
-
-  //     var payload = { username: req.headers.username };
-  //     refresh(req.headers.authorization, req.headers.userid, payload, async function (resp) {
-  //       if (resp.status == true) {
-
-  //         var product_lines_avaliable = await product_lines.findOne({ _awareid: req.headers.awareid, po_id: req.headers.po_id ,deleted:false}).catch((ex) => { loggerhandler.logger.error(`${ex} ,email:${req.headers.email}`); return res.status(400).jsonp({ status: false, message: "Bad request!" }); })
-
-  //         if (!product_lines_avaliable) {
-  //           return res.status(200).jsonp({ status: true, data: null, authorization: resp.token });
-  //         }
-  //         else {
-  //           return res.status(200).jsonp({ status: true, data: product_lines_avaliable, authorization: resp.token });
-
-  //         }
-
-  //       }
-  //       else {
-  //         return res.status(resp.code).jsonp({ status: false, data: null, authorization: null });
-  //       }
-  //     });
-
-  //   }
-  // },
-
   getProductLineFromBrandAsync: async (req, res) => {
     const errors = validationResult(req);
 
@@ -4442,14 +3952,6 @@ exports.handlers = {
         payload,
         async function (resp) {
           if (resp.status == true) {
-            // var product_lines_avaliable = await product_lines.findOne({
-            //   _awareid: req.headers.awareid,
-            //   po_id: req.headers.po_id,
-            //   deleted: false,
-            //   'product_line.deleted': false,
-            //   // product_line: { $elemMatch: { deleted: false } }
-            // });
-
             var product_lines_avaliable = await product_lines
               .findOne({
                 _awareid: req.headers.awareid,
@@ -4473,7 +3975,6 @@ exports.handlers = {
 
             let product = product_lines_avaliable.toObject();
 
-            // Fetch and add historical tokens to product lines if available
             await Promise.all(
               product.product_line.map(async (e) => {
                 if (e.update_aware_token_id) {
@@ -4501,15 +4002,13 @@ exports.handlers = {
             );
             console.log("product.product_line", product);
 
-            // Filter product_line where deleted is false
             let final_data = {
-              ...product, // Spread the existing product data to maintain other fields like _id, _awareid, etc.
+              ...product,
               product_line: product.product_line.filter(
                 (item) => item.deleted == false
-              ), // Filter product_line where deleted is false
+              ),
             };
 
-            // console.log("final_data1", final_data, final_data.length);
             console.log(
               "final_data.length2",
               typeof final_data,
@@ -4521,9 +4020,6 @@ exports.handlers = {
               data: final_data,
               authorization: resp.token,
             });
-            // else {
-            //   return res.status(200).jsonp({ status: true, data: product_lines_avaliable, authorization: resp.token });
-            // }
           } else {
             return res
               .status(resp.code)
@@ -4543,7 +4039,6 @@ exports.handlers = {
       const exemptedEmails = await exempted_email.find({});
       const emails = exemptedEmails.map((account) => account.email);
 
-      // Fetch accounts available
       var accounts_avaliable = await account_details.find({
         is_deleted: { $ne: true },
         role_id: { $ne: 1 },
@@ -4551,7 +4046,6 @@ exports.handlers = {
       });
       var kyc_ids = accounts_avaliable.map((account) => account.kyc_id);
 
-      // Fetch KYC details
       var kyc_Details = await kyc_details.find({
         _id: { $in: kyc_ids },
         is_deleted: { $ne: true },
@@ -4725,7 +4219,6 @@ exports.handlers = {
       async function (resp) {
         if (resp.status == true) {
           try {
-            // Validate required headers
             if (!req.headers.token_id) {
               return res.status(400).jsonp({
                 status: false,
@@ -4744,7 +4237,6 @@ exports.handlers = {
             const sendtokenId = req.headers.token_id;
             const selectedTokenId = req.headers.selected_token_id;
 
-            // Get receiver data
             const receiverData = await getReceiverData(sendtokenId);
             if (!receiverData.success) {
               return res.status(400).jsonp({
@@ -4754,7 +4246,6 @@ exports.handlers = {
               });
             }
 
-            // Since selectedTokenId is always one, find it directly
             let selectedToken;
             if (
               receiverData.data.selected_aware_token &&
@@ -4774,7 +4265,6 @@ exports.handlers = {
               });
             }
 
-            // Get token ID from the selected token respecting both cases
             const tokenId = selectedToken.aware_token_id
               ? selectedToken.aware_token_id
               : selectedToken.update_aware_token_id;
@@ -4786,8 +4276,22 @@ exports.handlers = {
               });
             }
 
-            // Build traceability tree for the token
-            const hierarchicalData = await buildTraceabilityTree(tokenId);
+            const transferredToken = receiverData.data.transferredTokens.find(
+              (token) =>
+                (token.historical_update_aware_token_id &&
+                  token.historical_update_aware_token_id.toString() ===
+                    tokenId.toString()) ||
+                (token.historical_aware_token_id &&
+                  token.historical_aware_token_id.toString() ===
+                    tokenId.toString())
+            );
+
+            const hierarchicalData = await buildTraceabilityTree(
+              tokenId,
+              0,
+              10,
+              transferredToken
+            );
             if (!hierarchicalData) {
               return res.status(404).jsonp({
                 status: false,
@@ -4796,7 +4300,6 @@ exports.handlers = {
               });
             }
 
-            // Flatten the tree using a helper function
             const flattenedData = [];
             function flattenTree(node, level = 1) {
               if (!node) return;
@@ -4808,9 +4311,9 @@ exports.handlers = {
             }
             flattenTree(hierarchicalData);
 
-            // Add receiver data as the root (level 0)
             const levelZeroData = {
               kycDetails: receiverData.data.kycDetails,
+              wallet: receiverData.data.wallet,
               sendAwToken: receiverData.data.send_aw_token,
               selectedAwareToken: receiverData.data.selected_aware_token,
               selectedReceiver: receiverData.data.selected_receiver,
@@ -4818,26 +4321,17 @@ exports.handlers = {
             };
             flattenedData.unshift(levelZeroData);
 
-            // For level 1 items, add extra information
             flattenedData.forEach((item) => {
               if (item.level === 1) {
                 item.transactionCertificate =
                   receiverData.data.transactionCertificate;
                 item.proofOfDelivery = receiverData.data.proofOfDelivery;
-                item.transferredToken =
-                  receiverData.data.transferredTokens.find(
-                    (token) =>
-                      (token.historical_update_aware_token_id &&
-                        token.historical_update_aware_token_id.toString() ===
-                          item.tokenId.toString()) ||
-                      (token.historical_aware_token_id &&
-                        token.historical_aware_token_id.toString() ===
-                          item.tokenId.toString())
-                  );
+                item.selectedAwareToken =
+                  receiverData.data.selected_aware_token;
+                item.transferredToken = transferredToken;
               }
             });
 
-            // Sort by level
             flattenedData.sort((a, b) => a.level - b.level);
             return res.status(200).jsonp({
               status: true,
@@ -4880,7 +4374,6 @@ exports.handlers = {
       async function (resp) {
         if (resp.status == true) {
           try {
-            // Validate token ID and role ID in request headers
             if (!req.headers.aware_token_id || !req.headers.role_id) {
               return res.status(400).jsonp({
                 status: false,
@@ -4892,58 +4385,53 @@ exports.handlers = {
             const initialTokenId = req.headers.aware_token_id;
             const requestRoleId = parseInt(req.headers.role_id, 10);
 
-            // Get all role definitions
             const roles = await user_role.find({}).sort({ role_id: 1 });
 
-            // Create a mapping of role_id to level based on the request role_id
             const roleLevels = {};
 
-            // Assign levels based on the requestRoleId
             if (requestRoleId === 2) {
-              roleLevels[2] = 1; // Pellet Compounder - level 1
-              roleLevels[3] = 0; // Fiber Producer - not in this chain
-              roleLevels[4] = 2; // Yarn Producer - level 2
-              roleLevels[5] = 3; // Fabric Producer - level 3
-              roleLevels[6] = 4; // Product Producer - level 4
-              roleLevels[7] = 5; // Final Brand - level 5
+              roleLevels[2] = 1;
+              roleLevels[3] = 0;
+              roleLevels[4] = 2;
+              roleLevels[5] = 3;
+              roleLevels[6] = 4;
+              roleLevels[7] = 5;
             } else if (requestRoleId === 3) {
-              roleLevels[2] = 0; // Pellet Compounder - not in this chain
-              roleLevels[3] = 1; // Fiber Producer - level 1
-              roleLevels[4] = 2; // Yarn Producer - level 2
-              roleLevels[5] = 3; // Fabric Producer - level 3
-              roleLevels[6] = 4; // Product Producer - level 4
-              roleLevels[7] = 5; // Final Brand - level 5
+              roleLevels[2] = 0;
+              roleLevels[3] = 1;
+              roleLevels[4] = 2;
+              roleLevels[5] = 3;
+              roleLevels[6] = 4;
+              roleLevels[7] = 5;
             } else if (requestRoleId === 4) {
-              roleLevels[2] = 0; // Pellet Compounder - not in this chain
-              roleLevels[3] = 0; // Fiber Producer - not in this chain
-              roleLevels[4] = 1; // Yarn Producer - level 1
-              roleLevels[5] = 2; // Fabric Producer - level 2
-              roleLevels[6] = 3; // Product Producer - level 3
-              roleLevels[7] = 4; // Final Brand - level 4
+              roleLevels[2] = 0;
+              roleLevels[3] = 0;
+              roleLevels[4] = 1;
+              roleLevels[5] = 2;
+              roleLevels[6] = 3;
+              roleLevels[7] = 4;
             } else if (requestRoleId === 5) {
-              roleLevels[2] = 0; // Pellet Compounder - not in this chain
-              roleLevels[3] = 0; // Fiber Producer - not in this chain
-              roleLevels[4] = 0; // Yarn Producer - not in this chain
-              roleLevels[5] = 1; // Fabric Producer - level 1
-              roleLevels[6] = 2; // Product Producer - level 2
-              roleLevels[7] = 3; // Final Brand - level 3
+              roleLevels[2] = 0;
+              roleLevels[3] = 0;
+              roleLevels[4] = 0;
+              roleLevels[5] = 1;
+              roleLevels[6] = 2;
+              roleLevels[7] = 3;
             } else if (requestRoleId === 6) {
-              roleLevels[2] = 0; // Pellet Compounder - not in this chain
-              roleLevels[3] = 0; // Fiber Producer - not in this chain
-              roleLevels[4] = 0; // Yarn Producer - not in this chain
-              roleLevels[5] = 0; // Fabric Producer - not in this chain
-              roleLevels[6] = 1; // Product Producer - level 1
-              roleLevels[7] = 2; // Final Brand - level 2
+              roleLevels[2] = 0;
+              roleLevels[3] = 0;
+              roleLevels[4] = 0;
+              roleLevels[5] = 0;
+              roleLevels[6] = 1;
+              roleLevels[7] = 2;
             } else if (requestRoleId === 7) {
-              roleLevels[2] = 0; // Pellet Compounder - not in this chain
-              roleLevels[3] = 0; // Fiber Producer - not in this chain
-              roleLevels[4] = 0; // Yarn Producer - not in this chain
-              roleLevels[5] = 0; // Fabric Producer - not in this chain
-              roleLevels[6] = 0; // Product Producer - not in this chain
-              roleLevels[7] = 1; // Final Brand - level 1
-            }
-            // Default case - for administrators, production managers, or any unspecified role
-            else {
+              roleLevels[2] = 0;
+              roleLevels[3] = 0;
+              roleLevels[4] = 0;
+              roleLevels[5] = 0;
+              roleLevels[6] = 0;
+              roleLevels[7] = 1;
+            } else {
               roleLevels[2] = 1;
               roleLevels[3] = 1;
               roleLevels[4] = 2;
@@ -4952,48 +4440,29 @@ exports.handlers = {
               roleLevels[7] = 5;
             }
 
-            // Always ensure Administrator and Production Manager are level 0
-            roleLevels[1] = 0; // Administrator is always level 0
-            roleLevels[10] = 0; // Production Manager is always level 0
+            roleLevels[1] = 0;
+            roleLevels[10] = 0;
 
-            // Create a mapping of role_id to role_name for reference
             const roleNames = {};
             roles.forEach((role) => {
               roleNames[role.role_id] = role.role_name;
             });
 
-            // Determine if the token is in aw_tokens or update_aw_tokens
             let initialToken = await aw_tokens.findOne({
               _id: mongoose.Types.ObjectId(initialTokenId),
             });
             let initialIsUpdateToken = false;
 
             if (!initialToken) {
-              initialToken = await update_aw_tokens.findOne({
-                _id: mongoose.Types.ObjectId(initialTokenId),
+              return res.status(404).jsonp({
+                status: false,
+                message: "Token not found",
+                authorization: resp.token,
               });
-              initialIsUpdateToken = true;
-
-              if (!initialToken) {
-                return res.status(404).jsonp({
-                  status: false,
-                  message:
-                    "Token not found in either aw_tokens or update_aw_tokens",
-                  authorization: resp.token,
-                });
-              }
             }
 
-            // Get asset ID for token info
             let assetId = null;
-            if (initialIsUpdateToken) {
-              const asset = await update_physical_asset
-                .findOne({ update_aware_token_id: initialTokenId })
-                .select("updated_aware_asset_id");
-              if (asset) {
-                assetId = asset.updated_aware_asset_id;
-              }
-            } else {
+            if (!initialIsUpdateToken) {
               const asset = await physical_assets
                 .findOne({ aware_token_id: initialTokenId })
                 .select("aware_asset_id");
@@ -5002,27 +4471,23 @@ exports.handlers = {
               }
             }
 
-            const nodes = new Map(); // Use Map for unique nodes
+            const nodes = new Map();
             const links = [];
-            const processedTokens = new Set(); // Track processed tokens to avoid cycles
+            const processedTokens = new Set();
 
-            // Queue for breadth-first search traversal
             const queue = [
               { tokenId: initialTokenId, isUpdateToken: initialIsUpdateToken },
             ];
 
-            // Process tokens using BFS
             while (queue.length > 0) {
               const { tokenId, isUpdateToken } = queue.shift();
 
-              // Skip if already processed
               if (processedTokens.has(tokenId.toString())) {
                 continue;
               }
 
               processedTokens.add(tokenId.toString());
 
-              // Find token in either aw_tokens or update_aw_tokens collection
               let token = isUpdateToken
                 ? await update_aw_tokens.findOne({
                     _id: mongoose.Types.ObjectId(tokenId),
@@ -5033,26 +4498,23 @@ exports.handlers = {
 
               if (!token) continue;
 
-              // Get the company that created/owns this token
               const companyKyc = await kyc_details
                 .findOne({ aware_id: token._awareid })
                 .select("company_name _id");
 
               if (!companyKyc) continue;
 
-              // Get account details to determine role
               const accountDetails = await account_details
                 .findOne({ kyc_id: companyKyc._id.toString() })
                 .select("role_id");
 
               if (!accountDetails) continue;
 
-              const companyRoleId = accountDetails.role_id;
+              const companyRoleId = accountDetails?.role_id;
               const companyRoleName =
                 roleNames[companyRoleId] || "Unknown Role";
               const companyLevel = roleLevels[companyRoleId] || 0;
 
-              // Add to nodes if not already present
               if (!nodes.has(companyKyc._id.toString())) {
                 nodes.set(companyKyc._id.toString(), {
                   id: companyKyc._id.toString(),
@@ -5063,7 +4525,6 @@ exports.handlers = {
                 });
               }
 
-              // Find transfers of this token
               const queryField = isUpdateToken
                 ? "historical_update_aware_token_id"
                 : "historical_aware_token_id";
@@ -5071,28 +4532,50 @@ exports.handlers = {
                 [queryField]: tokenId,
               });
 
-              // Process each transfer
               for (const transfer of transfers) {
-                // Get the company that received the token
                 const targetCompanyKyc = await kyc_details
                   .findOne({ aware_id: transfer._awareid })
-                  .select("company_name _id");
+                  .select("company_name _id aware_id");
 
                 if (!targetCompanyKyc) continue;
 
-                // Get target company's role
                 const targetAccountDetails = await account_details
                   .findOne({ kyc_id: targetCompanyKyc._id.toString() })
                   .select("role_id");
 
                 if (!targetAccountDetails) continue;
 
-                const targetRoleId = targetAccountDetails.role_id;
+                const targetRoleId = targetAccountDetails?.role_id;
                 const targetRoleName =
                   roleNames[targetRoleId] || "Unknown Role";
                 const targetLevel = roleLevels[targetRoleId] || 0;
+                const targetAwareId = targetCompanyKyc?.aware_id;
 
-                // Add target company to nodes if not already present
+                let productLinesData = null;
+                let poId = null;
+                let qrId = null;
+                let orderNumber = null;
+                let itemNumber = null;
+
+                if (targetRoleId == 7 && isUpdateToken) {
+                  productLinesData = await product_lines.findOne({
+                    _awareid: targetAwareId,
+                    "product_line.update_aware_token_id": token?._id,
+                  });
+
+                  if (productLinesData) {
+                    poId = productLinesData.po_id;
+
+                    productLinesData.product_line.map((e) => {
+                      if (e.update_aware_token_id == token?._id) {
+                        qrId = e?.id;
+                        orderNumber = e?.order_number;
+                        itemNumber = e?.item_number;
+                      }
+                    });
+                  }
+                }
+
                 if (!nodes.has(targetCompanyKyc._id.toString())) {
                   nodes.set(targetCompanyKyc._id.toString(), {
                     id: targetCompanyKyc._id.toString(),
@@ -5103,26 +4586,35 @@ exports.handlers = {
                   });
                 }
 
-                // Add link between companies
-                links.push({
+                const pushObj = {
                   source: companyKyc._id.toString(),
                   sourceName: companyKyc.company_name,
                   sourceRole: companyRoleName,
+                  sourceRoleId: companyRoleId,
                   sourceLevel: companyLevel,
                   target: targetCompanyKyc._id.toString(),
                   targetName: targetCompanyKyc.company_name,
                   targetRole: targetRoleName,
+                  targetRoleId: targetRoleId,
                   targetLevel: targetLevel,
                   value: transfer.total_tokens || 1,
                   tokenType: token.type_of_token || "Unknown",
-                });
+                };
 
-                // Check if this transferred token is used in any physical assets
+                if (poId && qrId) {
+                  pushObj.dppLink = `${
+                    process.env.PASSPORT_ADDRESS
+                  }${targetAwareId}-${poId}-${qrId.toLowerCase()}`;
+                  pushObj.orderNumber = orderNumber;
+                  pushObj.itemNumber = itemNumber;
+                }
+
+                links.push(pushObj);
+
                 const physicalAssets = await update_physical_asset.find({
                   "assetdataArrayMain.tt_id": transfer._id.toString(),
                 });
 
-                // Add subsequent tokens to the queue
                 for (const asset of physicalAssets) {
                   if (asset.update_aware_token_id) {
                     queue.push({
@@ -5134,12 +4626,10 @@ exports.handlers = {
               }
             }
 
-            // Sort nodes by level for better visualization
             const sortedNodes = Array.from(nodes.values()).sort(
               (a, b) => a.level - b.level
             );
 
-            // Group nodes by level
             const nodesByLevel = {};
             sortedNodes.forEach((node) => {
               if (!nodesByLevel[node.level]) {
@@ -5191,7 +4681,6 @@ exports.handlers = {
 
       const emails = exemptedEmails.map((account) => account.email);
 
-      // 1. Get accounts with specific role criteria (not 1, 7, 10 and sub_user is false)
       const accounts = await account_details
         .find({
           is_deleted: { $ne: true },
@@ -5209,12 +4698,10 @@ exports.handlers = {
         });
       }
 
-      // Extract kyc_ids
       const kycIds = accounts.map((account) => account.kyc_id).filter(Boolean);
 
       console.log("kycIds.length", kycIds.length);
 
-      // Create a map of accounts for quick lookups (kyc_id -> role_id)
       const accountMap = {};
       accounts.forEach((account) => {
         if (account.kyc_id) {
@@ -5222,7 +4709,6 @@ exports.handlers = {
         }
       });
 
-      // 2. Find kyc_details for these accounts
       const kycDetails = await kyc_details.find({
         _id: { $in: kycIds },
         is_deleted: { $ne: true },
@@ -5230,16 +4716,13 @@ exports.handlers = {
 
       console.log("kycDetails", kycDetails.length);
 
-      // Get all user roles to map role_id to role_name
       const roles = await user_role.find({});
 
-      // Create a role map for quick lookups (role_id -> role_name)
       const roleMap = {};
       roles.forEach((role) => {
         roleMap[role.role_id] = role.role_name;
       });
 
-      // Create a map of kyc details for quick lookups
       const kycMap = {};
       let cnt = 0;
       let insideCnt = 0;
@@ -5265,9 +4748,7 @@ exports.handlers = {
       console.log("noAwareIdInKycObjectsId", noAwareIdInKycObjectsId);
 
       console.log("kycMap Length", Object.keys(kycMap).length);
-      // console.log("kcyMap", kycMap);
 
-      // Extract aware_ids
       const awareIds = Object.keys(kycMap);
 
       if (!awareIds.length) {
@@ -5277,7 +4758,6 @@ exports.handlers = {
         });
       }
 
-      // 3. Get token information - find approved tokens
       const [awTokens, updateAwTokens] = await Promise.all([
         aw_tokens
           .find({
@@ -5294,7 +4774,6 @@ exports.handlers = {
           .select("_awareid total_tokens"),
       ]);
 
-      // Calculate total minted tokens per aware_id
       const mintedTokensMap = {};
       awareIds.forEach((id) => (mintedTokensMap[id] = 0));
 
@@ -5310,13 +4789,11 @@ exports.handlers = {
         }
       });
 
-      // 4 & 5. Get transfers and related data
       const [outgoingTransfers, incomingTransfers] = await Promise.all([
         selected_receiver.find({ _awareid: { $in: awareIds } }),
         selected_receiver.find({ _receiver_awareid: { $in: awareIds } }),
       ]);
 
-      // Get all send_aware_token_ids
       const sendAwareTokenIds = [
         ...new Set([
           ...outgoingTransfers.map((t) => t.send_aware_token_id),
@@ -5324,14 +4801,12 @@ exports.handlers = {
         ]),
       ].filter(Boolean);
 
-      // Get all token information
       const tokenInfo = await selected_aware_token
         .find({
           send_aware_token_id: { $in: sendAwareTokenIds },
         })
         .select("send_aware_token_id selected_tokens");
 
-      // Create a map of token amounts
       const tokenAmountMap = {};
       tokenInfo.forEach((info) => {
         if (!info.send_aware_token_id) return;
@@ -5350,7 +4825,6 @@ exports.handlers = {
         tokenAmountMap[info.send_aware_token_id] = totalTokens;
       });
 
-      // Get all unique aware_ids from transfers
       const relatedAwareIds = [
         ...new Set([
           ...outgoingTransfers.map((t) => t._receiver_awareid),
@@ -5358,7 +4832,6 @@ exports.handlers = {
         ]),
       ].filter(Boolean);
 
-      // Get company names for related aware_ids
       const relatedKyc = await kyc_details
         .find({
           aware_id: { $in: relatedAwareIds },
@@ -5372,7 +4845,6 @@ exports.handlers = {
         }
       });
 
-      // Process outgoing transfers
       const outgoingMap = {};
       outgoingTransfers.forEach((transfer) => {
         const { _awareid, _receiver_awareid, send_aware_token_id } = transfer;
@@ -5395,7 +4867,6 @@ exports.handlers = {
         outgoingMap[_awareid][_receiver_awareid].total_tokens += amount;
       });
 
-      // Process incoming transfers
       const incomingMap = {};
       incomingTransfers.forEach((transfer) => {
         const { _awareid, _receiver_awareid, send_aware_token_id } = transfer;
@@ -5418,16 +4889,13 @@ exports.handlers = {
         incomingMap[_receiver_awareid][_awareid].total_tokens += amount;
       });
 
-      // Combine all data
       const result = awareIds.map((awareId) => {
         const kyc = kycMap[awareId];
         const companyData = {};
 
-        // Only add fields that exist or use defaults specified
         companyData.company_name = kyc.company_name || "Unknown";
         companyData.aware_id = awareId;
 
-        // Add role information
         const roleId = accountMap[kyc._id.toString()] || null;
         companyData.role = roleMap[roleId] || "Unknown";
 
@@ -5435,7 +4903,6 @@ exports.handlers = {
           companyData.website = kyc.website;
         }
 
-        // Build address dynamically using only existing parts
         const addressParts = [];
         if (kyc.address_line_one) addressParts.push(kyc.address_line_one);
         if (kyc.address_line_two) addressParts.push(kyc.address_line_two);
@@ -5448,7 +4915,6 @@ exports.handlers = {
           companyData.address = addressParts.join(", ");
         }
 
-        // Properly handle geo_location using map instead of forEach
         if (
           kyc.geo_location &&
           Array.isArray(kyc.geo_location) &&
@@ -5495,93 +4961,6 @@ exports.handlers = {
     if (!errors.isEmpty()) {
       return res.status(422).jsonp(errors.array());
     } else {
-      // const response = await transaction_history.aggregate({
-      //   $match: {
-      //     createdAt: {
-      //       $gte: new Date("2016-01-01")
-      //     }
-      //   }
-      // }, {
-      //   $group: {
-      //     _id: {
-      //       "year":  { "$year": "$createdAt" },
-      //       "month": { "$month": "$createdAt" },
-      //       "day":   { "$dayOfMonth": "$createdAt" }
-      //     },
-      //     count:{$sum: 1}
-      //   }
-      // }).exec(function(err,data){
-      //   if (err) {
-      //     console.log('Error Fetching model');
-      //     console.log(err);
-      //   } else {
-      //     console.log(data);
-      //   }
-      // });
-      // console.log("response",response)
-      // const exemptedEmails = await exempted_email.find({});
-      // const emails = exemptedEmails.map((account) => account.email);
-      // // Fetch accounts available
-      // var accounts_avaliable = await account_details.find({ is_deleted: { $ne: true }, role_id: { $ne: 1 }, email: { $nin: emails } });
-      // var kyc_ids = accounts_avaliable.map((account) => account.kyc_id);
-      // // Fetch KYC details
-      // var kyc_Details = await kyc_details.find({ _id: { $in: kyc_ids }, is_deleted: { $ne: true } });
-      // var aware_ids = kyc_Details.map((kyc) => kyc.aware_id);
-      // var [
-      //   aw_tokens_found,
-      //   update_aw_tokens_found,
-      //   transferred_tokens_avaliable,
-      //   transaction_history_avalible,
-      //   roles,
-      // ] = await Promise.all([
-      //   aw_tokens.find({ _awareid: { $in: aware_ids }, hide_flag: { $ne: true } }),
-      //   update_aw_tokens.find({ _awareid: { $in: aware_ids } }),
-      //   transferred_tokens.find({ _awareid: { $in: aware_ids } }),
-      //   transaction_history.find({ _awareid: { $in: aware_ids } }),
-      //   user_role.find({}),
-      // ]);
-      // console.log("aw_tokens_found", aw_tokens_found.length)
-      // // console.log("roles",roles)
-      // var dataset = [];
-      // kyc_Details.forEach((kyc) => {
-      //   var account_found = accounts_avaliable.find((x) => x.kyc_id == kyc._id);
-      //   if (account_found) {
-      //     const type_of_producer = roles.find((x) => x.role_id == account_found.role_id).role_name;
-      //     var t1 = [];
-      //     var t2 = [];
-      //     var t3 = [];
-      //     var retrived_aw_tokens = aw_tokens_found.filter((x) => x._awareid == kyc.aware_id).map((y) => y._id);
-      //     if (retrived_aw_tokens.length > 0) {
-      //       const ft1 = transaction_history_avalible.filter((transaction) =>
-      //         retrived_aw_tokens.includes(mongoose.Types.ObjectId(transaction.aware_token_id))
-      //       );
-      //       // t1.push(ft1)
-      //       console.log("t1", ft1.length);
-      //     }
-      //     const retrived_update_aw_tokens = update_aw_tokens_found.filter((x) => x._awareid == kyc.aware_id).map((y) => y._id);
-      //     if (retrived_update_aw_tokens.length > 0) {
-      //       t1 = transaction_history_avalible.filter((transaction) =>
-      //         retrived_update_aw_tokens.includes(transaction.update_aware_token_id)
-      //       );
-      //     }
-      //     const retrived_transferred_tokens_avaliable = transferred_tokens_avaliable.filter((x) => x._awareid == kyc.aware_id);
-      //     if (retrived_transferred_tokens_avaliable.length > 0) {
-      //       // t3 = transaction_history_avalible.find((x) => x.update_aware_token_id == retrived_transferred_tokens_avaliable._id.toString());
-      //       t3 = transaction_history_avalible.filter((transaction) =>
-      //         retrived_transferred_tokens_avaliable.includes(transaction.update_aware_token_id)
-      //       );
-      //     }
-      //     if (kyc.aware_id) {
-      //       dataset.push({
-      //         company_name: kyc.company_name,
-      //         type_of_producer,
-      //         t1,
-      //         t2, t3
-      //       });
-      //     }
-      //   }
-      // });
-      // return res.status(200).jsonp({ status: true, data: { dataset } });
     }
   },
 };
@@ -5593,19 +4972,15 @@ function escapeRegExp(string) {
 function flattenTree(node, flattenedData, level = 1) {
   if (!node) return;
 
-  // Create a copy of the node without the children property
   const { children, ...nodeWithoutChildren } = node;
 
-  // Add level indicator to the node
   const flatNode = {
     ...nodeWithoutChildren,
     level,
   };
 
-  // Add the node to our flattened array
   flattenedData.push(flatNode);
 
-  // Process all children
   if (children && Array.isArray(children)) {
     children.forEach((child) => flattenTree(child, flattenedData, level + 1));
   }
@@ -5613,7 +4988,6 @@ function flattenTree(node, flattenedData, level = 1) {
 
 async function getReceiverData(tokenId) {
   try {
-    // Get the send_aw_tokens record
     const sendAwToken = await send_aw_tokens.findOne({
       _id: mongoose.Types.ObjectId(tokenId),
     });
@@ -5626,11 +5000,10 @@ async function getReceiverData(tokenId) {
       return { success: false, message: "Token has CONCEPT status" };
     }
 
-    // Get the selected_aware_token data - this contains the tokens we need
     const selectedAwareToken = await selected_aware_token.findOne({
       send_aware_token_id: tokenId,
     });
-    // Ensure we have selected tokens
+
     if (
       !selectedAwareToken.selected_tokens ||
       selectedAwareToken.selected_tokens.length === 0
@@ -5638,7 +5011,6 @@ async function getReceiverData(tokenId) {
       return { success: false, message: "No selected tokens found" };
     }
 
-    // Get the selected_receiver data if needed for context
     const selectedReceiver = await selected_receiver.findOne({
       send_aware_token_id: tokenId,
     });
@@ -5647,12 +5019,18 @@ async function getReceiverData(tokenId) {
       return { success: false, message: "No selected receiver data found" };
     }
 
-    // Get basic KYC details if receiver exists
     let receiverKycDetails = null;
+    let walletData = null;
     if (selectedReceiver && selectedReceiver._receiver_awareid) {
       receiverKycDetails = await kyc_details.findOne({
         aware_id: selectedReceiver._receiver_awareid,
       });
+
+      walletData = await wallets
+        .findOne({
+          _awareid: selectedReceiver._receiver_awareid,
+        })
+        .select("wallet_address_io");
     }
 
     const transactionCertificateData =
@@ -5667,7 +5045,7 @@ async function getReceiverData(tokenId) {
     const transferredTokensData = await transferred_tokens.find({
       historical_send_aw_tokens_id: tokenId,
     });
-    // Combine the required data
+
     return {
       success: true,
       data: {
@@ -5678,6 +5056,7 @@ async function getReceiverData(tokenId) {
         proofOfDelivery: proofOfDeliveryData,
         kycDetails: receiverKycDetails,
         transferredTokens: transferredTokensData,
+        wallet: walletData,
         level: 0,
       },
     };
@@ -5699,13 +5078,11 @@ async function buildTraceabilityTree(
   maxDepth = 10,
   transferredToken = null
 ) {
-  // Prevent infinite recursion
   if (depth >= maxDepth) {
     return null;
   }
 
   try {
-    // Try to find token in aw_tokens first
     let tokenData = await aw_tokens.findOne({
       _id: mongoose.Types.ObjectId(tokenId),
     });
@@ -5718,8 +5095,8 @@ async function buildTraceabilityTree(
     let transactionCertificateData = null;
     let proofOfDeliveryData = null;
     let selectedUpdateAwareTokenData = null;
+    let selectedAwareTokenDataWhileSending = null;
 
-    // If not found in aw_tokens, try update_aw_tokens
     if (!tokenData) {
       tokenData = await update_aw_tokens.findOne({
         _id: mongoose.Types.ObjectId(tokenId),
@@ -5734,17 +5111,22 @@ async function buildTraceabilityTree(
     }
 
     const kycDetailsData = await kyc_details.findOne({
-      aware_id: tokenData._awareid,
+      aware_id: tokenData?._awareid,
     });
 
-    // Get physical asset data
+    const walledData = await wallets
+      .findOne({
+        _awareid: tokenData?._awareid,
+      })
+      .select("wallet_address_io");
+
     if (isUpdateToken) {
       assetData = await update_physical_asset.findOne({
         update_aware_token_id: tokenId,
       });
 
       transactionHistory = await transaction_history.findOne({
-        _awareid: tokenData._awareid,
+        _awareid: tokenData?._awareid,
         update_aware_token_id: tokenId,
       });
 
@@ -5769,11 +5151,11 @@ async function buildTraceabilityTree(
       });
 
       transactionHistory = await transaction_history.findOne({
-        _awareid: tokenData._awareid,
+        _awareid: tokenData?._awareid,
         aware_token_id: tokenId,
       });
 
-      tracerData = await update_tracer.findOne({
+      tracerData = await tracer.findOne({
         aware_token_id: tokenId,
       });
 
@@ -5815,27 +5197,35 @@ async function buildTraceabilityTree(
           _id: transferredToken.historical_selected_proof_of_deliveries_id,
         });
       }
+
+      if (
+        transferredToken &&
+        transferredToken.historical_selected_aware_tokens_id !== null
+      ) {
+        selectedAwareTokenDataWhileSending = await selected_aware_token.findOne(
+          {
+            _id: mongoose.Types.ObjectId(
+              transferredToken.historical_selected_aware_tokens_id
+            ),
+          }
+        );
+      }
     }
 
-    // Process transferred tokens as children
     const transferredTokensData = [];
 
-    // Check if assetData and assetdataArrayMain exist
     if (
       assetData &&
       assetData.assetdataArrayMain &&
       Array.isArray(assetData.assetdataArrayMain)
     ) {
-      // Process each item in assetdataArrayMain
       for (const assetItem of assetData.assetdataArrayMain) {
         if (assetItem.tt_id) {
-          // Find the transferred token using tt_id
           const transferredToken = await transferred_tokens.findOne({
             _id: mongoose.Types.ObjectId(assetItem.tt_id),
           });
 
           if (transferredToken) {
-            // Determine which token ID to use based on token_base_type
             let historicalTokenId = null;
 
             if (transferredToken.token_base_type === "initiated") {
@@ -5845,20 +5235,18 @@ async function buildTraceabilityTree(
                 transferredToken.historical_update_aware_token_id;
             }
 
-            // If we have a valid historical token ID, build its tree
             if (historicalTokenId) {
               const historicalTokenData = await buildTraceabilityTree(
                 historicalTokenId,
                 depth + 1,
                 maxDepth,
-                transferredToken // Pass the transferredToken to include it in the child node
+                transferredToken
               );
 
               if (historicalTokenData) {
                 transferredTokensData.push(historicalTokenData);
               }
             } else {
-              // Add the transferred token as a leaf node if no historical token ID
               transferredTokensData.push({
                 transferredToken,
                 level: depth + 1,
@@ -5870,6 +5258,36 @@ async function buildTraceabilityTree(
       }
     }
 
+    if (selectedUpdateAwareTokenData && assetData) {
+      assetData = assetData.toObject ? assetData.toObject() : { ...assetData };
+
+      if (
+        selectedUpdateAwareTokenData?.value_chain_process_main !== undefined
+      ) {
+        assetData.value_chain_process_main =
+          selectedUpdateAwareTokenData.value_chain_process_main;
+      }
+
+      if (selectedUpdateAwareTokenData?.value_chain_process_sub !== undefined) {
+        assetData.value_chain_process_sub =
+          selectedUpdateAwareTokenData.value_chain_process_sub;
+      }
+
+      if (
+        selectedUpdateAwareTokenData &&
+        selectedUpdateAwareTokenData.production_facility !== undefined
+      ) {
+        assetData.production_facility =
+          selectedUpdateAwareTokenData.production_facility;
+      }
+
+      console.log(
+        "Updated assetData:",
+        assetData.value_chain_process_main,
+        assetData.value_chain_process_sub
+      );
+    }
+
     const result = {
       tokenId: tokenId,
       tokenType: isUpdateToken ? "update_token" : "create_token",
@@ -5878,14 +5296,13 @@ async function buildTraceabilityTree(
       transactionHistory: transactionHistory,
       receiverTransactionHistory: receiverTransactionHistory,
       kycDetails: kycDetailsData,
+      wallet: walledData,
       tracer: tracerData,
       companyCompliance: companyComplianceData,
       selfValidation: selfValidationData,
-      selectedUpdateAwareToken: selectedUpdateAwareTokenData,
-      children: transferredTokensData, // Include transferred tokens as children
+      children: transferredTokensData,
     };
 
-    // Only include transferredToken if it was provided
     if (transferredToken) {
       result.transferredToken = transferredToken;
     }
@@ -5893,9 +5310,9 @@ async function buildTraceabilityTree(
     if (depth !== 0) {
       result.transactionCertificate = transactionCertificateData;
       result.proofOfDelivery = proofOfDeliveryData;
+      result.selectedAwareToken = selectedAwareTokenDataWhileSending;
     }
 
-    // Add level as the last property to ensure it appears at the end
     result.level = depth;
 
     return result;
@@ -5921,7 +5338,6 @@ const validateTokenStepper = async (req, res, expectedStep) => {
   try {
     const tokenId = req.body.aware_token_id;
 
-    // Get current token state from database
     const token = await aw_tokens.findOne({
       _id: mongoose.Types.ObjectId(tokenId),
     });
@@ -5936,8 +5352,6 @@ const validateTokenStepper = async (req, res, expectedStep) => {
 
     const serverStepper = token.create_token_stepper;
 
-    // Check if the expected step is exactly one step ahead of the server stepper
-    // This ensures proper progression through the workflow
     if (expectedStep !== serverStepper + 1) {
       return {
         valid: false,
@@ -5965,147 +5379,3 @@ const validateTokenStepper = async (req, res, expectedStep) => {
     };
   }
 };
-
-// function AWARE_TOKEN_BY_ID(id) {
-//   return gql`
-//   {
-//     awareToken(id:"${id.toString()}") {
-//       id,
-//       owner {
-//         id
-//       },
-//       creator {
-//         id
-//       },
-//       contentURI,
-//       metadataURI,
-//       amount,
-//       createdAtTimestamp
-//     }
-//   }
-//   `;
-// }
-
-// async function getTokenByBlockchainIdAsync(blockchainId) {
-//   try {
-//     if (!blockchainId) {
-//       throw new Error("Blockchain ID is required");
-//     }
-
-//     // GraphQL query to fetch token data
-//     const result = await request(
-//       process.env.SUBGRAPH_URL,
-//       AWARE_TOKEN_BY_ID(blockchainId)
-//     );
-
-//     if (!result || !result.awareToken) {
-//       throw new Error("Token not found");
-//     }
-
-//     // Update URI if needed
-//     const updatedURI = result.awareToken.metadataURI.includes(
-//       "https://storageapi.fleek.co"
-//     )
-//       ? result.awareToken.metadataURI.replace(
-//           "https://storageapi.fleek.co",
-//           "https://storage.wearaware.co"
-//         )
-//       : result.awareToken.metadataURI;
-
-//     // Fetch metadata
-//     const metadata = await axios.get(updatedURI);
-
-//     return {
-//       success: true,
-//       data: result.awareToken,
-//       metadata: metadata.data,
-//     };
-//   } catch (error) {
-//     console.error("Error fetching token by blockchain ID:", error);
-//     return {
-//       success: false,
-//       message: "Failed to fetch token data",
-//       error: error.message,
-//     };
-//   }
-// }
-
-// kyc_Details.forEach((kyc) => {
-
-//   const account_found = accounts_avaliable.find(x => x.kyc_id == kyc._id);
-
-//   const type_of_producer = roles.find(x => x.role_id == account_found.role_id).role_name;
-
-//   const retrived_aw_tokens = aw_tokens_found.filter((x) => x._awareid == kyc.aware_id);
-
-//   const retrived_update_aw_tokens = update_aw_tokens_found.filter(x => x._awareid == kyc.aware_id);
-
-//   const retrived_transferred_tokens_avaliable = transferred_tokens_avaliable.filter(x => x._awareid == kyc.aware_id);
-
-//   var Pellet = 0, Fiber = 0, Yarn = 0, Fabric = 0, Product = 0; Final_product = 0;
-//   retrived_aw_tokens.filter((item) => {
-//     if (item.type_of_token === 'Pellet') {
-//       Pellet = Pellet + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Fiber') {
-//       Fiber = Fiber + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Yarn') {
-//       Yarn = Yarn + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Fabric') {
-//       Fabric = Fabric + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Product') {
-//       Product = Product + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Final product') {
-//       Product = Product + item.avaliable_tokens;
-//     }
-//   });
-
-//   retrived_update_aw_tokens.filter((item) => {
-//     if (item.type_of_token === 'Pellet') {
-//       Pellet = Pellet + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Fiber') {
-//       Fiber = Fiber + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Yarn') {
-//       Yarn = Yarn + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Fabric') {
-//       Fabric = Fabric + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Product') {
-//       Product = Product + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Final product') {
-//       Product = Product + item.avaliable_tokens;
-//     }
-//   });
-
-//   retrived_transferred_tokens_avaliable.filter((item) => {
-//     if (item.type_of_token === 'Pellet') {
-//       Pellet = Pellet + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Fiber') {
-//       Fiber = Fiber + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Yarn') {
-//       Yarn = Yarn + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Fabric') {
-//       Fabric = Fabric + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Product') {
-//       Product = Product + item.avaliable_tokens;
-//     }
-//     else if (item.type_of_token === 'Final product') {
-//       Product = Product + item.avaliable_tokens;
-//     }
-//   });
-
-//   if (kyc.aware_id) dataset.push({ "company_name": kyc.company_name, type_of_producer, Pellet, Fiber, Yarn, Fabric, Fabric, Product })
-
-// });
