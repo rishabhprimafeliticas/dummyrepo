@@ -12,11 +12,9 @@ const {
   ensureCreateTokenEditableAndLock,
 } = require("../middleware/tokenLockMiddleware");
 var limits = {
-  // allow only 1 file per request
-  fileSize: 7340032, // 2 MB (max file size)
+  fileSize: 7340032,
 };
 var fileFilters = function (req, file, cb) {
-  // supported image file mimetypes
   var allowedMimes = [
     "application/pdf",
     "image/png",
@@ -28,12 +26,9 @@ var fileFilters = function (req, file, cb) {
   ];
 
   if (_.includes(allowedMimes, file.mimetype)) {
-    // allow supported image files
     cb(null, true);
   } else {
-    // throw error for invalid files
     cb(new Error("I know you have it in you, Try again!"));
-    // return res.status(400).jsonp('I know you have it in you, Try again!')
   }
 };
 var storage = multer.diskStorage({
@@ -54,11 +49,6 @@ var storage2 = multer.diskStorage({
     cb(null, "./uploads");
   },
   filename: function (req, file, cb) {
-    // const originalname = file.originalname;
-    // const extension = originalname.substring(originalname.lastIndexOf('.')); // Get file extension
-    // const filename = originalname.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, ''); // Replace spaces and non-English characters
-    // cb(null, Date.now() + filename + extension);
-
     cb(null, file.originalname);
   },
 });
@@ -131,16 +121,7 @@ router.post(
 
 router.post(
   "/v2/post_source_address_async",
-  [
-    // check('_awareid').escape(),
-    // check('source_name').escape(),
-    // check('address_line_one').escape(),
-    // check('address_line_two').escape(),
-    // check('country').escape(),
-    // check('state').escape(),
-    // check('city').escape(),
-    // check('zipcode').escape()
-  ],
+  [],
   verify,
   asyncHandler(awaretokenhandler.handlers.storeSourceAddressAsync)
 );
@@ -168,63 +149,36 @@ router.post(
   asyncHandler(awaretokenhandler.handlers.archiveSource)
 );
 
-//done
 router.post(
   "/v2/create_physical_assest_async",
-  [
-    // check('_awareid_t').not().isEmpty().withMessage("I know you have it in you, Try again!").escape(),
-    // check('date_t').not().isEmpty().withMessage("I know you have it in you, Try again!").escape(),
-    // // check('production_facility_t').not().isEmpty().withMessage("I know you have it in you, Try again!").escape(),
-    // // check('value_chain_process_main').not().isEmpty().withMessage("I know you have it in you, Try again!").escape(),
-    // // check('value_chain_process_sub').not().isEmpty().withMessage("I know you have it in you, Try again!").escape(),
-    // check('aware_token_type_t').not().isEmpty().withMessage("I know you have it in you, Try again!").escape(),
-    // // check('material_specs_t').not().isEmpty().withMessage("I know you have it in you, Try again!").escape(),
-    // check('main_color_t').not().isEmpty().withMessage("I know you have it in you, Try again!").escape(),
-    // check('select_main_color_t').not().isEmpty().withMessage("I know you have it in you, Try again!").escape(),
-    // check('production_lot_t').not().isEmpty().withMessage("I know you have it in you, Try again!").escape(),
-    // // check('compositionArrayMain').not().isEmpty().withMessage("I know you have it in you, Try again!").escape(),
-    // check('weight_t').not().isEmpty().withMessage("I know you have it in you, Try again!").escape(),
-    // check('sustainable_process_claim_t').not().isEmpty().withMessage("I know you have it in you, Try again!").escape(),
-    // check('wet_processing_t').not().isEmpty().withMessage("I know you have it in you, Try again!").escape(),
-    // // check('wet_processing').not().isEmpty().withMessage("I know you have it in you, Try again!").escape(),
-    // // check('sustainable_process_certificates').not().isEmpty().withMessage("I know you have it in you, Try again!").escape(),
-  ],
+  [],
   verify,
   ensureCreateTokenExists,
   ensureCreateTokenEditableAndLock,
   asyncHandler(awaretokenhandler.handlers.createPhysicalAssestAsync)
 );
 
-//done
 router.get(
   "/v2/getphysicalassets",
   verify,
   asyncHandler(awaretokenhandler.handlers.getPhyscialAssetsAsync)
 );
 
-//done
 router.post(
   "/v2/company_complinces_async",
-  [
-    check("_awareid").escape(),
-    // check('environmental_scope_certificates').not().isEmpty().withMessage("I know you have it in you, Try again!").escape(),
-    // check('social_compliance_certificates').not().isEmpty().withMessage("I know you have it in you, Try again!").escape(),
-    // check('chemical_compliance_certificates').not().isEmpty().withMessage("I know you have it in you, Try again!").escape(),
-  ],
+  [check("_awareid").escape()],
   verify,
   ensureCreateTokenExists,
   ensureCreateTokenEditableAndLock,
   asyncHandler(awaretokenhandler.handlers.createCompanyComplianceAsync)
 );
 
-//done
 router.get(
   "/v2/getcompanycompliance",
   verify,
   asyncHandler(awaretokenhandler.handlers.getCompanyComplianceAsync)
 );
 
-//done
 router.post(
   "/v2/post_self_validation_async",
   upload.array("uploadedImages[]"),
@@ -235,14 +189,12 @@ router.post(
   asyncHandler(awaretokenhandler.handlers.createSelfValidationAsync)
 );
 
-//done
 router.get(
   "/v2/getselfvalidation",
   verify,
   asyncHandler(awaretokenhandler.handlers.getSelfValidationAsync)
 );
 
-//done
 router.post(
   "/v2/reset_aware_token",
   [check("_awareid").escape(), check("type").escape()],
@@ -250,7 +202,6 @@ router.post(
   asyncHandler(awaretokenhandler.handlers.deleteResetAwareTokenAsync)
 );
 
-//done
 router.post(
   "/v2/post_tracer",
   upload2.single("upload_pdf"),
@@ -261,14 +212,12 @@ router.post(
   asyncHandler(awaretokenhandler.handlers.createTracerAsync)
 );
 
-//done
 router.get(
   "/v2/gettracer",
   verify,
   asyncHandler(awaretokenhandler.handlers.getTracerAsync)
 );
 
-//done
 router.post(
   "/v2/post_digital_twin",
   [],
@@ -290,10 +239,10 @@ router.get(
   asyncHandler(awaretokenhandler.handlers.getSankeyDiagramData)
 );
 
-//done
 router.get(
   "/v2/get_digital_twin",
   verify,
+  ensureCreateTokenExists,
   asyncHandler(awaretokenhandler.handlers.getDigitalTwinAsync)
 );
 
@@ -302,14 +251,12 @@ router.get(
   asyncHandler(awaretokenhandler.handlers.getTokenStatisticsAsync)
 );
 
-//done
 router.get(
   "/v3/get_digital_twin",
   verify,
   asyncHandler(awaretokenhandler.handlers.getDigitalTwinAsyncV3)
 );
 
-//done
 router.post(
   "/v2/delete_aware_token",
   [check("_awareid").escape(), check("aware_token_id").escape()],
@@ -319,10 +266,10 @@ router.post(
   asyncHandler(awaretokenhandler.handlers.deleteAwareTokenAsync)
 );
 
-//done
 router.get(
   "/v2/get_aw_token_details",
   verify,
+  ensureCreateTokenExists,
   asyncHandler(awaretokenhandler.handlers.getAwareTokenDetailsAsync)
 );
 
@@ -332,7 +279,6 @@ router.get(
   asyncHandler(awaretokenhandler.handlers.getWalletAsync)
 );
 
-//done
 router.get(
   "/v2/get_details_for_self_validation_certificate_async",
   verify,
@@ -341,14 +287,12 @@ router.get(
   )
 );
 
-//done
 router.get(
   "/v2/get_purchase_orders_async",
   verify,
   asyncHandler(awaretokenhandler.handlers.getPurchaseOrdersFromBrandAsync)
 );
 
-//done
 router.get(
   "/v2/get_purchase_order_details_async",
   verify,
@@ -357,7 +301,6 @@ router.get(
   )
 );
 
-//done
 router.get(
   "/v2/get_product_lines_async",
   verify,
