@@ -138,9 +138,19 @@ async function startScheduler() {
         controllerResponse = { success: false, message: err.toString() };
       }
 
+      console.log(
+        "-----------------------------------------------------------------------------------------------------------------------------------"
+      );
+      console.log("Controller Response", controllerResponse);
+      console.log(
+        "-----------------------------------------------------------------------------------------------------------------------------------"
+      );
+
       // Log the result of the process
       console.log(
-        `Process result: ${controllerResponse.success ? "Success" : "Failed"}`
+        `👉 Process result: ${
+          controllerResponse.success ? "Success 🚀🚀🚀🚀" : "Failed 😭😭😭😭"
+        }`
       );
 
       // Always remove the processed item from Redis, regardless of success
@@ -191,18 +201,18 @@ async function startScheduler() {
   }
 }
 
-
-
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
-
-
 
 async function updateTokenStatusAndTransferAwareTokenBackground(req) {
   try {
     console.log("Inside background", req);
     const { _id, token_status, aware_id, message } = req.body;
+    const { userid } = req.headers;
+
+    const reviewedBy = userid ? userid : null;
+    const reviewedOn = new Date();
 
     // Fetch token details and associated asset concurrently
     const [aw_token_avaliable, assets_avaliable] = await Promise.all([
@@ -231,13 +241,21 @@ async function updateTokenStatusAndTransferAwareTokenBackground(req) {
       // Convert callback-based function to Promise-based
       const createTokenResult = await new Promise((resolve, reject) => {
         web3_handler.createAwareTokenAsync(_id, async function (response) {
-          if (response == false) {
+          if (response.status == false) {
             loggerhandler.logger.error("Token creation failed.");
-            reject(new Error("Token creation failed."));
+            reject(new Error(response.message));
             return;
           }
 
           try {
+            await aw_tokens.findOneAndUpdate(
+              { _id: mongoose.Types.ObjectId(_id) },
+              {
+                reviewedBy: reviewedBy,
+                reviewedOn: reviewedOn,
+              }
+            );
+
             // Notify user for approval
             await notifications.create({
               notification_sent_to: assets_avaliable._awareid,
@@ -268,7 +286,12 @@ async function updateTokenStatusAndTransferAwareTokenBackground(req) {
       // Reject token and update status
       await aw_tokens.findOneAndUpdate(
         { _awareid: aware_id, _id: mongoose.Types.ObjectId(_id) },
-        { status: "Rejected", message },
+        {
+          status: "Rejected",
+          message,
+          reviewedBy: reviewedBy,
+          reviewedOn: reviewedOn,
+        },
         { new: true }
       );
 
@@ -302,6 +325,10 @@ async function updateTokenStatusAndTransferUpdateAwareTokenBackground(req) {
     // Fetch token details and associated asset concurrently
     console.log("Inside Update Background", req.body);
     const { _id, token_status, aware_id, message } = req.body;
+    const { userid } = req.headers;
+
+    const reviewedBy = userid ? userid : null;
+    const reviewedOn = new Date();
 
     const [update_aw_token_avaliable, assets_avaliable] = await Promise.all([
       update_aw_tokens
@@ -342,9 +369,11 @@ async function updateTokenStatusAndTransferUpdateAwareTokenBackground(req) {
       // Convert callback-based function to Promise-based
       const updateTokenResult = await new Promise((resolve, reject) => {
         web3_handler.updateAwareTokenAsync(_id, async function (response) {
-          if (response == false) {
+          if (response.status == false) {
             loggerhandler.logger.error("Token update failed.");
-            reject(new Error("Token update failed."));
+            reject(new Error(response.message));
+
+            console.log("RISHAB");
             return;
           }
 
@@ -395,6 +424,14 @@ async function updateTokenStatusAndTransferUpdateAwareTokenBackground(req) {
                   throw ex;
                 });
             }
+
+            await update_aw_tokens.findOneAndUpdate(
+              { _id: mongoose.Types.ObjectId(_id), _awareid: aware_id },
+              {
+                reviewedBy,
+                reviewedOn,
+              }
+            );
 
             await notifications.create({
               notification_sent_to: aware_id,
@@ -505,7 +542,7 @@ async function updateTokenStatusAndTransferUpdateAwareTokenBackground(req) {
             _awareid: aware_id,
             _id: mongoose.Types.ObjectId(_id),
           },
-          { status: "Rejected", message: message },
+          { status: "Rejected", message: message, reviewedBy, reviewedOn },
           { new: true }
         )
         .catch((ex) => {
@@ -534,9 +571,11 @@ async function updateTokenStatusAndTransferUpdateAwareTokenBackground(req) {
     loggerhandler.logger.error(
       `Unhandled error in background processing: ${ex}`
     );
+
+    console.log("Abhishek");
+
     return { success: false, message: ex.toString() };
   }
 }
-
 
 module.exports = { startScheduler, schedulerRunning };
