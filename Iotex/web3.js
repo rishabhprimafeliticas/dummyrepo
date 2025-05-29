@@ -671,7 +671,19 @@ const mintAwareToken = async (
 
                 var result = await request(process.env.SUBGRAPH_URL, query);
 
-                const postID = result?.awareTokens[0]?.id;
+                if (
+                  !result ||
+                  !result.awareTokens ||
+                  result.awareTokens.length === 0
+                ) {
+                  console.log("No tokens found in subgraph yet");
+                  callback({
+                    status: false,
+                    message: "Token created but subgraph indexing pending",
+                  });
+                }
+
+                const postID = result.awareTokens[0].id;
 
                 console.log("post", postID);
 
@@ -1188,6 +1200,20 @@ const mintUpdateAwareToken = async (
                   process.env.SUBGRAPH_URL,
                   temp_query
                 );
+
+                if (
+                  !temp_result ||
+                  !temp_result.awareTokens ||
+                  temp_result.awareTokens.length === 0
+                ) {
+                  console.log("No tokens found in subgraph yet");
+                  callback({
+                    status: false,
+                    message: "Token created but subgraph indexing pending",
+                  });
+                  return;
+                }
+
                 var temp_tokens_in_wallet = temp_result.awareTokens
                   .sort(compare)
                   .reverse();
@@ -1217,6 +1243,18 @@ const mintUpdateAwareToken = async (
                 ).catch((ex) => {
                   console.log("EXX", ex);
                 });
+
+                if (
+                  !result ||
+                  !result.awareTokens ||
+                  result.awareTokens.length === 0
+                ) {
+                  console.log("No tokens found in subgraph yet");
+                  callback({
+                    status: false,
+                    message: "Token created but subgraph indexing pending",
+                  });
+                }
                 console.log("SUBGRAPH_Result", result);
                 const postID = result?.awareTokens[0]?.id;
                 console.log("post", postID);
