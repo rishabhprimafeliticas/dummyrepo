@@ -253,10 +253,20 @@ module.exports = {
           aw_token_avaliable._awareid,
           aw_token_avaliable._id.toString(),
           (success) => {
+            console.log("mintAwareToken response", success);
+
             if (success.status == true) {
               callback({ status: true, message: success.message });
             } else {
-              callback({ status: false, message: success.message });
+              if (success?.fleekError) {
+                callback({
+                  status: false,
+                  message: success.message,
+                  stopScheduler: true,
+                });
+              } else {
+                callback({ status: false, message: success.message });
+              }
             }
           }
         );
@@ -266,7 +276,6 @@ module.exports = {
     } catch (ex) {
       console.log("Error:", ex);
       loggerhandler.logger.error("Outer Catch - ", ex);
-
       callback({ status: false, message: ex.message });
     }
   },
@@ -362,12 +371,22 @@ module.exports = {
           update_aw_token_avaliable._awareid,
           update_aw_token_avaliable._id.toString(),
           async function (response) {
+            console.log("mintUpdateAwareToken response", response);
+
             if (response.status == true) {
               console.log("Minting successful");
               callback({ status: true, message: response.message });
             } else {
               console.error("Minting failed");
-              callback({ status: false, message: response.message });
+              if (response?.fleekError) {
+                callback({
+                  status: false,
+                  message: response.message,
+                  stopScheduler: true,
+                });
+              } else {
+                callback({ status: false, message: response.message });
+              }
             }
           }
         );
@@ -520,7 +539,6 @@ const mintAwareToken = async (
         ? assets_avaliable.wet_processing_arr
         : [],
     tracer: tracerMetadata,
-
     selfValidationCertificate: ["requested"],
     environmentalScopeCertificate: environmentalScopeCertificate,
     socialComplianceCertificate: socialComplianceCertificate,
@@ -549,7 +567,11 @@ const mintAwareToken = async (
   console.log({ upload });
 
   if (upload == null || !upload.data?.fileUrl || !upload.data?.metadataUrl) {
-    callback({ status: false, message: "Fleek upload failed" });
+    callback({
+      status: false,
+      message: "Fleek upload failed",
+      fleekError: true,
+    });
 
     return;
   }
@@ -683,7 +705,12 @@ const mintAwareToken = async (
                   });
                 }
 
-                const postID = result.awareTokens[0].id;
+                console.log(
+                  "result ----------------------------------",
+                  result
+                );
+
+                const postID = result?.awareTokens[0]?.id;
 
                 console.log("post", postID);
 
@@ -1051,10 +1078,8 @@ const mintUpdateAwareToken = async (
         assets_avaliable.wet_processing_t == true
           ? assets_avaliable.wet_processing
           : [],
-
       tracer: tracerMetadata,
       selfValidationCertificate: ["requested"],
-
       environmentalScopeCertificate: environmentalScopeCertificate,
       socialComplianceCertificate: socialComplianceCertificate,
       chemicalComplianceCertificate: chemicalComplianceCertificate,
@@ -1078,6 +1103,18 @@ const mintUpdateAwareToken = async (
         message: ex.message,
       });
     });
+
+    console.log({ upload });
+
+    if (upload == null || !upload.data?.fileUrl || !upload.data?.metadataUrl) {
+      callback({
+        status: false,
+        message: "Fleek upload failed",
+        fleekError: true,
+      });
+
+      return;
+    }
 
     const { fileUrl, metadataUrl } = upload.data;
 
@@ -1213,7 +1250,6 @@ const mintUpdateAwareToken = async (
                   });
                   return;
                 }
-
                 var temp_tokens_in_wallet = temp_result.awareTokens
                   .sort(compare)
                   .reverse();
@@ -1254,6 +1290,7 @@ const mintUpdateAwareToken = async (
                     status: false,
                     message: "Token created but subgraph indexing pending",
                   });
+                  return;
                 }
                 console.log("SUBGRAPH_Result", result);
                 const postID = result?.awareTokens[0]?.id;
@@ -1850,7 +1887,7 @@ const createFileLikeFromJSON = (data, fileName) => {
 
 const postToFleekAsync = async (data) => {
   try {
-    const file = createFileLike(data.file); // Create the FileLike object
+    const file = createFileLike(data.file);
     const publicUrl = await fleekSdk.storage().uploadFile({
       file,
       onUploadProgress,
@@ -1858,8 +1895,7 @@ const postToFleekAsync = async (data) => {
 
     const fileUrl = `https://storage.wearaware.co/ipfs/${publicUrl.pin.cid}`;
 
-    // Upload the JSON data
-    const jsonFile = createFileLikeFromJSON(data.metadata, "metadata.json"); // Create a FileLike object for JSON
+    const jsonFile = createFileLikeFromJSON(data.metadata, "metadata.json");
     const jsonResult = await fleekSdk.storage().uploadFile({
       file: jsonFile,
       onUploadProgress,
@@ -1943,7 +1979,6 @@ const transferAsync = async (to0xaddress, gastobetransfred) => {
                 .sendSignedTransaction(signedTx.rawTransaction)
                 .on("receipt", async function (receipt) {
                   console.log("receipt", receipt);
-
                   resolve();
                 })
                 .on("error", async function (e) {
