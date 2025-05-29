@@ -153,10 +153,16 @@ async function startScheduler() {
         }`
       );
 
-      // Always remove the processed item from Redis, regardless of success
+      // Always remove the processed item from Redis, regardless of success or failure, EXCEPT when stopScheduler flag is true
       try {
-        await redisClient.lPop(selectedKey);
-        console.log(`Removed item from list for key ${selectedKey}`);
+        if (!controllerResponse?.stopScheduler) {
+          await redisClient.lPop(selectedKey);
+          console.log(`Removed item from list for key ${selectedKey}`);
+        } else {
+          console.log(
+            `Keeping item in list due to critical error that requires scheduler stop`
+          );
+        }
       } catch (err) {
         console.error(`Error removing item from ${selectedKey}:`, err);
       }
@@ -186,6 +192,11 @@ async function startScheduler() {
             await redisClient.del(logKey);
             console.log(`Bulk inserted logs and cleared log list.`);
           }
+
+          if (controllerResponse?.stopScheduler === true) {
+            console.log("Stopping scheduler due to stopScheduler flag.");
+            break; // Exit the while loop
+          }
         } catch (err) {
           console.error("Error logging failed item:", err);
         }
@@ -201,9 +212,12 @@ async function startScheduler() {
   }
 }
 
+
+
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
 
 async function updateTokenStatusAndTransferAwareTokenBackground(req) {
   try {
@@ -241,9 +255,16 @@ async function updateTokenStatusAndTransferAwareTokenBackground(req) {
       // Convert callback-based function to Promise-based
       const createTokenResult = await new Promise((resolve, reject) => {
         web3_handler.createAwareTokenAsync(_id, async function (response) {
+          console.log("Response from web3 handler ------------:", response);
+    
           if (response.status == false) {
+            console.log("Inside web3 handler response status false");
             loggerhandler.logger.error("Token creation failed.");
-            reject(new Error(response.message));
+            const error = new Error(response.message);
+            if (response?.stopScheduler === true) {
+              error.stopScheduler = true;
+            }
+            reject(error);
             return;
           }
 
@@ -313,10 +334,15 @@ async function updateTokenStatusAndTransferAwareTokenBackground(req) {
       return { success: false, message: "Token was rejected." };
     }
   } catch (ex) {
+    console.error(`Unhandled error in background processing: ${ex}`);
     loggerhandler.logger.error(
       `Unhandled error in background processing: ${ex}`
     );
-    return { success: false, message: ex.toString() };
+    const response = { success: false, message: ex.toString() };
+    if (ex?.stopScheduler === true) {
+      response.stopScheduler = true;
+    }
+    return response;
   }
 }
 
@@ -369,11 +395,16 @@ async function updateTokenStatusAndTransferUpdateAwareTokenBackground(req) {
       // Convert callback-based function to Promise-based
       const updateTokenResult = await new Promise((resolve, reject) => {
         web3_handler.updateAwareTokenAsync(_id, async function (response) {
-          if (response.status == false) {
-            loggerhandler.logger.error("Token update failed.");
-            reject(new Error(response.message));
+          console.log("Response from web3 handler ------------:", response);
 
-            console.log("RISHAB");
+          if (response.status == false) {
+            console.log("Inside web3 handler response status false");
+            loggerhandler.logger.error("Token update failed.");
+            const error = new Error(response.message);
+            if (response?.stopScheduler === true) {
+              error.stopScheduler = true;
+            }
+            reject(error);
             return;
           }
 
@@ -568,14 +599,17 @@ async function updateTokenStatusAndTransferUpdateAwareTokenBackground(req) {
       return { success: false, message: "Token was rejected." };
     }
   } catch (ex) {
+    console.error("Unhandled error in background processing:", ex);
     loggerhandler.logger.error(
       `Unhandled error in background processing: ${ex}`
     );
-
-    console.log("Abhishek");
-
-    return { success: false, message: ex.toString() };
+    const response = { success: false, message: ex.toString() };
+    if (ex?.stopScheduler === true) {
+      response.stopScheduler = true;
+    }
+    return response;
   }
 }
+
 
 module.exports = { startScheduler, schedulerRunning };
